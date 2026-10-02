@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Pagamento · Michelangelo Beauty</title>
+<meta name="description" content="Pagamento simulato: sito dimostrativo, nessun ordine viene inviato.">
+<meta name="theme-color" content="#F3EFE7">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=1">
+
+</head>
+<body class="is-checkout">
+<a class="skip" href="#main">Vai al contenuto</a>
+<div class="topbar">Spedizione gratuita da 49 € · <strong>Sito dimostrativo: nessun ordine reale</strong></div>
+<header class="site-header">
+  <div class="header-in">
+    <a class="logo" href="index.html"><span class="logo__name">Michelangelo</span><span class="logo__sub">Beauty · bottega toscana</span></a>
+    <nav class="nav" aria-label="Principale"><a href="opere.html">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html">Traccia il lotto</a><a href="bottega.html">La bottega</a></nav>
+    <div class="header-actions">
+      <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-cart-count>0</span></button>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu>Menu</button>
+    </div>
+  </div>
+  <div class="menu" id="menu" hidden>
+    <nav aria-label="Menu"><a href="opere.html">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html">Traccia il lotto</a><a href="bottega.html">La bottega</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
+  </div>
+</header>
+<main id="main">
+
+<section class="wrap checkout" data-checkout>
+  <p class="demo-note"><strong>Sito dimostrativo:</strong> nessun ordine viene inviato e nessun pagamento addebitato.</p>
+  <ol class="co-steps" aria-label="Passaggi"><li data-co-step="1" aria-current="step"><span>1</span>Dati e indirizzo</li><li data-co-step="2"><span>2</span>Spedizione</li><li data-co-step="3"><span>3</span>Pagamento</li><li data-co-step="4"><span>✓</span>Conferma</li></ol>
+  <div class="co-grid">
+    <div class="co-main">
+      <div class="co-empty" data-co-empty hidden><h1>Il carrello è vuoto</h1><p>Aggiungi qualche opera prima di passare al pagamento.</p><a class="btn btn--primary" href="opere.html">Vai alle opere</a></div>
+      <form class="co-panel" data-co-panel="1" novalidate>
+        <h1>Dati e indirizzo</h1>
+        <div class="guest"><strong>Acquista senza registrarti</strong><span>Ti basta un'email per ricevere conferma e tracciamento.</span><button type="button" class="link" data-login-toggle aria-expanded="false">Hai già un account?</button><p class="small muted" data-login-note hidden>In questo sito dimostrativo non ci sono account: continua come ospite.</p></div>
+        <div class="fields"><div class="field field--full"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required><p class="field__err" id="err-email" hidden></p></div><div class="field"><label for="f-nome">Nome</label><input id="f-nome" name="nome" type="text" autocomplete="given-name" inputmode="text" required><p class="field__err" id="err-nome" hidden></p></div><div class="field"><label for="f-cognome">Cognome</label><input id="f-cognome" name="cognome" type="text" autocomplete="family-name" inputmode="text" required><p class="field__err" id="err-cognome" hidden></p></div><div class="field field--full"><label for="f-indirizzo">Via e numero civico</label><input id="f-indirizzo" name="indirizzo" type="text" autocomplete="address-line1" inputmode="text" required><p class="field__err" id="err-indirizzo" hidden></p></div><div class="field"><label for="f-cap">CAP</label><input id="f-cap" name="cap" type="text" autocomplete="postal-code" inputmode="numeric" required><p class="field__err" id="err-cap" hidden></p></div><div class="field"><label for="f-citta">Città</label><input id="f-citta" name="citta" type="text" autocomplete="address-level2" inputmode="text" required><p class="field__err" id="err-citta" hidden></p></div><div class="field"><label for="f-provincia">Provincia (sigla)</label><input id="f-provincia" name="provincia" type="text" autocomplete="address-level1" inputmode="text" required><p class="field__err" id="err-provincia" hidden></p></div><div class="field"><label for="f-telefono">Telefono per il corriere (facoltativo)</label><input id="f-telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel"><p class="field__err" id="err-telefono" hidden></p></div></div>
+        <div class="co-nav"><a class="link" href="opere.html" data-co-cart>← Torna al carrello</a><button class="btn btn--primary" type="submit">Continua: spedizione</button></div>
+      </form>
+      <div class="co-panel" data-co-panel="2" hidden>
+        <h1>Spedizione</h1>
+        <p class="co-address" data-co-address></p>
+        <div class="radios" role="radiogroup" aria-label="Metodo di spedizione">
+          <label class="radio"><input type="radio" name="ship" value="standard" checked><span><strong>Standard</strong> · <span data-ship-std>4,90 €</span><br><span class="muted">Arriva <span data-delivery>in 2-4 giorni lavorativi</span></span></span></label>
+          <label class="radio"><input type="radio" name="ship" value="express"><span><strong>Espressa</strong> · 8,90 €<br><span class="muted">Arriva <span data-delivery-exp>in 1-2 giorni lavorativi</span></span></span></label>
+        </div>
+        <div class="co-nav"><button type="button" class="link" data-co-back>← Indietro</button><button class="btn btn--primary" type="button" data-co-next>Continua: pagamento</button></div>
+      </div>
+      <div class="co-panel" data-co-panel="3" hidden>
+        <h1>Pagamento</h1>
+        <div class="radios" role="radiogroup" aria-label="Metodo di pagamento">
+          <label class="radio"><input type="radio" name="pay" value="carta" checked><span><strong>Carta di credito o debito</strong><br><span class="muted">In un negozio vero qui si aprirebbe la pagina sicura del fornitore di pagamento. In questa demo non si inseriscono dati della carta.</span></span></label>
+          <label class="radio"><input type="radio" name="pay" value="bonifico"><span><strong>Bonifico bancario</strong><br><span class="muted">Prepariamo l'ordine quando riceviamo il bonifico.</span></span></label>
+        </div>
+        <p class="small muted">Confermando accetti le <a href="condizioni-vendita.html">condizioni di vendita</a>. Hai 14 giorni per il recesso.</p>
+        <div class="co-nav"><button type="button" class="link" data-co-back>← Indietro</button><button class="btn btn--primary" type="button" data-co-place>Conferma l'ordine (simulato)</button></div>
+      </div>
+      <div class="co-panel co-done" data-co-panel="4" hidden tabindex="-1">
+        <div class="dw done__dw" aria-hidden="true"><span class="dw__tag">Disegno a sanguigna</span><span class="dw__id">dw-mani-pacco</span><span class="dw__desc">Due mani che chiudono un pacco con un nastro, tratto a sanguigna</span></div>
+        <h1>Grazie, ordine simulato ricevuto</h1>
+        <p data-co-done-text></p>
+        <a class="btn btn--ghost" href="opere.html">Torna alle opere</a>
+      </div>
+    </div>
+    <aside class="co-summary" aria-label="Riepilogo ordine"><h2>Riepilogo</h2><div data-co-summary></div></aside>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="footer-in">
+    <div class="footer-brand"><div class="logo"><span class="logo__name">Michelangelo</span><span class="logo__sub">Beauty · bottega toscana</span></div><p>Cosmetici fatti a mano in piccoli lotti numerati, tra Firenze e le Alpi Apuane.</p></div>
+    <div class="footer-cols">
+      <div><p class="footer-title">Negozio</p><a href="opere.html">Tutte le opere</a><a href="rituale.html">Il tuo rituale</a><a href="opere.html?linea=cofanetti">Idee regalo</a></div>
+      <div><p class="footer-title">La bottega</p><a href="bottega.html">Chi siamo</a><a href="lotto.html">Traccia il lotto</a></div>
+      <div><p class="footer-title">Aiuto</p><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></div>
+      <div><p class="footer-title">Legale</p><a href="condizioni-vendita.html">Condizioni di vendita</a><a href="privacy.html">Privacy</a><a href="cookie.html">Cookie</a></div>
+    </div>
+    <p class="footer-legal">Progetto dimostrativo. Michelangelo Beauty è un marchio di fantasia, senza alcun legame con l'artista Michelangelo Buonarroti, i suoi eredi o istituzioni museali. Nomi, prodotti, prezzi e dati non si riferiscono ad attività reali. Michelangelo Beauty Bottega s.n.c., Via della Bottega 0, 55000 Colline Apuane (LU), P.IVA 00000000000, bottega@michelangelobeauty.example, tel. 000 000 0000 (dati di fantasia).</p>
+  </div>
+</footer>
+<div class="overlay" data-overlay hidden></div>
+<aside class="drawer" id="carrello" aria-label="Carrello" aria-hidden="true" tabindex="-1">
+  <div class="drawer__head"><h2>Carrello</h2><button type="button" class="icon-btn" data-cart-close aria-label="Chiudi il carrello"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8"/></svg></button></div>
+  <div class="drawer__body" data-cart-body></div>
+  <div class="drawer__foot" data-cart-foot></div>
+</aside>
+<div class="toast" data-toast role="status" aria-live="polite"></div>
+<script src="js/catalogo.js?v=1"></script>
+<script src="js/main.js?v=1"></script>
+</body>
+</html>
