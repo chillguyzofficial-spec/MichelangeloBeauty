@@ -331,6 +331,61 @@
     back.addEventListener('click', () => go(Math.max(0, cur - 1)));
   }
 
+  // ---------- strisce di foto a scorrimento: frecce, contatore, tastiera ----------
+  qa('[data-strip]').forEach(st => {
+    const track = q('[data-strip-track]', st), items = qa('.strip__item', st), cnt = q('[data-strip-count]', st);
+    const prev = q('[data-strip-prev]', st), next = q('[data-strip-next]', st);
+    const current = () => { const x = track.scrollLeft; let best = 0; items.forEach((it, i) => { if (Math.abs(it.offsetLeft - track.offsetLeft - x) < Math.abs(items[best].offsetLeft - track.offsetLeft - x)) best = i; }); return best; };
+    const update = () => { const i = current(), end = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4; cnt.textContent = (end ? items.length : i + 1) + ' / ' + items.length; prev.disabled = track.scrollLeft <= 4; next.disabled = end; };
+    const go = d => { const i = Math.max(0, Math.min(items.length - 1, current() + d)); track.scrollTo({ left: items[i].offsetLeft - track.offsetLeft, behavior: 'smooth' }); };
+    prev.addEventListener('click', () => go(-1)); next.addEventListener('click', () => go(1));
+    track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); go(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); } });
+    track.addEventListener('scroll', () => { window.requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', update); update();
+  });
+
+  // ---------- rituale: scegli il modo (guidato / componi tu) ----------
+  const modes = qa('[data-mode]');
+  if (modes.length) {
+    const setMode = m => { modes.forEach(b => b.setAttribute('aria-selected', String(b.dataset.mode === m))); qa('[data-mode-panel]').forEach(p => { p.hidden = p.dataset.modePanel !== m; }); };
+    modes.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+    modes.forEach((b, i) => b.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = modes[(i + (e.key === 'ArrowRight' ? 1 : -1) + modes.length) % modes.length]; n.focus(); setMode(n.dataset.mode); } }));
+  }
+
+  // ---------- componi tu: da 2 a 4 opere, messe nell'ordine d'uso ----------
+  const sum = q('[data-pick-sum]');
+  if (sum) {
+    const MAX = 4, MIN = 2;
+    // ordine d'uso: prima si deterge, poi si leviga, poi i trattamenti leggeri, poi quelli ricchi
+    const USE = { 'sapone-calendula': 1, 'sapone-argilla': 1, 'shampoo-rosmarino': 1, 'scrub-marmo': 2, 'siero-vinacce': 3, 'crema-iris': 4, 'olio-lavanda': 4, 'crema-mani': 5, 'balsamo-labbra': 6 };
+    const STEP = { 1: 'per detergere', 2: 'una o due volte a settimana, per levigare', 3: 'sulla pelle ancora umida', 4: 'per nutrire e chiudere', 5: 'quando serve, durante il giorno', 6: 'quando serve, in borsa' };
+    let picks = [];
+    const picksEl = qa('[data-pick]'), bar = q('[data-pick-bar]'), barText = q('[data-pick-bar-text]');
+    let sumVisible = false;
+    const syncBar = () => { bar.hidden = !picks.length || sumVisible; };
+    if ('IntersectionObserver' in window) new IntersectionObserver(en => { sumVisible = en[0].isIntersecting; syncBar(); }).observe(sum);
+    function render() {
+      picksEl.forEach(b => { const on = picks.includes(b.dataset.pick); b.setAttribute('aria-pressed', String(on)); b.setAttribute('aria-disabled', String(!on && picks.length >= MAX)); });
+      if (!picks.length) { sum.innerHTML = ''; syncBar(); return; }
+      const ord = picks.slice().sort((a, b) => USE[a] - USE[b]), tot = ord.reduce((s, id) => s + MB.P[id].price, 0);
+      barText.textContent = ord.length + (ord.length === 1 ? ' opera' : ' opere') + ' · ' + eur(tot); syncBar();
+      sum.innerHTML = `<h2>Il tuo rituale: ${ord.length} ${ord.length === 1 ? 'opera' : 'opere'}</h2>
+        <p>${ord.length < MIN ? 'Scegline almeno un\'altra.' : ord.length >= MAX ? 'Hai raggiunto il massimo di quattro opere.' : 'Puoi aggiungerne ancora ' + (MAX - ord.length) + '.'} Ecco l'ordine in cui usarle.</p>
+        <ol class="ritual">${ord.map((id, i) => { const p = MB.P[id]; return `<li style="--line:${MB.LINES[p.line].bg}"><span class="ritual__n">${['I', 'II', 'III', 'IV'][i]}</span><div><p class="ritual__name"><a href="${p.url}">${esc(p.name)}</a></p><p class="ritual__why">${STEP[USE[id]]}</p></div><span class="ritual__price">${eur(p.price)}</span></li>`; }).join('')}</ol>
+        <div class="ritual-total"><button type="button" class="btn btn--primary" data-pick-add${ord.length < MIN ? ' disabled' : ''}>Aggiungi il rituale al carrello · ${eur(tot)}</button><button type="button" class="link" data-pick-reset>Ricomincia</button></div>`;
+      const add2 = q('[data-pick-add]', sum); if (add2) add2.addEventListener('click', () => { ord.forEach(id => add(id, 1, true)); openCart(); });
+      q('[data-pick-reset]', sum).addEventListener('click', () => { picks = []; render(); });
+    }
+    picksEl.forEach(b => b.addEventListener('click', () => {
+      const id = b.dataset.pick;
+      if (picks.includes(id)) picks = picks.filter(x => x !== id);
+      else if (picks.length < MAX) picks.push(id);
+      else { say('Massimo quattro opere: togline una per cambiarla'); return; }
+      render();
+    }));
+    render();
+  }
+
   // ---------- moduli dimostrativi (newsletter, contatti) ----------
   qa('[data-demo-form]').forEach(form => form.addEventListener('submit', e => {
     e.preventDefault();

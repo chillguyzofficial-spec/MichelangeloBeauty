@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '16'; // cache-busting css/js
+const V = '18'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -65,6 +65,14 @@ function drawing(id, desc, cls = '') {
   return `<div class="dw ${cls}" aria-hidden="true"><span class="dw__tag">Disegno a sanguigna</span><span class="dw__id">${id}</span><span class="dw__desc">${esc(desc)}</span></div>`;
 }
 const packshot = (p, o = {}) => photo('prodotto-' + p.id, '4:5', p.name + ' ' + p.size + ' sul piano di marmo, stessa luce per tutto il catalogo', { alt: p.name, shared: true, sizes: '(max-width: 700px) 50vw, 25vw', ...o });
+
+// striscia orizzontale di foto con frecce e contatore; items = [[id, ratio, descrizione], ...]
+function strip(items, label) {
+  return `<div class="strip" data-strip>
+  <div class="strip__track" tabindex="0" role="region" aria-label="${label}" data-strip-track>${items.map(([id, ratio, desc], i) => `<figure class="strip__item" style="--ar:${RATIO[ratio][0]}/${RATIO[ratio][1]}">${photo(id, ratio, desc, { eager: i === 0, sizes: '(max-width: 959px) 80vw, 40vw' })}</figure>`).join('')}</div>
+  <div class="strip__nav"><button type="button" class="strip__btn" data-strip-prev aria-label="Foto precedente">‹</button><span class="strip__count" data-strip-count aria-live="polite">1 / ${items.length}</span><button type="button" class="strip__btn" data-strip-next aria-label="Foto successiva">›</button></div>
+</div>`;
+}
 
 // ---------- Pezzi comuni ----------
 const NAV = [['opere.html', 'Le opere'], ['rituale.html', 'Il tuo rituale'], ['lotto.html', 'Traccia il lotto'], ['bottega.html', 'La bottega']];
@@ -447,12 +455,22 @@ curPage = 'rituale.html';
 <section class="page-head wrap page-head--split">
   <div>
     <p class="eyebrow">Il tuo rituale</p>
-    <h1>Tre domande, due o tre opere.</h1>
-    <p class="lead">Rispondi toccando un bottone. Alla fine ti diciamo cosa usare e perché: niente account, niente email.</p>
+    <h1>Il tuo rituale, <em>come preferisci.</em></h1>
+    <p class="lead">Lasciati guidare da tre domande, oppure scegli tu le opere: in entrambi i casi ti diciamo in che ordine usarle. Niente account, niente email.</p>
   </div>
   ${drawing('dw-iris', 'Un fiore di iris con le foglie, studio botanico a sanguigna', 'page-head__dw')}
 </section>
-<section class="wrap quiz" data-quiz>
+<div class="wrap modes" role="tablist" aria-label="Come vuoi comporre il rituale">
+  <button type="button" class="mode" role="tab" aria-selected="true" aria-controls="modo-guida" id="tab-guida" data-mode="guida"><strong>Guidami</strong><span>tre domande, ti consigliamo noi</span></button>
+  <button type="button" class="mode" role="tab" aria-selected="false" aria-controls="modo-componi" id="tab-componi" data-mode="componi"><strong>Componi tu</strong><span>scegli da 2 a 4 opere</span></button>
+</div>
+<section class="wrap compose" id="modo-componi" role="tabpanel" aria-labelledby="tab-componi" data-mode-panel="componi" hidden>
+  <p class="lead">Tocca le opere che vuoi, da 2 a 4. Le mettiamo noi nell'ordine giusto d'uso.</p>
+  <div class="compose__grid">${D.P.filter(p => !p.contents).map(p => { const l = LINE[p.line]; return `<button type="button" class="pick" data-pick="${p.id}" aria-pressed="false" style="--line:${l.bg};--line-fg:${l.fg}"><span class="pick__img">${packshot(p, { sizes: '(max-width: 700px) 45vw, 180px' })}</span><span class="pick__band">Opera n. ${p.opera} · ${l.name}</span><span class="pick__name">${esc(p.name)}</span><span class="pick__meta">${p.size} · ${eur(p.price)}</span><span class="pick__check" aria-hidden="true">✓</span></button>`; }).join('')}</div>
+  <aside class="compose__sum" id="tuo-rituale" data-pick-sum aria-live="polite"></aside>
+  <div class="compose__bar" data-pick-bar hidden><span data-pick-bar-text></span><a class="link" href="#tuo-rituale">Vedi il tuo rituale ↓</a></div>
+</section>
+<section class="wrap quiz" id="modo-guida" role="tabpanel" aria-labelledby="tab-guida" data-mode-panel="guida" data-quiz>
   <ol class="quiz__steps" aria-label="Avanzamento"><li data-quiz-step="1" aria-current="step">La tua pelle</li><li data-quiz-step="2">Quando</li><li data-quiz-step="3">Cosa ti interessa</li></ol>
   ${q(1, 'pelle', 'Che pelle hai?', [['Secca', 'Secca', 'tira, a volte si squama'], ['Sensibile', 'Sensibile', 'si arrossa facilmente'], ['Mista o grassa', 'Mista o grassa', 'lucida in zona T']])}
   ${q(2, 'momento', 'Quando ti prendi cura di te?', [['mattina', 'La mattina', 'pochi minuti, prima di uscire'], ['sera', 'La sera', 'con calma, prima di dormire'], ['entrambi', 'Mattina e sera', 'due momenti brevi']])}
@@ -493,12 +511,21 @@ page({
   file: 'bottega.html', active: 'bottega.html', title: 'La bottega · Michelangelo Beauty',
   description: 'Chi siamo: due artigiani tra Firenze e le Apuane, ricette scritte a mano, lotti numerati. Perché ci chiamiamo Michelangelo.',
   body: `
-<section class="hero hero--page">
-  <div class="hero__media">${photo('bottega-apertura', '16:9', 'L\'interno della bottega: banco di marmo, scaffali di castagno con i saponi in stagionatura, finestra sulle colline', { eager: true, sizes: '100vw' })}</div>
-  <div class="hero__text wrap"><div>
+<section class="hero hero--home hero--bottega wrap">
+  <div class="hero__text">
     <p class="eyebrow">La bottega</p>
-    <h1>Una stanza di pietra, un banco di marmo, due paia di mani.</h1>
-  </div></div>
+    <h1>Una stanza di pietra, un banco di marmo, <em>due paia di mani.</em></h1>
+    <p class="lead">Tra Firenze e le Alpi Apuane: ricette scritte a mano, materia che arriva da qui intorno, lotti numerati.</p>
+    <a class="link" href="#come-nasce">Come nasce un lotto ↓</a>
+  </div>
+  <div class="hero__media">${strip([
+    ['bottega-apertura', '16:9', 'L\'interno della bottega: banco di marmo, scaffali di castagno con i saponi in stagionatura, finestra sulle colline'],
+    ['bottega-esterno', '16:9', 'La bottega vista da fuori al tramonto: muro di pietra, scuri verdi aperti, l\'insegna e gli ulivi sulle colline'],
+    ['bottega-laboratorio', '4:5', 'Il laboratorio luminoso: banco di marmo, vasi di erbe essiccate sugli scaffali, finestra sulle colline'],
+    ['bottega-erbe', '4:5', 'L\'angolo delle erbe: mazzi di lavanda e calendula appesi a seccare sopra i barattoli'],
+    ['bottega-saponi', '4:5', 'Gli scaffali dei saponi in stagionatura, ognuno con la sua fascetta di carta'],
+    ['bottega-banco', '4:5', 'Il banco di lavoro: bilancia, olio d\'oliva, barattoli e la ricetta scritta a mano']
+  ], 'Foto della bottega')}</div>
 </section>
 <section class="sec wrap prose">
   ${sectionHead('I', 'Perché Michelangelo')}
@@ -514,7 +541,7 @@ page({
   </div>
 </section>
 <section class="sec wrap">
-  ${sectionHead('III', 'Come nasce un lotto')}
+  <span id="come-nasce"></span>${sectionHead('III', 'Come nasce un lotto')}
   <ol class="steps">${D.STEPS.map(([t, x], i) => `<li class="step">${photo('lotto-passo-' + (i + 1), '4:5', stepDesc(i), { sizes: '(max-width: 700px) 100vw, 20vw' })}<p class="roman">${['I', 'II', 'III', 'IV', 'V'][i]}</p><h3>${t}</h3><p>${x}</p></li>`).join('')}</ol>
 </section>
 <section class="sec wrap">

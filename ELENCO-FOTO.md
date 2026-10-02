@@ -1,7 +1,7 @@
 # Michelangelo Beauty — foto e disegni da generare
 <!-- generato da _build/build.js: si aggiorna da solo a ogni build -->
 
-Foto: **46/47** presenti · Disegni: **5/7** presenti
+Foto: **51/52** presenti · Disegni: **5/7** presenti
 
 ## Regole per tutte le foto
 - Luce naturale calda da finestra laterale, materiali veri: marmo bianco di Carrara, legno di castagno, vetro ambrato, lino, terracotta.
@@ -51,6 +51,11 @@ Foto: **46/47** presenti · Disegni: **5/7** presenti
 | `shampoo-rosmarino-dettaglio.webp` | 4:5 | 1600×2000 | La schiuma tra le mani | opera-shampoo-rosmarino.html |
 | `cofanetto-bottega-in-mano.webp` | 4:5 | 1600×2000 | Cofanetto regalo "La bottega" tenuto in mano, per mostrare la dimensione reale (4 saponi da 100 g) | opera-cofanetto-bottega.html |
 | `bottega-apertura.webp` | 16:9 | 2048×1152 | L'interno della bottega: banco di marmo, scaffali di castagno con i saponi in stagionatura, finestra sulle colline | bottega.html |
+| `bottega-esterno.webp` | 16:9 | 2048×1152 | La bottega vista da fuori al tramonto: muro di pietra, scuri verdi aperti, l'insegna e gli ulivi sulle colline | bottega.html |
+| `bottega-laboratorio.webp` | 4:5 | 1600×2000 | Il laboratorio luminoso: banco di marmo, vasi di erbe essiccate sugli scaffali, finestra sulle colline | bottega.html |
+| `bottega-erbe.webp` | 4:5 | 1600×2000 | L'angolo delle erbe: mazzi di lavanda e calendula appesi a seccare sopra i barattoli | bottega.html |
+| `bottega-saponi.webp` | 4:5 | 1600×2000 | Gli scaffali dei saponi in stagionatura, ognuno con la sua fascetta di carta | bottega.html |
+| `bottega-banco.webp` | 4:5 | 1600×2000 | Il banco di lavoro: bilancia, olio d'oliva, barattoli e la ricetta scritta a mano | bottega.html |
 | `bottega-territorio.webp` | 16:9 | 2048×1152 | Colline toscane con ulivi in primo piano e le cave di marmo delle Apuane bianche sullo sfondo, luce del tardo pomeriggio | bottega.html |
 | `lotto-passo-1.webp` | 4:5 | 1600×2000 | Cesto di vimini con fiori di calendula e rametti di lavanda appena raccolti | bottega.html |
 | `lotto-passo-2.webp` | 4:5 | 1600×2000 | Barattoli di vetro con fiori in olio d'oliva su un davanzale di pietra | bottega.html |

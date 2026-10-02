@@ -76,6 +76,24 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     ok(await pg.isVisible('[data-saved-empty]'), 'tolta: pagina salvati vuota');
     await pg.goto(base + 'opere.html');
     ok((await pg.textContent('.card .unit')).includes('/l') || (await pg.textContent('.card .unit')).includes('/kg'), 'prezzo unitario sulle card');
+    // striscia della bottega
+    await pg.goto(base + 'bottega.html');
+    ok((await pg.textContent('[data-strip-count]')).trim() === '1 / 6' && await pg.isDisabled('[data-strip-prev]'), 'striscia: parte da 1 / 6, freccia indietro disattiva');
+    await pg.click('[data-strip-next]'); await pg.waitForTimeout(700);
+    ok((await pg.textContent('[data-strip-count]')).trim() === '2 / 6', 'striscia: freccia avanti → 2 / 6');
+    // componi tu
+    await pg.goto(base + 'rituale.html');
+    await pg.click('[data-mode=componi]');
+    ok(await pg.isVisible('[data-mode-panel=componi]') && !(await pg.isVisible('[data-mode-panel=guida]')), 'rituale: modo Componi tu');
+    await pg.click('[data-pick=crema-mani]');
+    ok(await pg.isDisabled('[data-pick-add]'), 'componi: con 1 opera il pulsante è disattivo');
+    for (const id of ['sapone-argilla', 'balsamo-labbra', 'scrub-marmo', 'olio-lavanda']) await pg.click('[data-pick=' + id + ']', { force: true }); // la quinta è rifiutata dal sito
+    const names = await pg.$$eval('.compose__sum .ritual__name', e => e.map(x => x.textContent));
+    ok(names.length === 4 && names[0].includes('argilla') && names[3].includes('Balsamo'), 'componi: massimo 4 e ordine d’uso (' + names.join(' → ') + ')');
+    const before = +(await pg.textContent('[data-cart-count]'));
+    await pg.click('[data-pick-add]'); await pg.waitForTimeout(400);
+    ok(+(await pg.textContent('[data-cart-count]')) === before + 4, 'componi: 4 opere aggiunte al carrello');
+    await pg.keyboard.press('Escape');
     // pagamento
     await pg.goto(base + 'pagamento.html');
     await pg.click('[data-co-panel="1"] button[type=submit]');
