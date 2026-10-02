@@ -4,7 +4,7 @@
   const MB = window.MB;
   const q = (s, r = document) => r.querySelector(s);
   const qa = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const eur = n => n.toFixed(2).replace('.', ',') + ' €';
+  const eur = n => n.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+,)/, '.') + ' €'; // 1.066,67 €
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const mobile = () => window.matchMedia('(max-width: 700px)').matches;
 
@@ -22,8 +22,11 @@
 
   // ---------- date di consegna ----------
   const DAYS = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
+  const DAYS_LONG = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
   const MONTHS = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
-  function addBiz(n) { const x = new Date(); let k = 0; while (k < n) { x.setDate(x.getDate() + 1); const w = x.getDay(); if (w !== 0 && w !== 6) k++; } return x; }
+  const isBiz = d => d.getDay() !== 0 && d.getDay() !== 6;
+  function shipDay() { const x = new Date(); if (isBiz(x) && x.getHours() < 12) return x; do { x.setDate(x.getDate() + 1); } while (!isBiz(x)); return x; }
+  function addBiz(n) { const x = shipDay(); let k = 0; while (k < n) { x.setDate(x.getDate() + 1); if (isBiz(x)) k++; } return x; }
   function between(a, b) {
     const d1 = addBiz(a), d2 = addBiz(b), s = d => DAYS[d.getDay()] + ' ' + d.getDate();
     return 'tra ' + s(d1) + (d1.getMonth() !== d2.getMonth() ? ' ' + MONTHS[d1.getMonth()] : '') + ' e ' + s(d2) + ' ' + MONTHS[d2.getMonth()];
@@ -68,7 +71,7 @@
       const freeMsg = sub >= MB.FREE ? 'Spedizione gratuita raggiunta.' : 'Ti mancano <strong>' + eur(MB.FREE - sub) + '</strong> alla spedizione gratuita.';
       foot.innerHTML = `<div class="free">${freeMsg}<div class="free__bar"><span style="width:${Math.min(100, sub / MB.FREE * 100)}%"></span></div></div>
         <div class="totals"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${gift.on ? `<div><span>Confezione regalo</span><span>${eur(MB.GIFT)}</span></div>` : ''}<div><span>Spedizione standard</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(sub + ship + giftCost())}</span></div></div>
-        <p class="small muted">Arriva ${between(2, 4)} · reso entro 14 giorni</p>
+        <p class="small muted">Arriva ${between(2, 4)} · reso entro 14 giorni · campione omaggio in ogni pacco</p>
         <a class="btn btn--primary" href="pagamento.html">Vai al pagamento</a>`;
     }
     updateShipLine();
@@ -118,6 +121,35 @@
       if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
       else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
     }
+  });
+
+  // ---------- salva per dopo (senza account, nella memoria del browser) ----------
+  let saved = store.get('mb-saved', []).filter(id => MB.P[id]);
+  function renderSaved() {
+    qa('[data-saved-count]').forEach(el => { el.textContent = saved.length; el.toggleAttribute('data-zero', !saved.length); });
+    qa('[data-save]').forEach(b => {
+      const on = saved.includes(b.dataset.save); b.setAttribute('aria-pressed', String(on));
+      const lab = q('[data-save-label]', b); if (lab) lab.textContent = on ? 'Salvata: la trovi in Opere salvate' : 'Salva per dopo';
+    });
+    const grid = q('[data-saved-grid]');
+    if (grid) {
+      grid.innerHTML = saved.map(id => { const p = MB.P[id], l = MB.LINES[p.line]; return `<article class="card" style="--line:${l.bg};--line-fg:${l.fg}"><div class="card__mediawrap"><a class="card__media" href="${p.url}" tabindex="-1" aria-hidden="true">${p.img ? `<img class="ph-img" src="${p.img}" alt="" loading="lazy">` : ''}</a><button type="button" class="save" data-save="${id}" aria-pressed="true" aria-label="Togli ${esc(p.name)} dalle salvate"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg></button></div><div class="card__band"><span>Opera n. ${p.opera}</span><span>${l.name}</span></div><div class="card__body"><h2 class="card__name"><a href="${p.url}">${esc(p.name)}</a></h2><p class="card__meta">${p.size} · <strong>${eur(p.price)}</strong><span class="unit">${p.unit}</span></p><button class="btn btn--add" type="button" data-add="${id}">Aggiungi <span class="sr">${esc(p.name)} al carrello</span></button></div></article>`; }).join('');
+      q('[data-saved-empty]').hidden = saved.length > 0;
+    }
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-save]'); if (!b) return;
+    const id = b.dataset.save, on = saved.includes(id);
+    saved = on ? saved.filter(x => x !== id) : saved.concat(id); store.set('mb-saved', saved);
+    renderSaved(); say(on ? 'Tolta dalle opere salvate' : 'Salvata: la trovi in Opere salvate');
+  });
+  renderSaved();
+
+  // ---------- orario limite reale: ordini entro le 12 dei giorni feriali partono in giornata ----------
+  qa('[data-cutoff]').forEach(el => {
+    const now = new Date(), s = shipDay(), tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+    const when = s.toDateString() === now.toDateString() ? null : s.toDateString() === tomorrow.toDateString() ? 'domani' : DAYS_LONG[s.getDay()];
+    el.textContent = when ? ' · se ordini ora, parte ' + when : ' · ordina entro le 12:00 e parte oggi';
   });
 
   // ---------- scheda prodotto: quantità e spedizione ----------
@@ -295,10 +327,11 @@
     let step = 1, order = null;
     const shipSel = () => (q('input[name=ship]:checked', co) || {}).value || 'standard';
     const shipCost = () => (shipSel() === 'express' ? MB.EXP : subtotal() >= MB.FREE ? 0 : MB.STD);
+    const sampleSel = () => { const r = q('input[name=sample]:checked', co); return r && r.value !== 'nessuno' ? r.closest('label').querySelector('strong').textContent : ''; };
     renderSummary = function () {
       const lines = order ? order.lines : cart, sub = order ? order.sub : subtotal(), ship = order ? order.ship : shipCost(), g = order ? order.gift : giftCost();
       sumBox.innerHTML = lines.map(l => { const p = MB.P[l.id]; return `<div class="line" style="--line:${MB.LINES[p.line].bg};--line-fg:${MB.LINES[p.line].fg}">${thumb(p)}<div><p class="line__name">${esc(p.name)}</p><p class="line__meta">${l.qty} × ${eur(p.price)}</p></div></div>`; }).join('') +
-        `<div class="totals" style="margin-top:12px"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${g ? `<div><span>Confezione regalo</span><span>${eur(g)}</span></div>` : ''}<div><span>Spedizione</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(sub + ship + g)}</span></div></div>`;
+        `<div class="totals" style="margin-top:12px"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${g ? `<div><span>Confezione regalo</span><span>${eur(g)}</span></div>` : ''}<div><span>Spedizione</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(sub + ship + g)}</span></div></div>${(order ? order.sample : sampleSel()) ? `<p class="small muted" style="margin-top:10px">Campione omaggio: ${esc(order ? order.sample : sampleSel())}</p>` : ''}`;
       const std = q('[data-ship-std]', co); if (std) std.textContent = subtotal() >= MB.FREE ? 'Gratuita' : eur(MB.STD);
     };
     function show(n) {
@@ -308,8 +341,7 @@
       renderSummary(); window.scrollTo(0, 0);
       const h = q('[data-co-panel="' + n + '"] h1', co); if (h && n > 1) { h.setAttribute('tabindex', '-1'); h.focus(); }
     }
-    if (!cart.length) { panels.forEach(p => { p.hidden = true; }); q('[data-co-empty]', co).hidden = false; q('.co-summary', co).hidden = true; }
-    else show(1);
+    if (cart.length) { q('[data-co-empty]', co).hidden = true; q('.co-summary', co).hidden = false; show(1); }
     const form = q('[data-co-panel="1"]', co);
     const rules = {
       email: v => /^\S+@\S+\.\S+$/.test(v) || 'Inserisci un indirizzo email valido.',
@@ -332,16 +364,16 @@
       q('[data-co-address]', co).textContent = 'Spediamo a: ' + data.nome + ' ' + data.cognome + ', ' + data.indirizzo + ', ' + data.cap + ' ' + data.citta + ' (' + data.provincia.toUpperCase() + ')';
       show(2);
     });
-    qa('input[name=ship]', co).forEach(r => r.addEventListener('change', renderSummary));
+    qa('input[name=ship], input[name=sample]', co).forEach(r => r.addEventListener('change', renderSummary));
     qa('[data-co-back]', co).forEach(b => b.addEventListener('click', () => show(step - 1)));
     q('[data-co-next]', co).addEventListener('click', () => show(3));
     q('[data-login-toggle]', co).addEventListener('click', e => { const n = q('[data-login-note]', co); n.hidden = !n.hidden; e.currentTarget.setAttribute('aria-expanded', String(!n.hidden)); });
     q('[data-co-cart]', co).addEventListener('click', e => { e.preventDefault(); openCart(); });
     q('[data-co-place]', co).addEventListener('click', () => {
       const num = 'MB-DEMO-' + String(Math.floor(1000 + Math.random() * 9000));
-      order = { lines: cart.slice(), sub: subtotal(), ship: shipCost(), gift: giftCost() };
+      order = { lines: cart.slice(), sub: subtotal(), ship: shipCost(), gift: giftCost(), sample: sampleSel() };
       const when = shipSel() === 'express' ? between(1, 2) : between(2, 4);
-      q('[data-co-done-text]', co).innerHTML = `Ordine <strong>${num}</strong>. In un negozio vero ti arriverebbe una conferma a <strong>${esc(data.email)}</strong> e il pacco ${when}.${gift.on ? ' Con confezione regalo e biglietto scritto a mano.' : ''}`;
+      q('[data-co-done-text]', co).innerHTML = `Ordine <strong>${num}</strong>. In un negozio vero ti arriverebbe una conferma a <strong>${esc(data.email)}</strong> e il pacco ${when}.${gift.on ? ' Con confezione regalo e biglietto scritto a mano.' : ''}${order.sample ? ' Nel pacco anche il campione: ' + esc(order.sample) + '.' : ''}`;
       cart = []; gift = { on: false, msg: '' }; save(); renderCart();
       show(4); q('[data-co-panel="4"]', co).focus();
     });

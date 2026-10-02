@@ -213,6 +213,7 @@ const FAQS = [
   { q: 'Perché vi chiamate Michelangelo?', a: 'È un omaggio al modo di lavorare delle botteghe toscane: materia, mani e tempo. Non abbiamo alcun legame con l\'artista, con i suoi eredi o con i musei.' },
   { q: 'I prodotti sono profumati?', a: 'La maggior parte no. Alcuni contengono oli essenziali, come lavanda, limone o rosmarino: gli allergeni che contengono sono indicati in fondo all\'INCI.' },
   { q: 'Posso fare un regalo?', a: 'Sì: nel carrello puoi aggiungere la confezione regalo con biglietto scritto a mano (3 €). Non mettiamo lo scontrino nel pacco.' },
+  { q: 'Ricevo un campione con l\'ordine?', a: 'Sì: in ogni pacco mettiamo un campione omaggio, e al pagamento scegli tu quale (crema all\'iris, siero alle vinacce o olio alla lavanda).' },
   { q: 'Spedite all\'estero?', a: 'Per ora solo in Italia. Spedizione gratuita da 49 €, consegna in 2-4 giorni lavorativi.' }
 ];
 

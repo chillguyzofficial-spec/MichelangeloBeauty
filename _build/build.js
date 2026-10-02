@@ -7,15 +7,22 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '8'; // cache-busting css/js
+const V = '12'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const eur = n => n.toFixed(2).replace('.', ',') + ' €';
+const eur = n => n.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+,)/, '.') + ' €'; // 1.066,67 €
 const BY = Object.fromEntries(D.P.map(p => [p.id, p]));
 const LINE = Object.fromEntries(D.LINES.map(l => [l.id, l]));
 const slug = p => 'opera-' + p.id + '.html';
 const inLine = id => D.P.filter(p => p.line === id);
+// prezzo al litro o al kg, calcolato dal formato (es. "50 ml" → €/l, "4 saponi da 100 g" → €/kg)
+function unitPrice(p) {
+  const m = /(?:(\d+)\s+\w+\s+da\s+)?(\d+)\s*(ml|g)\b/.exec(p.size);
+  if (!m) return '';
+  const qty = (m[1] ? +m[1] : 1) * +m[2] / 1000;
+  return eur(p.price / qty) + (m[3] === 'ml' ? '/l' : '/kg');
+}
 
 // ---------- Foto e disegni ----------
 function webpSize(file) {
@@ -40,7 +47,8 @@ function photo(id, ratio, desc, { alt = '', eager = false, sizes = '(max-width: 
   const [rw, rh] = RATIO[ratio];
   if (fs.existsSync(f)) {
     const { w, h } = webpSize(f);
-    const small = fs.existsSync(path.join(out, 'assets/foto/800', id + '.webp')) && w > 800 ? ` srcset="assets/foto/800/${id}.webp 800w, assets/foto/${id}.webp ${w}w"` : '';
+    const vs = [480, 800, 1400].filter(v => v < w && fs.existsSync(path.join(out, 'assets/foto/' + v, id + '.webp')));
+    const small = vs.length ? ` srcset="${vs.map(v => `assets/foto/${v}/${id}.webp ${v}w`).join(', ')}, assets/foto/${id}.webp ${w}w"` : '';
     return `<img class="ph-img ${cls}" src="assets/foto/${id}.webp"${small} alt="${esc(alt || desc)}" width="${w}" height="${h}" sizes="${sizes}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
   }
   return `<div class="ph ${cls}" style="aspect-ratio:${rw}/${rh}" role="img" aria-label="${esc(alt || desc)}"><span class="ph__tag">Foto · ${ratio}</span><span class="ph__id">${id}</span><span class="ph__desc">${esc(desc)}</span></div>`;
@@ -62,6 +70,7 @@ const packshot = (p, o = {}) => photo('prodotto-' + p.id, '4:5', p.name + ' ' + 
 const NAV = [['opere.html', 'Le opere'], ['rituale.html', 'Il tuo rituale'], ['lotto.html', 'Traccia il lotto'], ['bottega.html', 'La bottega']];
 const ICON = {
   bag: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+  heart: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg>',
   close: '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8"/></svg>',
   wa: '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>'
 };
@@ -76,12 +85,13 @@ function header(active) {
     ${logo()}
     <nav class="nav" aria-label="Principale">${links}</nav>
     <div class="header-actions">
+      <a class="saved-btn" href="salvati.html" aria-label="Opere salvate">${ICON.heart}<span class="cart-btn__n" data-saved-count data-zero>0</span></a>
       <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello">${ICON.bag}<span class="cart-btn__n" data-cart-count>0</span></button>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu>Menu</button>
     </div>
   </div>
   <div class="menu" id="menu" hidden>
-    <nav aria-label="Menu">${links}<a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
+    <nav aria-label="Menu">${links}<a href="salvati.html">Opere salvate</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
   </div>
 </header>`;
 }
@@ -119,9 +129,8 @@ function page({ file, active = '', title, description, body, ld = [], cls = '' }
 <meta name="description" content="${esc(description)}">
 <meta name="theme-color" content="#F3EFE7">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/fonts.css?v=${V}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="css/fonts.css?v=${V}"></noscript>
 <link rel="stylesheet" href="css/styles.css?v=${V}">
 ${ld.map(o => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n')}
 </head>
@@ -145,11 +154,11 @@ ${shell()}
 function card(p, { heading = 'h3' } = {}) {
   const l = LINE[p.line];
   return `<article class="card" style="--line:${l.bg};--line-fg:${l.fg}" data-line="${l.id}" data-skin="${p.skin.join('|')}" data-format="${p.format}" data-price="${p.price}" data-name="${esc(p.name)}" data-order="${D.P.indexOf(p)}">
-  <a class="card__media" href="${slug(p)}" tabindex="-1" aria-hidden="true">${packshot(p)}</a>
+  <div class="card__mediawrap"><a class="card__media" href="${slug(p)}" tabindex="-1" aria-hidden="true">${packshot(p)}</a><button type="button" class="save" data-save="${p.id}" aria-pressed="false" aria-label="Salva ${esc(p.name)} per dopo">${ICON.heart}</button></div>
   <div class="card__band"><span>Opera n. ${p.opera}</span><span>${l.name}</span></div>
   <div class="card__body">
     <${heading} class="card__name"><a href="${slug(p)}">${esc(p.name)}</a></${heading}>
-    <p class="card__meta">${p.size} · <strong>${eur(p.price)}</strong></p>
+    <p class="card__meta">${p.size} · <strong>${eur(p.price)}</strong><span class="unit">${unitPrice(p)}</span></p>
     <button class="btn btn--add" type="button" data-add="${p.id}">Aggiungi <span class="sr">${esc(p.name)} al carrello</span></button>
   </div>
 </article>`;
@@ -333,14 +342,16 @@ for (const p of D.P) {
       <p class="buy__line"><span class="pill">${l.name}</span> Opera n. ${p.opera}</p>
       <h1>${esc(p.name)}</h1>
       <p class="buy__lead">${esc(p.lead)}</p>
-      <p class="buy__price"><strong>${eur(p.price)}</strong> <span>${p.size} · IVA inclusa</span></p>
+      <p class="buy__price"><strong>${eur(p.price)}</strong> <span>${p.size} · IVA inclusa · ${unitPrice(p)}</span></p>
       <div class="buy__row">
         <div class="qty" data-qty><button type="button" data-qty-dec aria-label="Diminuisci la quantità">−</button><span data-qty-val aria-live="polite">1</span><button type="button" data-qty-inc aria-label="Aumenta la quantità">+</button></div>
         <button class="btn btn--primary btn--grow" type="button" data-add="${p.id}" data-add-qty>Aggiungi al carrello</button>
       </div>
+      <button type="button" class="save save--inline" data-save="${p.id}" aria-pressed="false">${ICON.heart}<span data-save-label>Salva per dopo</span></button>
       <ul class="buy__facts">
         <li data-ship-line data-price="${p.price}">Spedizione 4,90 € · gratuita da 49 €</li>
-        <li>Arriva <strong data-delivery>in 2-4 giorni lavorativi</strong> con la spedizione standard</li>
+        <li>Arriva <strong data-delivery>in 2-4 giorni lavorativi</strong> con la spedizione standard<span data-cutoff></span></li>
+        <li>${p.id === 'cofanetto-bottega' ? 'Biglietto scritto a mano incluso: il messaggio lo scrivi nel carrello' : 'Confezione regalo con biglietto scritto a mano (+3 €): la scegli nel carrello'}</li>
         <li>Reso entro 14 giorni dalla consegna · <a href="spedizioni-resi.html">come funziona</a></li>
       </ul>
       ${p.warn ? `<p class="warn"><strong>Attenzione.</strong> ${esc(p.warn)}</p>` : ''}
@@ -480,6 +491,14 @@ function stepDesc(i) {
   return ['Cesto di vimini con fiori di calendula e rametti di lavanda appena raccolti', 'Barattoli di vetro con fiori in olio d\'oliva su un davanzale di pietra', 'Bilancia di precisione e becher sul banco di marmo, mani con guanti', 'Scaffale di castagno con file di saponi a stagionare', 'Mani che applicano l\'etichetta MICHELANGELO su un vasetto di vetro ambrato'][i];
 }
 
+// ---------- OPERE SALVATE ----------
+curPage = 'salvati.html';
+page({
+  file: 'salvati.html', title: 'Opere salvate · Michelangelo Beauty', description: 'Le opere che hai salvato per dopo, senza bisogno di registrarti.',
+  body: `<section class="page-head wrap"><p class="eyebrow">Per dopo</p><h1>Opere salvate</h1><p class="lead">Restano salvate in questo browser, senza account. Le togli toccando di nuovo il cuore.</p></section>
+<section class="wrap saved-page"><div class="grid" data-saved-grid></div><div class="saved-empty" data-saved-empty hidden><p>Non hai ancora salvato nessuna opera: tocca il cuore su quelle che ti piacciono.</p><a class="btn btn--ghost" href="opere.html">Guarda le opere</a></div></section>`
+});
+
 // ---------- SPEDIZIONI E RESI ----------
 curPage = 'spedizioni-resi.html';
 page({
@@ -543,8 +562,8 @@ curPage = 'pagamento.html';
   <ol class="co-steps" aria-label="Passaggi"><li data-co-step="1" aria-current="step"><span>1</span>Dati e indirizzo</li><li data-co-step="2"><span>2</span>Spedizione</li><li data-co-step="3"><span>3</span>Pagamento</li><li data-co-step="4"><span>✓</span>Conferma</li></ol>
   <div class="co-grid">
     <div class="co-main">
-      <div class="co-empty" data-co-empty hidden><h1>Il carrello è vuoto</h1><p>Aggiungi qualche opera prima di passare al pagamento.</p><a class="btn btn--primary" href="opere.html">Vai alle opere</a></div>
-      <form class="co-panel" data-co-panel="1" novalidate>
+      <div class="co-empty" data-co-empty><h1>Il carrello è vuoto</h1><p>Aggiungi qualche opera prima di passare al pagamento.</p><a class="btn btn--primary" href="opere.html">Vai alle opere</a></div>
+      <form class="co-panel" data-co-panel="1" novalidate hidden>
         <h1>Dati e indirizzo</h1>
         <div class="guest"><strong>Acquista senza registrarti</strong><span>Ti basta un'email per ricevere conferma e tracciamento.</span><button type="button" class="link" data-login-toggle aria-expanded="false">Hai già un account?</button><p class="small muted" data-login-note hidden>In questo sito dimostrativo non ci sono account: continua come ospite.</p></div>
         <div class="fields">${F.map(([k, l, t, a, m, s]) => `<div class="field${s ? ' field--full' : ''}"><label for="f-${k}">${l}</label><input id="f-${k}" name="${k}" type="${t}" autocomplete="${a}" inputmode="${m}"${k === 'telefono' ? '' : ' required'}><p class="field__err" id="err-${k}" hidden></p></div>`).join('')}</div>
@@ -557,6 +576,11 @@ curPage = 'pagamento.html';
           <label class="radio"><input type="radio" name="ship" value="standard" checked><span><strong>Standard</strong> · <span data-ship-std>4,90 €</span><br><span class="muted">Arriva <span data-delivery>in 2-4 giorni lavorativi</span></span></span></label>
           <label class="radio"><input type="radio" name="ship" value="express"><span><strong>Espressa</strong> · 8,90 €<br><span class="muted">Arriva <span data-delivery-exp>in 1-2 giorni lavorativi</span></span></span></label>
         </div>
+        <fieldset class="sample">
+          <legend>Il tuo campione omaggio</legend>
+          <p class="muted small">In ogni pacco mettiamo un campione: scegli quale.</p>
+          <div class="radios">${[['crema-iris', 'Crema viso all\'iris fiorentino', '5 ml'], ['siero-vinacce', 'Siero viso alle vinacce', '3 ml'], ['olio-lavanda', 'Olio corpo alla lavanda', '10 ml'], ['nessuno', 'Nessun campione, grazie', '']].map(([v, n, s], i) => `<label class="radio radio--compact"><input type="radio" name="sample" value="${v}"${i === 0 ? ' checked' : ''}><span><strong>${n}</strong>${s ? ' · ' + s : ''}</span></label>`).join('')}</div>
+        </fieldset>
         <div class="co-nav"><button type="button" class="link" data-co-back>← Indietro</button><button class="btn btn--primary" type="button" data-co-next>Continua: pagamento</button></div>
       </div>
       <div class="co-panel" data-co-panel="3" hidden>
@@ -575,7 +599,7 @@ curPage = 'pagamento.html';
         <a class="btn btn--ghost" href="opere.html">Torna alle opere</a>
       </div>
     </div>
-    <aside class="co-summary" aria-label="Riepilogo ordine"><h2>Riepilogo</h2><div data-co-summary></div></aside>
+    <aside class="co-summary" aria-label="Riepilogo ordine" hidden><h2>Riepilogo</h2><div data-co-summary></div></aside>
   </div>
 </section>`
   });
@@ -602,7 +626,7 @@ page({
 const client = {
   FREE, STD, EXP, GIFT,
   LINES: Object.fromEntries(D.LINES.map(l => [l.id, { name: l.name, bg: l.bg, fg: l.fg }])),
-  P: Object.fromEntries(D.P.map(p => [p.id, { name: p.name, opera: p.opera, line: p.line, size: p.size, price: p.price, skin: p.skin, pao: p.pao, url: slug(p), img: fs.existsSync(path.join(out, 'assets/foto/800/prodotto-' + p.id + '.webp')) ? 'assets/foto/800/prodotto-' + p.id + '.webp' : fs.existsSync(path.join(out, 'assets/foto/prodotto-' + p.id + '.webp')) ? 'assets/foto/prodotto-' + p.id + '.webp' : '' }])),
+  P: Object.fromEntries(D.P.map(p => [p.id, { name: p.name, opera: p.opera, line: p.line, size: p.size, price: p.price, unit: unitPrice(p), skin: p.skin, pao: p.pao, url: slug(p), img: fs.existsSync(path.join(out, 'assets/foto/800/prodotto-' + p.id + '.webp')) ? 'assets/foto/800/prodotto-' + p.id + '.webp' : fs.existsSync(path.join(out, 'assets/foto/prodotto-' + p.id + '.webp')) ? 'assets/foto/prodotto-' + p.id + '.webp' : '' }])),
   GLOSS: D.GLOSS,
   LOTS: D.LOTS,
   PEOPLE: Object.fromEntries(D.PEOPLE.map(p => [p.id, p.name]))

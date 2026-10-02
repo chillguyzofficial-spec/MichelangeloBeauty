@@ -1,7 +1,7 @@
 # Michelangelo Beauty — foto e disegni da generare
 <!-- generato da _build/build.js: si aggiorna da solo a ogni build -->
 
-Foto: **46/47** presenti · Disegni: **4/7** presenti
+Foto: **46/47** presenti · Disegni: **5/7** presenti
 
 ## Regole per tutte le foto
 - Luce naturale calda da finestra laterale, materiali veri: marmo bianco di Carrara, legno di castagno, vetro ambrato, lino, terracotta.

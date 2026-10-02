@@ -8,10 +8,9 @@
 <meta name="description" content="Inserisci il numero di lotto stampato sulla confezione: data di produzione, chi l'ha fatto e da dove arrivano gli ingredienti.">
 <meta name="theme-color" content="#F3EFE7">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=8">
+<link rel="stylesheet" href="css/fonts.css?v=12" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="css/fonts.css?v=12"></noscript>
+<link rel="stylesheet" href="css/styles.css?v=12">
 
 </head>
 <body class="">
@@ -22,12 +21,13 @@
     <a class="logo" href="index.html"><span class="logo__name">Michelangelo</span><span class="logo__sub">Beauty · bottega toscana</span></a>
     <nav class="nav" aria-label="Principale"><a href="opere.html">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html" aria-current="page">Traccia il lotto</a><a href="bottega.html">La bottega</a></nav>
     <div class="header-actions">
+      <a class="saved-btn" href="salvati.html" aria-label="Opere salvate"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-saved-count data-zero>0</span></a>
       <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-cart-count>0</span></button>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu>Menu</button>
     </div>
   </div>
   <div class="menu" id="menu" hidden>
-    <nav aria-label="Menu"><a href="opere.html">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html" aria-current="page">Traccia il lotto</a><a href="bottega.html">La bottega</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
+    <nav aria-label="Menu"><a href="opere.html">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html" aria-current="page">Traccia il lotto</a><a href="bottega.html">La bottega</a><a href="salvati.html">Opere salvate</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
   </div>
 </header>
 <main id="main">
@@ -38,7 +38,7 @@
     <h1>Ogni opera ha una storia. Ecco la tua.</h1>
     <p class="lead">Il numero di lotto è stampato sul fondo della confezione, accanto al simbolo del PAO. Inizia con MB.</p>
   </div>
-  <img class="dw-img page-head__dw" src="assets/disegni/dw-ramo-ulivo.webp" alt="" width="1600" height="1600" loading="lazy" decoding="async">
+  <img class="dw-img page-head__dw" src="assets/disegni/dw-ramo-ulivo.webp" alt="" width="720" height="720" loading="lazy" decoding="async">
 </section>
 <section class="wrap lot">
   <form class="lot-form" data-lot-form>
@@ -68,7 +68,7 @@
   <div class="drawer__foot" data-cart-foot></div>
 </aside>
 <div class="toast" data-toast role="status" aria-live="polite"></div>
-<script src="js/catalogo.js?v=8"></script>
-<script src="js/main.js?v=8"></script>
+<script src="js/catalogo.js?v=12"></script>
+<script src="js/main.js?v=12"></script>
 </body>
 </html>

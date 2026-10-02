@@ -113,7 +113,7 @@ p{margin:0}
 .line-tile{background:var(--line);color:var(--line-fg);text-decoration:none;padding:clamp(8px,1vw,12px);display:flex;flex-direction:column;transition:transform .25s}
 .line-tile:hover{transform:translateY(-3px)}
 .line-tile__text{display:flex;flex-direction:column;padding:14px 6px 8px}
-.line-tile .roman{color:inherit;opacity:.8;font-size:20px;margin:0}
+.line-tile .roman{color:inherit;font-size:20px;margin:0}
 .line-tile__name{font-family:var(--serif);font-size:clamp(24px,2.6vw,36px);line-height:1.1}
 .line-tile__meta{font-size:15px;opacity:.9;margin-top:4px}
 @media (max-width:700px){.lines{grid-template-columns:1fr 1fr}.line-tile__meta{font-size:14px}}
@@ -142,7 +142,7 @@ p{margin:0}
 .band h2{margin-bottom:14px}
 .band .lead,.band p{color:inherit}
 .band p:not(.roman){margin-bottom:24px;max-width:58ch}
-.band .roman{color:inherit;opacity:.8}
+.band .roman{color:inherit}
 .band--rituale{background:var(--lapis);color:#F6F2EA}
 .band--lotto{background:var(--verde);color:#F6F2EA}
 .band--lotto .band__in{grid-template-columns:1fr minmax(0,440px)}
@@ -433,3 +433,20 @@ p,dd,td,li,a,label{overflow-wrap:break-word}
 /* fascia fiducia: le linee divisorie sulle celle, così lo sfondo non copre i margini della pagina */
 .trust{background:none;border:0;gap:0}
 .trust div{border:1px solid var(--marble-3);margin:0 -1px -1px 0}
+
+/* Miglioramenti 2026-10-02: salva per dopo, prezzo unitario, campione omaggio */
+.unit{display:block;font-size:14px;color:var(--ink-3);font-weight:400}
+.buy__price span{display:inline-block}
+.card__mediawrap{position:relative}
+.save{position:absolute;top:8px;right:8px;width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(243,239,231,.92);color:var(--ink);cursor:pointer}
+.save:hover{color:var(--sanguigna)}
+.save[aria-pressed="true"]{color:var(--sanguigna);--heart-fill:var(--sanguigna)}
+.save--inline{position:static;width:auto;height:auto;min-height:44px;border-radius:0;background:none;display:inline-flex;gap:8px;padding:0;font-weight:500;font-size:16px;margin:-4px 0 14px}
+.saved-btn{position:relative;width:44px;height:48px;display:grid;place-items:center;color:var(--ink);--heart-fill:none}
+@media (max-width:419px){.saved-btn{display:none}}
+.saved-page{padding-bottom:var(--sec)}
+.saved-empty{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.sample{border:0;padding:0;margin:24px 0 0}
+.sample legend{font-family:var(--serif);font-size:24px;margin-bottom:4px;padding:0}
+.sample .small{margin-bottom:10px}
+.radio--compact{padding:12px 16px}

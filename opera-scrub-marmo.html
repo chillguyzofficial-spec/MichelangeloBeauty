@@ -8,10 +8,9 @@
 <meta name="description" content="La polvere di marmo che resta dalla lavorazione dei blocchi, finissima e setacciata, impastata con olio d'oliva. Leviga la pelle del corpo e la lascia m…">
 <meta name="theme-color" content="#F3EFE7">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=8">
+<link rel="stylesheet" href="css/fonts.css?v=12" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="css/fonts.css?v=12"></noscript>
+<link rel="stylesheet" href="css/styles.css?v=12">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Scrub corpo al marmo di Carrara","description":"La polvere di marmo che resta dalla lavorazione dei blocchi, finissima e setacciata, impastata con olio d'oliva. Leviga la pelle del corpo e la lascia morbida.","brand":{"@type":"Brand","name":"Michelangelo Beauty (marchio di fantasia)"},"sku":"MB-scrub-marmo","offers":{"@type":"Offer","price":"22.00","priceCurrency":"EUR","availability":"https://schema.org/InStock"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"index.html"},{"@type":"ListItem","position":2,"name":"Le opere","item":"opere.html"},{"@type":"ListItem","position":3,"name":"Scrub corpo al marmo di Carrara"}]}</script>
 </head>
@@ -23,12 +22,13 @@
     <a class="logo" href="index.html"><span class="logo__name">Michelangelo</span><span class="logo__sub">Beauty · bottega toscana</span></a>
     <nav class="nav" aria-label="Principale"><a href="opere.html" aria-current="page">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html">Traccia il lotto</a><a href="bottega.html">La bottega</a></nav>
     <div class="header-actions">
+      <a class="saved-btn" href="salvati.html" aria-label="Opere salvate"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-saved-count data-zero>0</span></a>
       <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-cart-count>0</span></button>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu>Menu</button>
     </div>
   </div>
   <div class="menu" id="menu" hidden>
-    <nav aria-label="Menu"><a href="opere.html" aria-current="page">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html">Traccia il lotto</a><a href="bottega.html">La bottega</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
+    <nav aria-label="Menu"><a href="opere.html" aria-current="page">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html">Traccia il lotto</a><a href="bottega.html">La bottega</a><a href="salvati.html">Opere salvate</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
   </div>
 </header>
 <main id="main">
@@ -36,23 +36,25 @@
 <nav class="crumbs wrap" aria-label="Briciole di pane"><a href="index.html">Home</a> / <a href="opere.html">Le opere</a> / <a href="opere.html?linea=corpo">Corpo</a> / <span aria-current="page">Scrub corpo al marmo di Carrara</span></nav>
 <section class="product wrap" style="--line:#C8902E;--line-fg:#1C1A17" data-product="scrub-marmo">
   <div class="product__gallery">
-    <img class="ph-img " src="assets/foto/prodotto-scrub-marmo.webp" srcset="assets/foto/800/prodotto-scrub-marmo.webp 800w, assets/foto/prodotto-scrub-marmo.webp 1408w" alt="Scrub corpo al marmo di Carrara" width="1408" height="1760" sizes="(max-width: 900px) 100vw, 50vw" fetchpriority="high" decoding="async">
-    <img class="ph-img " src="assets/foto/scrub-marmo-in-mano.webp" srcset="assets/foto/800/scrub-marmo-in-mano.webp 800w, assets/foto/scrub-marmo-in-mano.webp 1296w" alt="Scrub corpo al marmo di Carrara, dimensione reale 200 ml" width="1296" height="1616" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" decoding="async">
-    <img class="ph-img " src="assets/foto/scrub-marmo-dettaglio.webp" srcset="assets/foto/800/scrub-marmo-dettaglio.webp 800w, assets/foto/scrub-marmo-dettaglio.webp 1296w" alt="Scrub corpo al marmo di Carrara, dettaglio" width="1296" height="1616" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" decoding="async">
+    <img class="ph-img " src="assets/foto/prodotto-scrub-marmo.webp" srcset="assets/foto/480/prodotto-scrub-marmo.webp 480w, assets/foto/800/prodotto-scrub-marmo.webp 800w, assets/foto/1400/prodotto-scrub-marmo.webp 1400w, assets/foto/prodotto-scrub-marmo.webp 1408w" alt="Scrub corpo al marmo di Carrara" width="1408" height="1760" sizes="(max-width: 900px) 100vw, 50vw" fetchpriority="high" decoding="async">
+    <img class="ph-img " src="assets/foto/scrub-marmo-in-mano.webp" srcset="assets/foto/480/scrub-marmo-in-mano.webp 480w, assets/foto/800/scrub-marmo-in-mano.webp 800w, assets/foto/scrub-marmo-in-mano.webp 1296w" alt="Scrub corpo al marmo di Carrara, dimensione reale 200 ml" width="1296" height="1616" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" decoding="async">
+    <img class="ph-img " src="assets/foto/scrub-marmo-dettaglio.webp" srcset="assets/foto/480/scrub-marmo-dettaglio.webp 480w, assets/foto/800/scrub-marmo-dettaglio.webp 800w, assets/foto/scrub-marmo-dettaglio.webp 1296w" alt="Scrub corpo al marmo di Carrara, dettaglio" width="1296" height="1616" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" decoding="async">
   </div>
   <div class="product__info">
     <div class="buy">
       <p class="buy__line"><span class="pill">Corpo</span> Opera n. III</p>
       <h1>Scrub corpo al marmo di Carrara</h1>
       <p class="buy__lead">La polvere di marmo che resta dalla lavorazione dei blocchi, finissima e setacciata, impastata con olio d'oliva. Leviga la pelle del corpo e la lascia morbida.</p>
-      <p class="buy__price"><strong>22,00 €</strong> <span>200 ml · IVA inclusa</span></p>
+      <p class="buy__price"><strong>22,00 €</strong> <span>200 ml · IVA inclusa · 110,00 €/l</span></p>
       <div class="buy__row">
         <div class="qty" data-qty><button type="button" data-qty-dec aria-label="Diminuisci la quantità">−</button><span data-qty-val aria-live="polite">1</span><button type="button" data-qty-inc aria-label="Aumenta la quantità">+</button></div>
         <button class="btn btn--primary btn--grow" type="button" data-add="scrub-marmo" data-add-qty>Aggiungi al carrello</button>
       </div>
+      <button type="button" class="save save--inline" data-save="scrub-marmo" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg><span data-save-label>Salva per dopo</span></button>
       <ul class="buy__facts">
         <li data-ship-line data-price="22">Spedizione 4,90 € · gratuita da 49 €</li>
-        <li>Arriva <strong data-delivery>in 2-4 giorni lavorativi</strong> con la spedizione standard</li>
+        <li>Arriva <strong data-delivery>in 2-4 giorni lavorativi</strong> con la spedizione standard<span data-cutoff></span></li>
+        <li>Confezione regalo con biglietto scritto a mano (+3 €): la scegli nel carrello</li>
         <li>Reso entro 14 giorni dalla consegna · <a href="spedizioni-resi.html">come funziona</a></li>
       </ul>
       <p class="warn"><strong>Attenzione.</strong> Solo per il corpo: non usarlo sul viso né su pelle lesa. Il piatto della doccia può diventare scivoloso, risciacqualo dopo l'uso.</p>
@@ -81,29 +83,29 @@
 <section class="sec wrap">
   <div class="sec-head"><h2>Si abbina con</h2></div>
   <div class="grid grid--3"><article class="card" style="--line:#C8902E;--line-fg:#1C1A17" data-line="corpo" data-skin="Secca|Sensibile|Mista o grassa" data-format="Olio" data-price="19" data-name="Olio corpo alla lavanda" data-order="3">
-  <a class="card__media" href="opera-olio-lavanda.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-olio-lavanda.webp" srcset="assets/foto/800/prodotto-olio-lavanda.webp 800w, assets/foto/prodotto-olio-lavanda.webp 1408w" alt="Olio corpo alla lavanda" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a>
+  <div class="card__mediawrap"><a class="card__media" href="opera-olio-lavanda.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-olio-lavanda.webp" srcset="assets/foto/480/prodotto-olio-lavanda.webp 480w, assets/foto/800/prodotto-olio-lavanda.webp 800w, assets/foto/1400/prodotto-olio-lavanda.webp 1400w, assets/foto/prodotto-olio-lavanda.webp 1408w" alt="Olio corpo alla lavanda" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a><button type="button" class="save" data-save="olio-lavanda" aria-pressed="false" aria-label="Salva Olio corpo alla lavanda per dopo"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
   <div class="card__band"><span>Opera n. IV</span><span>Corpo</span></div>
   <div class="card__body">
     <h3 class="card__name"><a href="opera-olio-lavanda.html">Olio corpo alla lavanda</a></h3>
-    <p class="card__meta">100 ml · <strong>19,00 €</strong></p>
+    <p class="card__meta">100 ml · <strong>19,00 €</strong><span class="unit">190,00 €/l</span></p>
     <button class="btn btn--add" type="button" data-add="olio-lavanda">Aggiungi <span class="sr">Olio corpo alla lavanda al carrello</span></button>
   </div>
 </article>
 <article class="card" style="--line:#D9A48E;--line-fg:#1C1A17" data-line="saponi" data-skin="Secca|Sensibile|Mista o grassa" data-format="Solido" data-price="8.5" data-name="Sapone all'olio d'oliva e calendula" data-order="6">
-  <a class="card__media" href="opera-sapone-calendula.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-sapone-calendula.webp" srcset="assets/foto/800/prodotto-sapone-calendula.webp 800w, assets/foto/prodotto-sapone-calendula.webp 1408w" alt="Sapone all'olio d'oliva e calendula" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a>
+  <div class="card__mediawrap"><a class="card__media" href="opera-sapone-calendula.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-sapone-calendula.webp" srcset="assets/foto/480/prodotto-sapone-calendula.webp 480w, assets/foto/800/prodotto-sapone-calendula.webp 800w, assets/foto/1400/prodotto-sapone-calendula.webp 1400w, assets/foto/prodotto-sapone-calendula.webp 1408w" alt="Sapone all'olio d'oliva e calendula" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a><button type="button" class="save" data-save="sapone-calendula" aria-pressed="false" aria-label="Salva Sapone all'olio d'oliva e calendula per dopo"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
   <div class="card__band"><span>Opera n. VII</span><span>Saponi</span></div>
   <div class="card__body">
     <h3 class="card__name"><a href="opera-sapone-calendula.html">Sapone all'olio d'oliva e calendula</a></h3>
-    <p class="card__meta">100 g · <strong>8,50 €</strong></p>
+    <p class="card__meta">100 g · <strong>8,50 €</strong><span class="unit">85,00 €/kg</span></p>
     <button class="btn btn--add" type="button" data-add="sapone-calendula">Aggiungi <span class="sr">Sapone all'olio d'oliva e calendula al carrello</span></button>
   </div>
 </article>
 <article class="card" style="--line:#A4472F;--line-fg:#F6F2EA" data-line="mani-labbra" data-skin="Secca|Sensibile" data-format="Crema" data-price="13" data-name="Crema mani all'olio d'oliva" data-order="5">
-  <a class="card__media" href="opera-crema-mani.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-crema-mani.webp" srcset="assets/foto/800/prodotto-crema-mani.webp 800w, assets/foto/prodotto-crema-mani.webp 1408w" alt="Crema mani all'olio d'oliva" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a>
+  <div class="card__mediawrap"><a class="card__media" href="opera-crema-mani.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-crema-mani.webp" srcset="assets/foto/480/prodotto-crema-mani.webp 480w, assets/foto/800/prodotto-crema-mani.webp 800w, assets/foto/1400/prodotto-crema-mani.webp 1400w, assets/foto/prodotto-crema-mani.webp 1408w" alt="Crema mani all'olio d'oliva" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a><button type="button" class="save" data-save="crema-mani" aria-pressed="false" aria-label="Salva Crema mani all'olio d'oliva per dopo"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
   <div class="card__band"><span>Opera n. VI</span><span>Mani e labbra</span></div>
   <div class="card__body">
     <h3 class="card__name"><a href="opera-crema-mani.html">Crema mani all'olio d'oliva</a></h3>
-    <p class="card__meta">75 ml · <strong>13,00 €</strong></p>
+    <p class="card__meta">75 ml · <strong>13,00 €</strong><span class="unit">173,33 €/l</span></p>
     <button class="btn btn--add" type="button" data-add="crema-mani">Aggiungi <span class="sr">Crema mani all'olio d'oliva al carrello</span></button>
   </div>
 </article></div>
@@ -128,7 +130,7 @@
   <div class="drawer__foot" data-cart-foot></div>
 </aside>
 <div class="toast" data-toast role="status" aria-live="polite"></div>
-<script src="js/catalogo.js?v=8"></script>
-<script src="js/main.js?v=8"></script>
+<script src="js/catalogo.js?v=12"></script>
+<script src="js/main.js?v=12"></script>
 </body>
 </html>
