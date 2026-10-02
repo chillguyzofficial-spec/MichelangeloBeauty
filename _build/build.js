@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '1'; // cache-busting css/js
+const V = '2'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -40,7 +40,8 @@ function photo(id, ratio, desc, { alt = '', eager = false, sizes = '(max-width: 
   const [rw, rh] = RATIO[ratio];
   if (fs.existsSync(f)) {
     const { w, h } = webpSize(f);
-    return `<img class="ph-img ${cls}" src="assets/foto/${id}.webp" alt="${esc(alt || desc)}" width="${w}" height="${h}" sizes="${sizes}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
+    const small = fs.existsSync(path.join(out, 'assets/foto/800', id + '.webp')) && w > 800 ? ` srcset="assets/foto/800/${id}.webp 800w, assets/foto/${id}.webp ${w}w"` : '';
+    return `<img class="ph-img ${cls}" src="assets/foto/${id}.webp"${small} alt="${esc(alt || desc)}" width="${w}" height="${h}" sizes="${sizes}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
   }
   return `<div class="ph ${cls}" style="aspect-ratio:${rw}/${rh}" role="img" aria-label="${esc(alt || desc)}"><span class="ph__tag">Foto · ${ratio}</span><span class="ph__id">${id}</span><span class="ph__desc">${esc(desc)}</span></div>`;
 }
@@ -55,7 +56,7 @@ function drawing(id, desc, cls = '') {
   }
   return `<div class="dw ${cls}" aria-hidden="true"><span class="dw__tag">Disegno a sanguigna</span><span class="dw__id">${id}</span><span class="dw__desc">${esc(desc)}</span></div>`;
 }
-const packshot = p => photo('prodotto-' + p.id, '4:5', p.name + ' ' + p.size + ' sul piano di marmo, stessa luce per tutto il catalogo', { alt: p.name, shared: true, sizes: '(max-width: 700px) 50vw, 25vw' });
+const packshot = (p, o = {}) => photo('prodotto-' + p.id, '4:5', p.name + ' ' + p.size + ' sul piano di marmo, stessa luce per tutto il catalogo', { alt: p.name, shared: true, sizes: '(max-width: 700px) 50vw, 25vw', ...o });
 
 // ---------- Pezzi comuni ----------
 const NAV = [['opere.html', 'Le opere'], ['rituale.html', 'Il tuo rituale'], ['lotto.html', 'Traccia il lotto'], ['bottega.html', 'La bottega']];
@@ -297,7 +298,7 @@ curPage = 'opere.html';
     <label class="sort">Ordina <select data-sort><option value="evidenza">In evidenza</option><option value="prezzo-asc">Prezzo crescente</option><option value="prezzo-desc">Prezzo decrescente</option><option value="nome">Nome A-Z</option></select></label></div>
   <div class="grid" data-shop-grid>${D.P.map(p => card(p, { heading: 'h2' })).join('\n')}</div>
   <div class="shop__empty" data-shop-empty hidden>
-    ${drawing('dw-foglie', 'Un ramo di ulivo con poche foglie, tratto leggero a sanguigna', 'empty__dw')}
+    ${drawing('dw-lavanda', 'Un rametto di lavanda appoggiato di traverso, tratto leggero a sanguigna', 'empty__dw')}
     <p>Nessuna opera con questi filtri.</p><button class="btn btn--ghost" type="button" data-filter-reset>Togli i filtri</button>
   </div>
 </section>`
@@ -323,7 +324,7 @@ for (const p of D.P) {
 <nav class="crumbs wrap" aria-label="Briciole di pane"><a href="index.html">Home</a> / <a href="opere.html">Le opere</a> / <a href="opere.html?linea=${l.id}">${l.name}</a> / <span aria-current="page">${esc(p.name)}</span></nav>
 <section class="product wrap" style="--line:${l.bg};--line-fg:${l.fg}" data-product="${p.id}">
   <div class="product__gallery">
-    ${photo(p.id + '-ambientata', '4:5', p.name + ' ambientato in bottega, sul banco di marmo', { alt: p.name, eager: true })}
+    ${packshot(p, { eager: true, sizes: '(max-width: 900px) 100vw, 50vw' })}
     ${photo(p.id + '-in-mano', '4:5', p.name + ' tenuto in mano, per mostrare la dimensione reale (' + p.size + ')', { alt: p.name + ', dimensione reale ' + p.size })}
     ${photo(p.id + '-dettaglio', '4:5', dettaglio(p), { alt: p.name + ', dettaglio' })}
   </div>
@@ -601,7 +602,7 @@ page({
 const client = {
   FREE, STD, EXP, GIFT,
   LINES: Object.fromEntries(D.LINES.map(l => [l.id, { name: l.name, bg: l.bg, fg: l.fg }])),
-  P: Object.fromEntries(D.P.map(p => [p.id, { name: p.name, opera: p.opera, line: p.line, size: p.size, price: p.price, skin: p.skin, pao: p.pao, url: slug(p), img: fs.existsSync(path.join(out, 'assets/foto/prodotto-' + p.id + '.webp')) ? 'assets/foto/prodotto-' + p.id + '.webp' : '' }])),
+  P: Object.fromEntries(D.P.map(p => [p.id, { name: p.name, opera: p.opera, line: p.line, size: p.size, price: p.price, skin: p.skin, pao: p.pao, url: slug(p), img: fs.existsSync(path.join(out, 'assets/foto/800/prodotto-' + p.id + '.webp')) ? 'assets/foto/800/prodotto-' + p.id + '.webp' : fs.existsSync(path.join(out, 'assets/foto/prodotto-' + p.id + '.webp')) ? 'assets/foto/prodotto-' + p.id + '.webp' : '' }])),
   GLOSS: D.GLOSS,
   LOTS: D.LOTS,
   PEOPLE: Object.fromEntries(D.PEOPLE.map(p => [p.id, p.name]))
@@ -635,7 +636,7 @@ Foto: **${done}/${plist.length}** presenti · Disegni: **${ddone}/${dlist.length
 ## Foto
 | File | Proporzioni | Pixel consigliati | Cosa mostra | Dove |
 |---|---|---|---|---|
-${plist.map(x => `| \`${x.id}.webp\` | ${x.ratio} | ${RATIO[x.ratio][2]} | ${x.desc} | ${x.shared ? 'card del prodotto (negozio, home, abbinamenti, carrello)' : [...x.pages].join(', ')} |`).join('\n')}
+${plist.map(x => `| \`${x.id}.webp\` | ${x.ratio} | ${RATIO[x.ratio][2]} | ${x.desc} | ${x.shared ? 'foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda' : [...x.pages].join(', ')} |`).join('\n')}
 
 ## Disegni a sanguigna
 Stile: studio di bottega rinascimentale a gesso rosso (sanguigna), tratto vivo e sicuro, **disegni nuovi** (non copie di opere esistenti), su **fondo bianco pulito** (il bianco lo tolgo io in pagina, così il disegno si posa sul marmo). Formato quadrato 1600×1600 o verticale 4:5.

@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=1">
+<link rel="stylesheet" href="css/styles.css?v=2">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"Michelangelo Beauty (progetto dimostrativo)","description":"Bottega di cosmetica artigianale, marchio di fantasia.","email":"bottega@michelangelobeauty.example","priceRange":"€€"}</script>
 </head>
 <body class="">
@@ -33,7 +33,7 @@
 <main id="main">
 
 <section class="hero">
-  <div class="hero__media"><div class="ph " style="aspect-ratio:16/9" role="img" aria-label="Il banco di marmo della bottega con vasetti in vetro ambrato, saponi e un mazzo di iris; mani che lavorano; luce calda da una finestra laterale"><span class="ph__tag">Foto · 16:9</span><span class="ph__id">home-apertura</span><span class="ph__desc">Il banco di marmo della bottega con vasetti in vetro ambrato, saponi e un mazzo di iris; mani che lavorano; luce calda da una finestra laterale</span></div></div>
+  <div class="hero__media"><img class="ph-img " src="assets/foto/home-apertura.webp" srcset="assets/foto/800/home-apertura.webp 800w, assets/foto/home-apertura.webp 2048w" alt="Il banco di marmo della bottega con vasetti in vetro ambrato, saponi e un mazzo di iris; mani che lavorano; luce calda da una finestra laterale" width="2048" height="1152" sizes="100vw" fetchpriority="high" decoding="async"></div>
   <div class="hero__text wrap">
     <div>
       <p class="eyebrow">Bottega di cosmetica · Toscana</p>
@@ -41,7 +41,7 @@
       <p class="lead">Olio extravergine d'oliva, iris fiorentino, polvere di marmo di Carrara. Piccoli lotti numerati, lavorati a mano tra Firenze e le Alpi Apuane.</p>
       <a class="btn btn--primary" href="opere.html">Scopri le opere</a>
     </div>
-    <div class="dw hero__dw" aria-hidden="true"><span class="dw__tag">Disegno a sanguigna</span><span class="dw__id">dw-mani-banco</span><span class="dw__desc">Due mani che lavorano un panetto di sapone sul banco, tratto a sanguigna</span></div>
+    <img class="dw-img hero__dw" src="assets/disegni/dw-mani-banco.webp" alt="" width="1920" height="1280" loading="lazy" decoding="async">
   </div>
 </section>
 
@@ -55,23 +55,23 @@
 <section class="sec wrap">
   <div class="sec-head"><p class="roman">I</p><h2>Le linee</h2><p class="sec-intro">Ogni linea ha il colore di un pigmento da affresco. Lo ritrovi su ogni opera, nel negozio e nel carrello.</p></div>
   <div class="lines"><a class="line-tile" href="opere.html?linea=viso" style="--line:#1F3A6B;--line-fg:#F6F2EA">
-  <div class="line-tile__media"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Vasetto di crema e flacone di siero su un piano di marmo, un fiore di iris viola accanto"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">linea-viso</span><span class="ph__desc">Vasetto di crema e flacone di siero su un piano di marmo, un fiore di iris viola accanto</span></div></div>
+  <div class="line-tile__media"><img class="ph-img " src="assets/foto/linea-viso.webp" srcset="assets/foto/800/linea-viso.webp 800w, assets/foto/linea-viso.webp 1408w" alt="Vasetto di crema e flacone di siero su un piano di marmo, un fiore di iris viola accanto" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 33vw" loading="lazy" decoding="async"></div>
   <div class="line-tile__text"><span class="roman">I</span><span class="line-tile__name">Viso</span><span class="line-tile__meta">2 opere · blu lapislazzuli</span></div>
 </a>
 <a class="line-tile" href="opere.html?linea=corpo" style="--line:#C8902E;--line-fg:#1C1A17">
-  <div class="line-tile__media"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Barattolo di scrub con polvere di marmo bianca e flacone di olio alla lavanda, mazzetto di lavanda"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">linea-corpo</span><span class="ph__desc">Barattolo di scrub con polvere di marmo bianca e flacone di olio alla lavanda, mazzetto di lavanda</span></div></div>
+  <div class="line-tile__media"><img class="ph-img " src="assets/foto/linea-corpo.webp" srcset="assets/foto/800/linea-corpo.webp 800w, assets/foto/linea-corpo.webp 1408w" alt="Barattolo di scrub con polvere di marmo bianca e flacone di olio alla lavanda, mazzetto di lavanda" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 33vw" loading="lazy" decoding="async"></div>
   <div class="line-tile__text"><span class="roman">II</span><span class="line-tile__name">Corpo</span><span class="line-tile__meta">2 opere · ocra gialla</span></div>
 </a>
 <a class="line-tile" href="opere.html?linea=mani-labbra" style="--line:#A4472F;--line-fg:#F6F2EA">
-  <div class="line-tile__media"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Mani che aprono una scatolina di latta di balsamo, maniche di lino"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">linea-mani-labbra</span><span class="ph__desc">Mani che aprono una scatolina di latta di balsamo, maniche di lino</span></div></div>
+  <div class="line-tile__media"><img class="ph-img " src="assets/foto/linea-mani-labbra.webp" srcset="assets/foto/800/linea-mani-labbra.webp 800w, assets/foto/linea-mani-labbra.webp 1408w" alt="Mani che aprono una scatolina di latta di balsamo, maniche di lino" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 33vw" loading="lazy" decoding="async"></div>
   <div class="line-tile__text"><span class="roman">III</span><span class="line-tile__name">Mani e labbra</span><span class="line-tile__meta">2 opere · rosso sanguigna</span></div>
 </a>
 <a class="line-tile" href="opere.html?linea=capelli" style="--line:#5E6B45;--line-fg:#F6F2EA">
-  <div class="line-tile__media"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Panetto di shampoo solido su un telo di lino, rametti di rosmarino fresco"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">linea-capelli</span><span class="ph__desc">Panetto di shampoo solido su un telo di lino, rametti di rosmarino fresco</span></div></div>
+  <div class="line-tile__media"><img class="ph-img " src="assets/foto/linea-capelli.webp" srcset="assets/foto/800/linea-capelli.webp 800w, assets/foto/linea-capelli.webp 1408w" alt="Panetto di shampoo solido su un telo di lino, rametti di rosmarino fresco" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 33vw" loading="lazy" decoding="async"></div>
   <div class="line-tile__text"><span class="roman">IV</span><span class="line-tile__name">Capelli</span><span class="line-tile__meta">1 opera · verde terra</span></div>
 </a>
 <a class="line-tile" href="opere.html?linea=saponi" style="--line:#D9A48E;--line-fg:#1C1A17">
-  <div class="line-tile__media"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Saponi in stagionatura su griglie di castagno, vista dall'alto"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">linea-saponi</span><span class="ph__desc">Saponi in stagionatura su griglie di castagno, vista dall'alto</span></div></div>
+  <div class="line-tile__media"><img class="ph-img " src="assets/foto/linea-saponi.webp" srcset="assets/foto/800/linea-saponi.webp 800w, assets/foto/linea-saponi.webp 1408w" alt="Saponi in stagionatura su griglie di castagno, vista dall'alto" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 33vw" loading="lazy" decoding="async"></div>
   <div class="line-tile__text"><span class="roman">V</span><span class="line-tile__name">Saponi</span><span class="line-tile__meta">2 opere · rosa incarnato</span></div>
 </a>
 <a class="line-tile" href="opere.html?linea=cofanetti" style="--line:#2B2824;--line-fg:#F6F2EA">
@@ -83,7 +83,7 @@
 <section class="sec wrap">
   <div class="sec-head"><p class="roman">II</p><h2>Le opere più amate</h2></div>
   <div class="grid"><article class="card" style="--line:#1F3A6B;--line-fg:#F6F2EA" data-line="viso" data-skin="Secca|Sensibile" data-format="Crema" data-price="28" data-name="Crema viso all'iris fiorentino" data-order="0">
-  <a class="card__media" href="opera-crema-iris.html" tabindex="-1" aria-hidden="true"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Crema viso all'iris fiorentino"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">prodotto-crema-iris</span><span class="ph__desc">Crema viso all'iris fiorentino 50 ml sul piano di marmo, stessa luce per tutto il catalogo</span></div></a>
+  <a class="card__media" href="opera-crema-iris.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-crema-iris.webp" srcset="assets/foto/800/prodotto-crema-iris.webp 800w, assets/foto/prodotto-crema-iris.webp 1408w" alt="Crema viso all'iris fiorentino" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a>
   <div class="card__band"><span>Opera n. I</span><span>Viso</span></div>
   <div class="card__body">
     <h3 class="card__name"><a href="opera-crema-iris.html">Crema viso all'iris fiorentino</a></h3>
@@ -92,7 +92,7 @@
   </div>
 </article>
 <article class="card" style="--line:#C8902E;--line-fg:#1C1A17" data-line="corpo" data-skin="Secca|Mista o grassa" data-format="Scrub" data-price="22" data-name="Scrub corpo al marmo di Carrara" data-order="2">
-  <a class="card__media" href="opera-scrub-marmo.html" tabindex="-1" aria-hidden="true"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Scrub corpo al marmo di Carrara"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">prodotto-scrub-marmo</span><span class="ph__desc">Scrub corpo al marmo di Carrara 200 ml sul piano di marmo, stessa luce per tutto il catalogo</span></div></a>
+  <a class="card__media" href="opera-scrub-marmo.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-scrub-marmo.webp" srcset="assets/foto/800/prodotto-scrub-marmo.webp 800w, assets/foto/prodotto-scrub-marmo.webp 1408w" alt="Scrub corpo al marmo di Carrara" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a>
   <div class="card__band"><span>Opera n. III</span><span>Corpo</span></div>
   <div class="card__body">
     <h3 class="card__name"><a href="opera-scrub-marmo.html">Scrub corpo al marmo di Carrara</a></h3>
@@ -101,7 +101,7 @@
   </div>
 </article>
 <article class="card" style="--line:#D9A48E;--line-fg:#1C1A17" data-line="saponi" data-skin="Secca|Sensibile|Mista o grassa" data-format="Solido" data-price="8.5" data-name="Sapone all'olio d'oliva e calendula" data-order="6">
-  <a class="card__media" href="opera-sapone-calendula.html" tabindex="-1" aria-hidden="true"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Sapone all'olio d'oliva e calendula"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">prodotto-sapone-calendula</span><span class="ph__desc">Sapone all'olio d'oliva e calendula 100 g sul piano di marmo, stessa luce per tutto il catalogo</span></div></a>
+  <a class="card__media" href="opera-sapone-calendula.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-sapone-calendula.webp" srcset="assets/foto/800/prodotto-sapone-calendula.webp 800w, assets/foto/prodotto-sapone-calendula.webp 1408w" alt="Sapone all'olio d'oliva e calendula" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a>
   <div class="card__band"><span>Opera n. VII</span><span>Saponi</span></div>
   <div class="card__body">
     <h3 class="card__name"><a href="opera-sapone-calendula.html">Sapone all'olio d'oliva e calendula</a></h3>
@@ -110,7 +110,7 @@
   </div>
 </article>
 <article class="card" style="--line:#1F3A6B;--line-fg:#F6F2EA" data-line="viso" data-skin="Secca|Sensibile|Mista o grassa" data-format="Olio" data-price="32" data-name="Siero viso alle vinacce" data-order="1">
-  <a class="card__media" href="opera-siero-vinacce.html" tabindex="-1" aria-hidden="true"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Siero viso alle vinacce"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">prodotto-siero-vinacce</span><span class="ph__desc">Siero viso alle vinacce 30 ml sul piano di marmo, stessa luce per tutto il catalogo</span></div></a>
+  <a class="card__media" href="opera-siero-vinacce.html" tabindex="-1" aria-hidden="true"><img class="ph-img " src="assets/foto/prodotto-siero-vinacce.webp" srcset="assets/foto/800/prodotto-siero-vinacce.webp 800w, assets/foto/prodotto-siero-vinacce.webp 1408w" alt="Siero viso alle vinacce" width="1408" height="1760" sizes="(max-width: 700px) 50vw, 25vw" loading="lazy" decoding="async"></a>
   <div class="card__band"><span>Opera n. II</span><span>Viso</span></div>
   <div class="card__body">
     <h3 class="card__name"><a href="opera-siero-vinacce.html">Siero viso alle vinacce</a></h3>
@@ -128,12 +128,12 @@
       <p class="lead">Che pelle hai, quando ti prendi cura di te, cosa ti interessa. In meno di un minuto ti proponiamo due o tre opere, con il perché di ogni scelta.</p>
       <a class="btn btn--light" href="rituale.html">Componi il tuo rituale</a>
     </div>
-    <div class="dw band__dw" aria-hidden="true"><span class="dw__tag">Disegno a sanguigna</span><span class="dw__id">dw-mortaio</span><span class="dw__desc">Mortaio di marmo con pestello e qualche foglia di rosmarino, tratto a sanguigna</span></div>
+    <img class="dw-img band__dw" src="assets/disegni/dw-mortaio.webp" alt="" width="1600" height="1600" loading="lazy" decoding="async">
   </div>
 </section>
 
 <section class="sec wrap split">
-  <div class="split__media"><div class="ph " style="aspect-ratio:4/5" role="img" aria-label="Tommaso che taglia a filo un blocco di sapone appena sformato, sul banco di castagno"><span class="ph__tag">Foto · 4:5</span><span class="ph__id">home-bottega</span><span class="ph__desc">Tommaso che taglia a filo un blocco di sapone appena sformato, sul banco di castagno</span></div></div>
+  <div class="split__media"><img class="ph-img " src="assets/foto/home-bottega.webp" srcset="assets/foto/800/home-bottega.webp 800w, assets/foto/home-bottega.webp 1408w" alt="Tommaso che taglia a filo un blocco di sapone appena sformato, sul banco di castagno" width="1408" height="1760" sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" decoding="async"></div>
   <div class="split__text">
     <p class="roman">IV</p>
     <h2>Due persone, un banco di marmo, il tempo che serve.</h2>
@@ -198,7 +198,7 @@
   <div class="drawer__foot" data-cart-foot></div>
 </aside>
 <div class="toast" data-toast role="status" aria-live="polite"></div>
-<script src="js/catalogo.js?v=1"></script>
-<script src="js/main.js?v=1"></script>
+<script src="js/catalogo.js?v=2"></script>
+<script src="js/main.js?v=2"></script>
 </body>
 </html>

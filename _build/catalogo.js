@@ -62,14 +62,14 @@ const P = [
 
   { id: 'balsamo-labbra', opera: 'V', name: 'Balsamo labbra alla cera d\'api', line: 'mani-labbra', skin: ['Secca', 'Sensibile', 'Mista o grassa'], format: 'Balsamo', size: '10 ml', price: 7, nat: 100, pao: '12M', lot: 'MB-26-110',
     pairs: ['crema-mani', 'crema-iris', 'sapone-calendula'],
-    tecnica: 'Colato a mano in scatoline di latta',
+    tecnica: 'Colato a mano in vasetti di vetro satinato',
     materiali: 'Cera d\'api della Garfagnana, burro di karité, calendula',
     lead: 'Cera d\'api di un apicoltore della Garfagnana, burro di karité e olio di ricino. Protegge e ammorbidisce le labbra.',
-    desc: 'Una piccola scatola di latta da tenere in tasca. La cera d\'api protegge, il burro di karité e l\'olio di ricino ammorbidiscono le labbra secche, anche d\'inverno. Contiene un macerato di calendula. Non è profumato.',
+    desc: 'Un piccolo vasetto di vetro satinato da tenere in borsa. La cera d\'api protegge, il burro di karité e l\'olio di ricino ammorbidiscono le labbra secche, anche d\'inverno. Contiene un macerato di calendula. Non è profumato.',
     use: 'Prendi un po\' di balsamo con la punta del dito e stendilo sulle labbra quando serve. Va bene anche sulle cuticole.',
     inci: 'Butyrospermum Parkii Butter, Ricinus Communis Seed Oil, Cera Alba, Helianthus Annuus Seed Oil, Calendula Officinalis Flower Extract, Tocopherol',
     keep: 'Con il caldo si ammorbidisce: d\'estate non lasciarlo in auto o al sole. Torna solido al fresco.',
-    faq: [{ q: 'Va bene per i bambini?', a: 'Gli ingredienti sono semplici, ma per i più piccoli chiedi sempre al pediatra.' }, { q: 'Perché è in ml?', a: 'È il volume della scatolina. Il contenuto è un balsamo solido.' }] },
+    faq: [{ q: 'Va bene per i bambini?', a: 'Gli ingredienti sono semplici, ma per i più piccoli chiedi sempre al pediatra.' }, { q: 'Perché è in ml?', a: 'È il volume del vasetto. Il contenuto è un balsamo solido.' }] },
 
   { id: 'crema-mani', opera: 'VI', name: 'Crema mani all\'olio d\'oliva', line: 'mani-labbra', skin: ['Secca', 'Sensibile'], format: 'Crema', size: '75 ml', price: 13, nat: 98, pao: '6M', lot: 'MB-26-114',
     pairs: ['balsamo-labbra', 'sapone-calendula', 'olio-lavanda'],

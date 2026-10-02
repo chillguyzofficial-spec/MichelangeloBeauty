@@ -241,7 +241,7 @@
       'scrub-marmo': () => 'Una o due volte a settimana sotto la doccia, per levigare la pelle del corpo.',
       'olio-lavanda': m => 'Dopo la doccia, su pelle umida: la lascia morbida' + (m === 'mattina' ? '. Si assorbe in pochi minuti, prima di vestirti.' : ' e profumata prima di dormire.'),
       'crema-mani': () => 'Si assorbe in fretta: tienila vicino al lavandino e usala dopo ogni lavaggio.',
-      'balsamo-labbra': () => 'La scatolina sta in tasca: protegge le labbra secche quando serve.',
+      'balsamo-labbra': () => 'Il vasetto sta in borsa: protegge le labbra secche quando serve.',
       'shampoo-rosmarino': (m, s) => 'Lava con delicatezza i capelli che si ungono in fretta.' + (s === 'Mista o grassa' ? '' : ' È delicato: se la cute è secca usalo a lavaggi alterni.')
     };
     function pick(a) {
