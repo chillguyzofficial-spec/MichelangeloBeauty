@@ -275,62 +275,6 @@
     if (pre) { const c = norm(pre); input.value = c; show(c, false); }
   }
 
-  // ---------- componi il tuo rituale ----------
-  const quiz = q('[data-quiz]');
-  if (quiz) {
-    const ans = {}, order = ['pelle', 'momento', 'zona'];
-    const qs = qa('[data-quiz-q]', quiz), back = q('[data-quiz-back]', quiz), res = q('[data-quiz-result]', quiz);
-    const steps = qa('[data-quiz-step]', quiz);
-    let cur = 0;
-    function go(i) {
-      cur = i;
-      qs.forEach((f, k) => { f.hidden = k !== i; });
-      steps.forEach((s, k) => { s.toggleAttribute('aria-current', k === i); if (k === i) s.setAttribute('aria-current', 'step'); s.classList.toggle('is-done', k < i); });
-      back.hidden = i === 0 || i > 2; res.hidden = i <= 2;
-      if (i <= 2) { const b = q('.quiz__opt', qs[i]); if (b && i > 0) b.focus(); }
-    }
-    const WHY = {
-      'crema-iris': m => 'Idrata e lascia la pelle vellutata, pensata per pelli secche e sensibili.' + (m === 'sera' ? ' La sera, dopo il siero.' : ' Al mattino, un minuto prima del trucco.'),
-      'siero-vinacce': (m, s) => 'Soli oli leggeri, da premere sul viso ancora umido.' + (m === 'mattina' ? ' Al mattino bastano due gocce; se preferisci, tienilo per la sera.' : ' È il gesto della sera.') + (s === 'Mista o grassa' ? ' Non lascia la pelle lucida se ne usi poco.' : ''),
-      'sapone-calendula': () => 'Deterge delicatamente viso e corpo senza seccare la pelle.',
-      'sapone-argilla': () => 'L\'argilla verde assorbe il sebo in eccesso: adatto alle pelli miste e grasse.',
-      'scrub-marmo': () => 'Una o due volte a settimana sotto la doccia, per levigare la pelle del corpo.',
-      'olio-lavanda': m => 'Dopo la doccia, su pelle umida: la lascia morbida' + (m === 'mattina' ? '. Si assorbe in pochi minuti, prima di vestirti.' : ' e profumata prima di dormire.'),
-      'crema-mani': () => 'Si assorbe in fretta: tienila vicino al lavandino e usala dopo ogni lavaggio.',
-      'balsamo-labbra': () => 'Il vasetto sta in borsa: protegge le labbra secche quando serve.',
-      'shampoo-rosmarino': (m, s) => 'Lava con delicatezza i capelli che si ungono in fretta.' + (s === 'Mista o grassa' ? '' : ' È delicato: se la cute è secca usalo a lavaggi alterni.')
-    };
-    function pick(a) {
-      const dry = a.pelle !== 'Mista o grassa', soap = dry ? 'sapone-calendula' : 'sapone-argilla';
-      if (a.zona === 'viso') {
-        if (!dry) return ['sapone-argilla', 'siero-vinacce'];
-        if (a.momento === 'mattina') return ['sapone-calendula', 'crema-iris'];
-        return ['sapone-calendula', 'siero-vinacce', 'crema-iris'];
-      }
-      if (a.zona === 'corpo') {
-        if (a.pelle === 'Sensibile') return ['sapone-calendula', 'olio-lavanda'];
-        return [soap, 'scrub-marmo', 'olio-lavanda'];
-      }
-      if (a.zona === 'mani-labbra') return ['crema-mani', 'balsamo-labbra', 'sapone-calendula'];
-      return ['shampoo-rosmarino', soap];
-    }
-    function result() {
-      const ids = pick(ans), total = ids.reduce((s, id) => s + MB.P[id].price, 0);
-      const when = { mattina: 'la mattina', sera: 'la sera', entrambi: 'mattina e sera' }[ans.momento];
-      res.innerHTML = `<p class="roman">Il tuo rituale</p><h2>Pelle ${ans.pelle.toLowerCase()}, ${when}.</h2><p>Ecco cosa ti proponiamo, nell'ordine in cui usarlo.</p>
-        <ol class="ritual">${ids.map((id, i) => { const p = MB.P[id]; return `<li style="--line:${MB.LINES[p.line].bg}"><span class="ritual__n">${['I', 'II', 'III'][i]}</span><div><p class="ritual__name"><a href="${p.url}">${esc(p.name)}</a></p><p class="ritual__why">${esc(WHY[id](ans.momento, ans.pelle))}</p></div><span class="ritual__price">${eur(p.price)}</span></li>`; }).join('')}</ol>
-        <div class="ritual-total"><button type="button" class="btn btn--primary" data-ritual-add>Aggiungi il rituale al carrello · ${eur(total)}</button><button type="button" class="link" data-quiz-restart>Ricomincia</button></div>`;
-      q('[data-ritual-add]', res).addEventListener('click', () => { ids.forEach(id => add(id, 1, true)); openCart(); });
-      q('[data-quiz-restart]', res).addEventListener('click', () => go(0));
-      go(3); res.focus();
-    }
-    qs.forEach((f, i) => qa('.quiz__opt', f).forEach(b => b.addEventListener('click', () => {
-      ans[order[i]] = b.dataset.quizValue;
-      if (i < 2) go(i + 1); else result();
-    })));
-    back.addEventListener('click', () => go(Math.max(0, cur - 1)));
-  }
-
   // ---------- strisce di foto a scorrimento: frecce, contatore, tastiera ----------
   qa('[data-strip]').forEach(st => {
     const track = q('[data-strip-track]', st), items = qa('.strip__item', st), cnt = q('[data-strip-count]', st);
@@ -344,46 +288,101 @@
     window.addEventListener('resize', update); update();
   });
 
-  // ---------- rituale: scegli il modo (guidato / componi tu) ----------
-  const modes = qa('[data-mode]');
-  if (modes.length) {
-    const setMode = m => { modes.forEach(b => b.setAttribute('aria-selected', String(b.dataset.mode === m))); qa('[data-mode-panel]').forEach(p => { p.hidden = p.dataset.modePanel !== m; }); };
-    modes.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
-    modes.forEach((b, i) => b.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = modes[(i + (e.key === 'ArrowRight' ? 1 : -1) + modes.length) % modes.length]; n.focus(); setMode(n.dataset.mode); } }));
-  }
-
-  // ---------- componi tu: da 2 a 4 opere, messe nell'ordine d'uso ----------
-  const sum = q('[data-pick-sum]');
-  if (sum) {
-    const MAX = 4, MIN = 2;
+  // ---------- il tuo rituale: 5 domande, poi il risultato si modifica (togli / aggiungi, senza limiti) ----------
+  const quiz = q('[data-quiz]');
+  if (quiz) {
+    const order = ['pelle', 'momento', 'zona', 'profumo', 'per'];
+    const ans = { zona: [] };
+    const qs = qa('[data-quiz-q]', quiz), back = q('[data-quiz-back]', quiz), res = q('[data-quiz-result]', quiz), steps = qa('[data-quiz-step]', quiz);
+    let cur = 0;
     // ordine d'uso: prima si deterge, poi si leviga, poi i trattamenti leggeri, poi quelli ricchi
-    const USE = { 'sapone-calendula': 1, 'sapone-argilla': 1, 'shampoo-rosmarino': 1, 'scrub-marmo': 2, 'siero-vinacce': 3, 'crema-iris': 4, 'olio-lavanda': 4, 'crema-mani': 5, 'balsamo-labbra': 6 };
-    const STEP = { 1: 'per detergere', 2: 'una o due volte a settimana, per levigare', 3: 'sulla pelle ancora umida', 4: 'per nutrire e chiudere', 5: 'quando serve, durante il giorno', 6: 'quando serve, in borsa' };
-    let picks = [];
-    const picksEl = qa('[data-pick]'), bar = q('[data-pick-bar]'), barText = q('[data-pick-bar-text]');
-    let sumVisible = false;
-    const syncBar = () => { bar.hidden = !picks.length || sumVisible; };
-    if ('IntersectionObserver' in window) new IntersectionObserver(en => { sumVisible = en[0].isIntersecting; syncBar(); }).observe(sum);
-    function render() {
-      picksEl.forEach(b => { const on = picks.includes(b.dataset.pick); b.setAttribute('aria-pressed', String(on)); b.setAttribute('aria-disabled', String(!on && picks.length >= MAX)); });
-      if (!picks.length) { sum.innerHTML = ''; syncBar(); return; }
-      const ord = picks.slice().sort((a, b) => USE[a] - USE[b]), tot = ord.reduce((s, id) => s + MB.P[id].price, 0);
-      barText.textContent = ord.length + (ord.length === 1 ? ' opera' : ' opere') + ' · ' + eur(tot); syncBar();
-      sum.innerHTML = `<h2>Il tuo rituale: ${ord.length} ${ord.length === 1 ? 'opera' : 'opere'}</h2>
-        <p>${ord.length < MIN ? 'Scegline almeno un\'altra.' : ord.length >= MAX ? 'Hai raggiunto il massimo di quattro opere.' : 'Puoi aggiungerne ancora ' + (MAX - ord.length) + '.'} Ecco l'ordine in cui usarle.</p>
-        <ol class="ritual">${ord.map((id, i) => { const p = MB.P[id]; return `<li style="--line:${MB.LINES[p.line].bg}"><span class="ritual__n">${['I', 'II', 'III', 'IV'][i]}</span><div><p class="ritual__name"><a href="${p.url}">${esc(p.name)}</a></p><p class="ritual__why">${STEP[USE[id]]}</p></div><span class="ritual__price">${eur(p.price)}</span></li>`; }).join('')}</ol>
-        <div class="ritual-total"><button type="button" class="btn btn--primary" data-pick-add${ord.length < MIN ? ' disabled' : ''}>Aggiungi il rituale al carrello · ${eur(tot)}</button><button type="button" class="link" data-pick-reset>Ricomincia</button></div>`;
-      const add2 = q('[data-pick-add]', sum); if (add2) add2.addEventListener('click', () => { ord.forEach(id => add(id, 1, true)); openCart(); });
-      q('[data-pick-reset]', sum).addEventListener('click', () => { picks = []; render(); });
+    const USE = { 'sapone-calendula': 1, 'sapone-argilla': 1, 'shampoo-rosmarino': 1, 'scrub-marmo': 2, 'siero-vinacce': 3, 'crema-iris': 4, 'olio-lavanda': 4, 'crema-mani': 5, 'balsamo-labbra': 6, 'cofanetto-bottega': 7 };
+    const SCENTED = ['olio-lavanda', 'scrub-marmo', 'sapone-argilla', 'shampoo-rosmarino'];
+    const WHY = {
+      'crema-iris': (a) => 'Idrata e lascia la pelle vellutata.' + (a.momento === 'sera' ? ' La sera, dopo il siero.' : ' Al mattino, un minuto prima del trucco.'),
+      'siero-vinacce': (a) => 'Soli oli leggeri, da premere sul viso ancora umido.' + (a.momento === 'mattina' ? ' Al mattino bastano due gocce.' : ' È il gesto della sera.'),
+      'sapone-calendula': () => 'Deterge delicatamente viso e corpo senza seccare la pelle. Non è profumato.',
+      'sapone-argilla': () => 'L\'argilla verde assorbe il sebo in eccesso: per pelli miste e grasse. Profuma di rosmarino.',
+      'scrub-marmo': () => 'Una o due volte a settimana sotto la doccia, per levigare il corpo. Profuma di limone.',
+      'olio-lavanda': (a) => 'Dopo la doccia, su pelle umida: la lascia morbida' + (a.momento === 'mattina' ? ' e si assorbe in pochi minuti.' : ' e profumata prima di dormire.'),
+      'crema-mani': () => 'Si assorbe in fretta: tienila vicino al lavandino. Non è profumata.',
+      'balsamo-labbra': () => 'Il vasetto sta in borsa: protegge le labbra secche quando serve.',
+      'shampoo-rosmarino': (a) => 'Lava con delicatezza i capelli che si ungono in fretta.' + (a.pelle === 'Mista o grassa' ? '' : ' Con cute secca, usalo a lavaggi alterni.'),
+      'cofanetto-bottega': () => 'Quattro saponi in una scatola con biglietto scritto a mano: un regalo pronto.'
+    };
+    function suggest(a) {
+      const dry = a.pelle !== 'Mista o grassa', noScent = a.profumo === 'no';
+      const soap = dry || noScent ? 'sapone-calendula' : 'sapone-argilla';
+      const out = [];
+      a.zona.forEach(z => {
+        if (z === 'viso') out.push(...(!dry ? [soap, 'siero-vinacce'] : a.momento === 'mattina' ? [soap, 'crema-iris'] : [soap, 'siero-vinacce', 'crema-iris']));
+        if (z === 'corpo') out.push(soap, ...(a.pelle === 'Sensibile' ? [] : ['scrub-marmo']), 'olio-lavanda');
+        if (z === 'mani-labbra') out.push('crema-mani', 'balsamo-labbra');
+        if (z === 'capelli') out.push('shampoo-rosmarino');
+      });
+      let ids = [...new Set(out)];
+      if (noScent) ids = ids.filter(id => !SCENTED.includes(id));
+      return ids;
     }
-    picksEl.forEach(b => b.addEventListener('click', () => {
-      const id = b.dataset.pick;
-      if (picks.includes(id)) picks = picks.filter(x => x !== id);
-      else if (picks.length < MAX) picks.push(id);
-      else { say('Massimo quattro opere: togline una per cambiarla'); return; }
-      render();
-    }));
-    render();
+    let chosen = [], giftOn = false, notes = [];
+    function go(i) {
+      cur = i;
+      qs.forEach((f, k) => { f.hidden = k !== i; });
+      steps.forEach((st, k) => { if (k === i) st.setAttribute('aria-current', 'step'); else st.removeAttribute('aria-current'); st.classList.toggle('is-done', k < i); });
+      back.hidden = i === 0 || i >= qs.length; res.hidden = i < qs.length;
+      if (i < qs.length && i > 0) { const bt = q('.quiz__opt', qs[i]); if (bt) bt.focus(); }
+    }
+    function renderResult() {
+      const ord = chosen.slice().sort((x, y) => USE[x] - USE[y]);
+      const others = Object.keys(MB.P).filter(id => !chosen.includes(id)).sort((x, y) => (ans.per === 'regalo' && x === 'cofanetto-bottega' ? -1 : 0) - (ans.per === 'regalo' && y === 'cofanetto-bottega' ? -1 : 0));
+      const tot = ord.reduce((t, id) => t + MB.P[id].price, 0) + (giftOn && ord.length ? MB.GIFT : 0);
+      const when = { mattina: 'la mattina', sera: 'la sera', entrambi: 'mattina e sera' }[ans.momento];
+      const zones = ans.zona.map(z => MB.LINES[z] ? MB.LINES[z].name.toLowerCase() : z).join(', ');
+      res.innerHTML = `<p class="roman">Il tuo rituale</p><h2>Pelle ${ans.pelle.toLowerCase()}, ${when}: ${zones}.</h2>
+        <p>${ord.length ? 'Ecco cosa ti proponiamo, nell\'ordine in cui usarlo. Togli quello che non ti serve, aggiungi quello che ti piace.' : 'Il rituale è vuoto: aggiungi le opere che ti interessano qui sotto.'}</p>
+        ${notes.map(n => `<p class="quiz__note">${n}</p>`).join('')}
+        <ol class="ritual">${ord.map((id, i) => { const p = MB.P[id]; return `<li style="--line:${MB.LINES[p.line].bg}"><span class="ritual__n">${['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][i]}</span><div><p class="ritual__name"><a href="${p.url}">${esc(p.name)}</a></p><p class="ritual__why">${esc((WHY[id] || (() => ''))(ans))}</p></div><div class="ritual__end"><span class="ritual__price">${eur(p.price)}</span><button type="button" class="link ritual__rm" data-rit-rm="${id}" aria-label="Togli ${esc(p.name)}">Togli</button></div></li>`; }).join('')}</ol>
+        <label class="ritual__gift"><input type="checkbox" data-rit-gift${giftOn ? ' checked' : ''}> <span><strong>Confezione regalo</strong> con biglietto scritto a mano (+${eur(MB.GIFT)})</span></label>
+        <div class="ritual-total"><button type="button" class="btn btn--primary" data-ritual-add${ord.length ? '' : ' disabled'}>Aggiungi il rituale al carrello · ${eur(tot)}</button><button type="button" class="link" data-quiz-restart>Ricomincia</button></div>
+        <div class="extras"><h3>Aggiungi altro al tuo rituale</h3>
+          <div class="extras__grid">${others.map(id => { const p = MB.P[id], l = MB.LINES[p.line]; return `<button type="button" class="extra" data-rit-add="${id}" style="--line:${l.bg};--line-fg:${l.fg}">${p.img ? `<img src="${p.img}" alt="" loading="lazy">` : '<span class="extra__ph"></span>'}<span class="extra__t">${ans.per === 'regalo' && id === 'cofanetto-bottega' ? '<em>Idea regalo</em>' : ''}${esc(p.name)}<small>${p.size} · ${eur(p.price)}</small></span><span class="extra__plus" aria-hidden="true">+</span><span class="sr">Aggiungi al rituale</span></button>`; }).join('')}</div>
+        </div>`;
+    }
+    function result() {
+      chosen = suggest(ans); giftOn = ans.per === 'regalo'; notes = [];
+      if (ans.profumo === 'no') {
+        const out = SCENTED.filter(id => (ans.zona.includes('corpo') && ['olio-lavanda', 'scrub-marmo'].includes(id)) || (ans.zona.includes('capelli') && id === 'shampoo-rosmarino'));
+        if (out.length) notes.push('Hai scelto senza profumo: abbiamo tolto ' + out.map(id => MB.P[id].name.toLowerCase()).join(' e ') + '. Se vuoi, li trovi qui sotto.');
+      }
+      renderResult(); go(qs.length); res.focus();
+    }
+    // risposte singole: un tocco e si va avanti; la domanda "Cosa ti interessa" è a scelta multipla con "Continua"
+    qs.forEach((f, i) => {
+      const multi = f.hasAttribute('data-multi'), nextBtn = q('[data-quiz-next]', f);
+      qa('.quiz__opt', f).forEach(bt => bt.addEventListener('click', () => {
+        const v = bt.dataset.quizValue;
+        if (multi) {
+          ans.zona = ans.zona.includes(v) ? ans.zona.filter(x => x !== v) : ans.zona.concat(v);
+          bt.setAttribute('aria-pressed', String(ans.zona.includes(v))); nextBtn.disabled = !ans.zona.length; return;
+        }
+        ans[order[i]] = v;
+        if (i < qs.length - 1) go(i + 1); else result();
+      }));
+      if (nextBtn) nextBtn.addEventListener('click', () => go(i + 1));
+    });
+    back.addEventListener('click', () => go(Math.max(0, cur - 1)));
+    res.addEventListener('click', e => {
+      const rm = e.target.closest('[data-rit-rm]'), ad = e.target.closest('[data-rit-add]');
+      if (rm) { chosen = chosen.filter(id => id !== rm.dataset.ritRm); renderResult(); say('Tolta dal rituale'); }
+      else if (ad) { chosen.push(ad.dataset.ritAdd); renderResult(); say('Aggiunta al rituale'); }
+      else if (e.target.closest('[data-quiz-restart]')) { ans.zona = []; qa('[data-multi] .quiz__opt', quiz).forEach(x => x.setAttribute('aria-pressed', 'false')); qa('[data-quiz-next]', quiz).forEach(x => { x.disabled = true; }); go(0); }
+      else if (e.target.closest('[data-ritual-add]')) {
+        chosen.slice().sort((x, y) => USE[x] - USE[y]).forEach(id => add(id, 1, true));
+        if (giftOn) { gift.on = true; save(); renderCart(); }
+        openCart();
+      }
+    });
+    res.addEventListener('change', e => { if (e.target.matches('[data-rit-gift]')) { giftOn = e.target.checked; renderResult(); const g = q('[data-rit-gift]', res); if (g) g.focus(); } });
   }
 
   // ---------- moduli dimostrativi (newsletter, contatti) ----------

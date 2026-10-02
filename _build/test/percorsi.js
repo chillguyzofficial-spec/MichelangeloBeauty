@@ -53,13 +53,16 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     ok((await pg.textContent('[data-lot-result]')).includes('Non troviamo'), 'lotto inesistente gestito');
     await pg.goto(base + 'lotto.html?lotto=MB-26-118');
     ok((await pg.textContent('[data-lot-result]')).includes('Livia'), 'lotto da URL (dalla home)');
-    // rituale
+    // rituale (5 domande)
     await pg.goto(base + 'rituale.html');
     await pg.click('[data-quiz-q="pelle"] [data-quiz-value="Secca"]');
     await pg.click('[data-quiz-q="momento"] [data-quiz-value="sera"]');
     await pg.click('[data-quiz-q="zona"] [data-quiz-value="viso"]');
+    await pg.click('[data-quiz-q="zona"] [data-quiz-next]');
+    await pg.click('[data-quiz-q="profumo"] [data-quiz-value="si"]');
+    await pg.click('[data-quiz-q="per"] [data-quiz-value="me"]');
     const rit = await pg.textContent('[data-quiz-result]');
-    ok(rit.includes('Siero viso alle vinacce') && rit.includes('Crema viso all'), 'rituale pelle secca/sera/viso');
+    ok(rit.includes('Siero viso alle vinacce') && rit.includes('Crema viso all') && rit.includes('Sapone all'), 'rituale pelle secca/sera/viso: sapone, siero, crema');
     await pg.click('[data-ritual-add]'); await pg.waitForTimeout(350);
     ok((await pg.textContent('[data-cart-count]')).trim() === '5', 'rituale aggiunto (2 creme + 3 opere = 5 pezzi): ' + await pg.textContent('[data-cart-count]'));
     await pg.keyboard.press('Escape');
@@ -81,18 +84,27 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     ok((await pg.textContent('[data-strip-count]')).trim() === '1 / 6' && await pg.isDisabled('[data-strip-prev]'), 'striscia: parte da 1 / 6, freccia indietro disattiva');
     await pg.click('[data-strip-next]'); await pg.waitForTimeout(700);
     ok((await pg.textContent('[data-strip-count]')).trim() === '2 / 6', 'striscia: freccia avanti → 2 / 6');
-    // componi tu
+    // rituale: più zone, senza profumo, regalo, togli / aggiungi
     await pg.goto(base + 'rituale.html');
-    await pg.click('[data-mode=componi]');
-    ok(await pg.isVisible('[data-mode-panel=componi]') && !(await pg.isVisible('[data-mode-panel=guida]')), 'rituale: modo Componi tu');
-    await pg.click('[data-pick=crema-mani]');
-    ok(await pg.isDisabled('[data-pick-add]'), 'componi: con 1 opera il pulsante è disattivo');
-    for (const id of ['sapone-argilla', 'balsamo-labbra', 'scrub-marmo', 'olio-lavanda']) await pg.click('[data-pick=' + id + ']', { force: true }); // la quinta è rifiutata dal sito
-    const names = await pg.$$eval('.compose__sum .ritual__name', e => e.map(x => x.textContent));
-    ok(names.length === 4 && names[0].includes('argilla') && names[3].includes('Balsamo'), 'componi: massimo 4 e ordine d’uso (' + names.join(' → ') + ')');
+    await pg.click('[data-quiz-q="pelle"] [data-quiz-value="Mista o grassa"]');
+    await pg.click('[data-quiz-q="momento"] [data-quiz-value="entrambi"]');
+    await pg.click('[data-quiz-q="zona"] [data-quiz-value="corpo"]');
+    await pg.click('[data-quiz-q="zona"] [data-quiz-value="mani-labbra"]');
+    await pg.click('[data-quiz-q="zona"] [data-quiz-next]');
+    await pg.click('[data-quiz-q="profumo"] [data-quiz-value="no"]');
+    await pg.click('[data-quiz-q="per"] [data-quiz-value="regalo"]');
+    let txt = await pg.textContent('[data-quiz-result]');
+    ok(txt.includes('Crema mani') && txt.includes('Balsamo') && !/<li[^>]*>[sS]*Olio corpo/.test(await pg.innerHTML('.ritual')) && txt.includes('senza profumo'), 'più zone + senza profumo: niente olio alla lavanda, nota mostrata');
+    ok(await pg.isChecked('[data-rit-gift]'), 'regalo: confezione già spuntata');
+    ok((await pg.textContent('.extras')).includes('Idea regalo'), 'regalo: cofanetto proposto come idea regalo');
+    await pg.click('[data-rit-rm="balsamo-labbra"]');
+    ok(!(await pg.textContent('.ritual')).includes('Balsamo') && (await pg.textContent('.extras')).includes('Balsamo'), 'togli: il balsamo passa tra gli extra');
+    await pg.click('[data-rit-add="cofanetto-bottega"]'); await pg.click('[data-rit-add="olio-lavanda"]');
+    const nRit = (await pg.$$('.ritual li')).length;
+    ok((await pg.textContent('.ritual')).includes('Cofanetto') && nRit === 4, 'aggiungi: cofanetto e olio nel rituale (' + nRit + ' opere, senza limiti)');
     const before = +(await pg.textContent('[data-cart-count]'));
-    await pg.click('[data-pick-add]'); await pg.waitForTimeout(400);
-    ok(+(await pg.textContent('[data-cart-count]')) === before + 4, 'componi: 4 opere aggiunte al carrello');
+    await pg.click('[data-ritual-add]'); await pg.waitForTimeout(400);
+    ok(+(await pg.textContent('[data-cart-count]')) === before + nRit && (await pg.textContent('[data-cart-foot]')).includes('Confezione regalo'), 'nel carrello: ' + nRit + ' opere in più e confezione regalo');
     await pg.keyboard.press('Escape');
     // pagamento
     await pg.goto(base + 'pagamento.html');

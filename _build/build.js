@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '18'; // cache-busting css/js
+const V = '19'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -444,37 +444,32 @@ function dettaglio(p) {
 // ---------- RITUALE ----------
 curPage = 'rituale.html';
 {
-  const q = (n, name, title, opts) => `<fieldset class="quiz__q" data-quiz-q="${name}"${n > 1 ? ' hidden' : ''}>
-  <legend><span class="roman">${['', 'I', 'II', 'III'][n]}</span>${title}</legend>
-  <div class="quiz__opts">${opts.map(([v, t, s]) => `<button type="button" class="quiz__opt" data-quiz-value="${v}"><strong>${t}</strong>${s ? `<span>${s}</span>` : ''}</button>`).join('')}</div>
+  const ROM = ['', 'I', 'II', 'III', 'IV', 'V'];
+  const q = (n, name, title, opts, multi) => `<fieldset class="quiz__q" data-quiz-q="${name}"${multi ? ' data-multi' : ''}${n > 1 ? ' hidden' : ''}>
+  <legend><span class="roman">${ROM[n]}</span>${title}</legend>
+  ${multi ? '<p class="quiz__hint">Puoi sceglierne più di una.</p>' : ''}
+  <div class="quiz__opts">${opts.map(([v, t, sub]) => `<button type="button" class="quiz__opt" data-quiz-value="${v}"${multi ? ' aria-pressed="false"' : ''}><strong>${t}</strong>${sub ? `<span>${sub}</span>` : ''}</button>`).join('')}</div>
+  ${multi ? '<button type="button" class="btn btn--primary quiz__next" data-quiz-next disabled>Continua</button>' : ''}
 </fieldset>`;
   page({
     file: 'rituale.html', active: 'rituale.html', title: 'Componi il tuo rituale · Michelangelo Beauty',
-    description: 'Tre domande sulla tua pelle e sulle tue abitudini: ti proponiamo due o tre opere della bottega, con il perché di ogni scelta.',
+    description: 'Cinque domande sulla tua pelle e sulle tue abitudini: ti proponiamo un rituale su misura, che puoi modificare come vuoi.',
     body: `
 <section class="page-head wrap page-head--split">
   <div>
     <p class="eyebrow">Il tuo rituale</p>
-    <h1>Il tuo rituale, <em>come preferisci.</em></h1>
-    <p class="lead">Lasciati guidare da tre domande, oppure scegli tu le opere: in entrambi i casi ti diciamo in che ordine usarle. Niente account, niente email.</p>
+    <h1>Il tuo rituale, <em>su misura.</em></h1>
+    <p class="lead">Cinque domande, un tocco per risposta. Poi lo cambi come vuoi: togli quello che non ti serve, aggiungi quello che ti piace. Niente account, niente email.</p>
   </div>
   ${drawing('dw-iris', 'Un fiore di iris con le foglie, studio botanico a sanguigna', 'page-head__dw')}
 </section>
-<div class="wrap modes" role="tablist" aria-label="Come vuoi comporre il rituale">
-  <button type="button" class="mode" role="tab" aria-selected="true" aria-controls="modo-guida" id="tab-guida" data-mode="guida"><strong>Guidami</strong><span>tre domande, ti consigliamo noi</span></button>
-  <button type="button" class="mode" role="tab" aria-selected="false" aria-controls="modo-componi" id="tab-componi" data-mode="componi"><strong>Componi tu</strong><span>scegli da 2 a 4 opere</span></button>
-</div>
-<section class="wrap compose" id="modo-componi" role="tabpanel" aria-labelledby="tab-componi" data-mode-panel="componi" hidden>
-  <p class="lead">Tocca le opere che vuoi, da 2 a 4. Le mettiamo noi nell'ordine giusto d'uso.</p>
-  <div class="compose__grid">${D.P.filter(p => !p.contents).map(p => { const l = LINE[p.line]; return `<button type="button" class="pick" data-pick="${p.id}" aria-pressed="false" style="--line:${l.bg};--line-fg:${l.fg}"><span class="pick__img">${packshot(p, { sizes: '(max-width: 700px) 45vw, 180px' })}</span><span class="pick__band">Opera n. ${p.opera} · ${l.name}</span><span class="pick__name">${esc(p.name)}</span><span class="pick__meta">${p.size} · ${eur(p.price)}</span><span class="pick__check" aria-hidden="true">✓</span></button>`; }).join('')}</div>
-  <aside class="compose__sum" id="tuo-rituale" data-pick-sum aria-live="polite"></aside>
-  <div class="compose__bar" data-pick-bar hidden><span data-pick-bar-text></span><a class="link" href="#tuo-rituale">Vedi il tuo rituale ↓</a></div>
-</section>
-<section class="wrap quiz" id="modo-guida" role="tabpanel" aria-labelledby="tab-guida" data-mode-panel="guida" data-quiz>
-  <ol class="quiz__steps" aria-label="Avanzamento"><li data-quiz-step="1" aria-current="step">La tua pelle</li><li data-quiz-step="2">Quando</li><li data-quiz-step="3">Cosa ti interessa</li></ol>
+<section class="wrap quiz" data-quiz>
+  <ol class="quiz__steps quiz__steps--5" aria-label="Avanzamento"><li data-quiz-step="1" aria-current="step">Pelle</li><li data-quiz-step="2">Quando</li><li data-quiz-step="3">Cosa</li><li data-quiz-step="4">Profumo</li><li data-quiz-step="5">Per chi</li></ol>
   ${q(1, 'pelle', 'Che pelle hai?', [['Secca', 'Secca', 'tira, a volte si squama'], ['Sensibile', 'Sensibile', 'si arrossa facilmente'], ['Mista o grassa', 'Mista o grassa', 'lucida in zona T']])}
   ${q(2, 'momento', 'Quando ti prendi cura di te?', [['mattina', 'La mattina', 'pochi minuti, prima di uscire'], ['sera', 'La sera', 'con calma, prima di dormire'], ['entrambi', 'Mattina e sera', 'due momenti brevi']])}
-  ${q(3, 'zona', 'Cosa ti interessa di più?', [['viso', 'Il viso'], ['corpo', 'Il corpo'], ['mani-labbra', 'Mani e labbra'], ['capelli', 'I capelli']])}
+  ${q(3, 'zona', 'Cosa ti interessa?', [['viso', 'Il viso'], ['corpo', 'Il corpo'], ['mani-labbra', 'Mani e labbra'], ['capelli', 'I capelli']], true)}
+  ${q(4, 'profumo', 'Ti piacciono i profumi?', [['si', 'Sì, delicati', 'oli essenziali di lavanda, limone, rosmarino'], ['no', 'Preferisco senza', 'solo opere non profumate']])}
+  ${q(5, 'per', 'È per te o da regalare?', [['me', 'Per me'], ['regalo', 'È un regalo', 'con confezione e biglietto scritto a mano']])}
   <button type="button" class="link quiz__back" data-quiz-back hidden>← Torna alla domanda precedente</button>
   <div class="quiz__result" data-quiz-result hidden tabindex="-1"></div>
 </section>`
