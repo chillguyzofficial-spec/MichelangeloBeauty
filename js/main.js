@@ -425,10 +425,14 @@
   if (pop) {
     const WEEK = 7 * 24 * 3600 * 1000;
     const dismissed = store.get('mb-promo-dismiss', 0);
-    const can = () => !promo && Date.now() - dismissed > WEEK && !document.body.classList.contains('is-checkout') && !(drawer && drawer.classList.contains('is-open'));
+    const can = () => !promo && Date.now() - dismissed > WEEK && !document.body.classList.contains('is-checkout');
+    // qualcosa è aperto (menu telefono, carrello, pannello INCI)? allora il popup aspetta
+    const busy = () => (drawer && drawer.classList.contains('is-open')) || (menu && !menu.hidden) || !!sheetPanel || locks > 0;
     let shown = false, popLast = null, timer;
     function openPop() {
-      if (shown || !can()) return; shown = true;
+      if (shown || !can()) return;
+      if (busy()) { clearTimeout(timer); timer = setTimeout(openPop, 1500); return; } // riprova quando l'utente ha chiuso
+      shown = true;
       popLast = document.activeElement; pop.hidden = false; lock(true);
       requestAnimationFrame(() => pop.classList.add('is-open'));
       setTimeout(() => q('input[type=email]', pop).focus(), 60);

@@ -7,3 +7,4 @@ Prima avvia il sito in locale: `npx http-server -p 8991 -s -c-1 .` (dalla cartel
 - Controllo impaginazione: `node "C:/Users/Claude FK/.claude/_studio/scripts/scan-sito.js" <cartella> <pagine.html,...>`.
 
 Per aprire le pagine come file invece che dal server: `BASE="file:///.../" node _build/test/percorsi.js`.
+- `node _build/test/telefono.js` — emulazione completa (schermo, tocco, user agent) su iPhone 13, iPhone SE, Pixel 7, iPhone in orizzontale, iPad verticale e orizzontale: ogni pagina senza scroll laterale e con le foto dentro i margini, menu aperto e chiuso 3 volte, popup che non copre il menu, carrello. Atteso: "tutto ok". (Non usare WebKit: su questo Windows Smart App Control lo blocca perché non è firmato.)

@@ -477,7 +477,7 @@ p,dd,td,li,a,label{overflow-wrap:break-word}
 .hero--home .hero__media{width:100%;margin:0}
 .hero__cta{display:flex;align-items:center;gap:20px}
 .hero--home .hero__dw{width:clamp(96px,10vw,150px);flex:none;margin:0}
-@media (max-width:959px){.hero--home{grid-template-columns:1fr;gap:24px}.hero--home .hero__media{margin:0 calc(var(--gutter) * -1)}}
+@media (max-width:959px){.hero--home{grid-template-columns:1fr;gap:24px}.hero--home .hero__media{margin:0}}
 /* il blocco dello scroll (popup, carrello) non deve far saltare la pagina quando sparisce la barra di scorrimento */
 html{scrollbar-gutter:stable}
 
