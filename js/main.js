@@ -51,8 +51,27 @@
   // ---------- menu telefono ----------
   const menuBtn = q('[data-menu]'), menu = q('#menu');
   if (menuBtn && menu) {
-    menuBtn.addEventListener('click', () => { const open = menuBtn.getAttribute('aria-expanded') === 'true'; menuBtn.setAttribute('aria-expanded', String(!open)); menu.hidden = open; menuBtn.textContent = open ? 'Menu' : 'Chiudi'; });
+    const header = q('.site-header');
+    const setMenu = open => {
+      if (open) menu.style.setProperty('--menu-h', Math.max(200, window.innerHeight - header.getBoundingClientRect().bottom) + 'px'); // il pannello arriva esattamente in fondo allo schermo
+      menuBtn.setAttribute('aria-expanded', String(open)); menu.hidden = !open; menuBtn.textContent = open ? 'Chiudi' : 'Menu';
+      if (String(open) !== menu.dataset.locked) { lock(open); menu.dataset.locked = String(open); }
+    };
+    menu.dataset.locked = 'false';
+    menuBtn.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
+    window.addEventListener('resize', () => { if (!menu.hidden && window.innerWidth >= 960) setMenu(false); });
   }
+
+  // ---------- tendina "Le opere" (PC): si apre al passaggio, al clic sulla freccia e da tastiera ----------
+  qa('[data-drop]').forEach(d => {
+    const t = q('[data-drop-toggle]', d);
+    t.addEventListener('click', () => { const o = !d.classList.contains('is-open'); d.classList.toggle('is-open', o); t.setAttribute('aria-expanded', String(o)); });
+    d.addEventListener('mouseenter', () => t.setAttribute('aria-expanded', 'true'));
+    d.addEventListener('mouseleave', () => { if (!d.classList.contains('is-open')) t.setAttribute('aria-expanded', 'false'); });
+    document.addEventListener('click', e => { if (!d.contains(e.target)) { d.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); } });
+    d.addEventListener('keydown', e => { if (e.key === 'Escape') { d.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); if (document.activeElement) document.activeElement.blur(); } });
+  });
 
   // ---------- carrello ----------
   const drawer = q('#carrello'), overlay = q('[data-overlay]');

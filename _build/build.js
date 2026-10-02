@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '15'; // cache-busting css/js
+const V = '16'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -77,13 +77,27 @@ const ICON = {
 const logo = (tag = 'a') => `<${tag} class="logo"${tag === 'a' ? ' href="index.html"' : ''}><span class="logo__name">Michelangelo</span><span class="logo__sub">Beauty · bottega toscana</span></${tag}>`;
 
 function header(active) {
-  const links = NAV.map(([h, l]) => `<a href="${h}"${h === active ? ' aria-current="page"' : ''}>${l}</a>`).join('');
+  const cur = h => (h === active ? ' aria-current="page"' : '');
+  const lineLinks = cls => D.LINES.map(l => { const n = inLine(l.id).length; return `<a class="${cls}" href="opere.html?linea=${l.id}" style="--line:${l.bg};--line-fg:${l.fg}"><span class="${cls}__sw" aria-hidden="true">${l.roman}</span><span class="${cls}__t">${l.name}<small>${n === 1 ? '1 opera' : n + ' opere'}</small></span></a>`; }).join('');
+  const rest = NAV.slice(1).map(([h, l]) => `<a href="${h}"${cur(h)}>${l}</a>`).join('');
   return `<a class="skip" href="#main">Vai al contenuto</a>
-<div class="topbar">Spedizione gratuita da 49 € · <strong>Sito dimostrativo: nessun ordine reale</strong></div>
+<div class="topbar">Spedizione gratuita da 49 € · <strong>Sito dimostrativo<span class="topbar__more">: nessun ordine reale</span></strong></div>
 <header class="site-header">
   <div class="header-in">
     ${logo()}
-    <nav class="nav" aria-label="Principale">${links}</nav>
+    <nav class="nav" aria-label="Principale">
+      <div class="nav__drop" data-drop>
+        <a href="opere.html"${cur('opere.html')}>Le opere</a><button type="button" class="nav__toggle" aria-expanded="false" aria-controls="drop-opere" aria-label="Mostra le linee" data-drop-toggle><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+        <div class="drop" id="drop-opere">
+          <div class="drop__in">
+            <p class="drop__title">Le linee</p>
+            <div class="drop__grid">${lineLinks('dl')}</div>
+            <div class="drop__foot"><a class="link" href="opere.html">Tutte le opere</a><a class="drop__rit" href="rituale.html">Non sai da dove iniziare? <strong>Componi il tuo rituale</strong></a></div>
+          </div>
+        </div>
+      </div>
+      ${rest}
+    </nav>
     <div class="header-actions">
       <a class="saved-btn" href="salvati.html" aria-label="Opere salvate">${ICON.heart}<span class="cart-btn__n" data-saved-count data-zero>0</span></a>
       <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello">${ICON.bag}<span class="cart-btn__n" data-cart-count data-zero>0</span></button>
@@ -92,7 +106,13 @@ function header(active) {
   </div>
   <script>try{var c=JSON.parse(localStorage.getItem('mb-cart')||'[]').reduce(function(a,l){return a+(l.qty||0)},0),s=JSON.parse(localStorage.getItem('mb-saved')||'[]').length;[['[data-cart-count]',c],['[data-saved-count]',s]].forEach(function(x){var e=document.querySelector(x[0]);if(e&&x[1]){e.textContent=x[1];e.removeAttribute('data-zero')}})}catch(e){}</script>
   <div class="menu" id="menu" hidden>
-    <nav aria-label="Menu">${links}<a href="salvati.html">Opere salvate</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
+    <div class="menu__in">
+      <p class="menu__label">Le linee</p>
+      <div class="menu__lines">${lineLinks('ml')}</div>
+      <nav class="menu__main" aria-label="Menu"><a href="opere.html"${cur('opere.html')}>Tutte le opere</a>${rest}</nav>
+      <nav class="menu__small" aria-label="Servizio"><a href="salvati.html">Opere salvate</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
+      <p class="menu__note">Spedizione gratuita da 49 € · reso entro 14 giorni</p>
+    </div>
   </div>
 </header>`;
 }

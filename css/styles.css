@@ -480,3 +480,43 @@ p,dd,td,li,a,label{overflow-wrap:break-word}
 @media (max-width:959px){.hero--home{grid-template-columns:1fr;gap:24px}.hero--home .hero__media{margin:0 calc(var(--gutter) * -1)}}
 /* il blocco dello scroll (popup, carrello) non deve far saltare la pagina quando sparisce la barra di scorrimento */
 html{scrollbar-gutter:stable}
+
+/* Menu (2026-10-02): tendina delle linee su PC, pannello a tutta pagina sul telefono */
+.topbar__more{font-weight:inherit}
+@media (max-width:560px){.topbar__more{display:none}}
+.logo__sub{white-space:nowrap}
+@media (max-width:479px){.logo__sub{letter-spacing:.06em}}
+.site-header{position:sticky}
+.nav{align-items:center}
+.nav__drop{position:relative;display:flex;align-items:center;gap:2px}
+.nav__toggle{width:28px;height:44px;display:grid;place-items:center;border:0;background:none;cursor:pointer;color:var(--ink-2)}
+.nav__toggle svg{transition:transform .2s}
+.nav__drop.is-open .nav__toggle svg{transform:rotate(180deg)}
+.drop{position:absolute;top:100%;left:-24px;padding-top:12px;display:none;z-index:40}
+.nav__drop:hover .drop,.nav__drop.is-open .drop,.nav__drop:focus-within .drop{display:block}
+.drop__in{width:min(620px,calc(100vw - 48px));background:var(--marble);background-image:url("../assets/marmo-1800.webp?v=3");background-size:1800px 1800px;border:1px solid var(--marble-3);border-top:4px solid var(--sanguigna);box-shadow:0 18px 40px rgba(28,26,23,.14);padding:20px 22px 18px}
+.drop__title,.menu__label{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px}
+.drop__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.nav .dl,.dl{display:flex;align-items:center;gap:12px;padding:8px;border:1px solid transparent;border-bottom:1px solid transparent;text-decoration:none}
+.nav .dl:hover,.dl:hover{border-color:var(--marble-3);background:#FBF8F2}
+.dl__sw,.ml__sw{flex:none;display:grid;place-items:center;width:42px;height:42px;background:var(--line);color:var(--line-fg);font-family:var(--serif);font-style:italic;font-size:17px}
+.dl__t,.ml__t{display:flex;flex-direction:column;font-family:var(--serif);font-size:19px;line-height:1.15}
+.dl__t small,.ml__t small{font-family:var(--sans);font-size:13px;color:var(--ink-3);margin-top:2px}
+.drop__foot{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--marble-3);font-size:15px}
+.nav .drop__foot a{border:0;padding:0}
+.drop__rit{text-decoration:none;color:var(--ink-2)}
+.drop__rit strong{color:var(--sanguigna);font-weight:600}
+/* telefono: pannello che copre la pagina sotto l'header */
+.menu{position:absolute;left:0;right:0;top:100%;height:var(--menu-h,calc(100svh - 70px));overflow-y:auto;overscroll-behavior:contain;border-top:1px solid var(--marble-3);background:var(--marble);background-image:url("../assets/marmo-1800.webp?v=3");background-size:1800px 1800px}
+.menu__in{padding:20px var(--gutter) calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+.menu__lines{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.ml{display:flex;align-items:center;gap:10px;padding:8px;background:#FBF8F2;border:1px solid var(--marble-3);text-decoration:none;font-family:inherit;font-size:inherit;border-bottom:1px solid var(--marble-3)}
+.menu .ml{padding:8px;border-bottom:1px solid var(--marble-3)}
+.ml__sw{width:38px;height:38px}
+.ml__t{font-size:18px}
+.menu .menu__main{display:flex;flex-direction:column;padding:0}
+.menu__main a{font-family:var(--serif);font-size:28px;text-decoration:none;padding:12px 0;border-bottom:1px solid var(--marble-2)}
+.menu__main a[aria-current="page"]{color:var(--sanguigna)}
+.menu .menu__small{display:flex;flex-direction:column;padding:12px 0 0}
+.menu__small a{font-family:var(--sans);font-size:17px;padding:10px 0;border:0;text-decoration:none;color:var(--ink-2)}
+.menu__note{margin-top:16px;font-size:14px;color:var(--ink-3)}
