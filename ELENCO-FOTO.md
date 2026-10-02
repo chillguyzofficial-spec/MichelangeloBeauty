@@ -1,7 +1,7 @@
 # Michelangelo Beauty — foto e disegni da generare
 <!-- generato da _build/build.js: si aggiorna da solo a ogni build -->
 
-Foto: **44/48** presenti · Disegni: **4/7** presenti
+Foto: **46/47** presenti · Disegni: **4/7** presenti
 
 ## Regole per tutte le foto
 - Luce naturale calda da finestra laterale, materiali veri: marmo bianco di Carrara, legno di castagno, vetro ambrato, lino, terracotta.
@@ -18,7 +18,7 @@ Foto: **44/48** presenti · Disegni: **4/7** presenti
 | `linea-mani-labbra.webp` | 4:5 | 1600×2000 | Mani che aprono una scatolina di latta di balsamo, maniche di lino | index.html |
 | `linea-capelli.webp` | 4:5 | 1600×2000 | Panetto di shampoo solido su un telo di lino, rametti di rosmarino fresco | index.html |
 | `linea-saponi.webp` | 4:5 | 1600×2000 | Saponi in stagionatura su griglie di castagno, vista dall'alto | index.html |
-| `linea-cofanetti.webp` | 4:5 | 1600×2000 | Cofanetto di cartone aperto con quattro prodotti, carta velina e nastro di cotone | index.html |
+| `linea-cofanetti.webp` | 4:5 | 1600×2000 | Il cofanetto dei quattro saponi chiuso con nastro di cotone (oggi in uso una foto provvisoria con vasetti: da rifare) | index.html |
 | `prodotto-crema-iris.webp` | 4:5 | 1600×2000 | Crema viso all'iris fiorentino 50 ml sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-scrub-marmo.webp` | 4:5 | 1600×2000 | Scrub corpo al marmo di Carrara 200 ml sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-sapone-calendula.webp` | 4:5 | 1600×2000 | Sapone all'olio d'oliva e calendula 100 g sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
@@ -30,7 +30,7 @@ Foto: **44/48** presenti · Disegni: **4/7** presenti
 | `prodotto-crema-mani.webp` | 4:5 | 1600×2000 | Crema mani all'olio d'oliva 75 ml sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-sapone-argilla.webp` | 4:5 | 1600×2000 | Sapone all'argilla e rosmarino 100 g sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-shampoo-rosmarino.webp` | 4:5 | 1600×2000 | Shampoo solido al rosmarino 70 g sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
-| `prodotto-cofanetto-bottega.webp` | 4:5 | 1600×2000 | Cofanetto regalo "La bottega" 4 opere sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
+| `prodotto-cofanetto-bottega.webp` | 4:5 | 1600×2000 | Cofanetto regalo "La bottega" 4 saponi da 100 g sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `crema-iris-in-mano.webp` | 4:5 | 1600×2000 | Crema viso all'iris fiorentino tenuto in mano, per mostrare la dimensione reale (50 ml) | opera-crema-iris.html |
 | `crema-iris-dettaglio.webp` | 4:5 | 1600×2000 | La crema aperta nel vasetto di vetro satinato con tappo dorato, superficie liscia, un petalo di iris accanto | opera-crema-iris.html |
 | `siero-vinacce-in-mano.webp` | 4:5 | 1600×2000 | Siero viso alle vinacce tenuto in mano, per mostrare la dimensione reale (30 ml) | opera-siero-vinacce.html |
@@ -49,8 +49,7 @@ Foto: **44/48** presenti · Disegni: **4/7** presenti
 | `sapone-argilla-dettaglio.webp` | 4:5 | 1600×2000 | Il colore verde del sapone, in controluce, con un rametto di rosmarino | opera-sapone-argilla.html |
 | `shampoo-rosmarino-in-mano.webp` | 4:5 | 1600×2000 | Shampoo solido al rosmarino tenuto in mano, per mostrare la dimensione reale (70 g) | opera-shampoo-rosmarino.html |
 | `shampoo-rosmarino-dettaglio.webp` | 4:5 | 1600×2000 | La schiuma tra le mani | opera-shampoo-rosmarino.html |
-| `cofanetto-bottega-in-mano.webp` | 4:5 | 1600×2000 | Cofanetto regalo "La bottega" tenuto in mano, per mostrare la dimensione reale (4 opere) | opera-cofanetto-bottega.html |
-| `cofanetto-bottega-dettaglio.webp` | 4:5 | 1600×2000 | L'interno della scatola, carta velina e biglietto scritto a mano | opera-cofanetto-bottega.html |
+| `cofanetto-bottega-in-mano.webp` | 4:5 | 1600×2000 | Cofanetto regalo "La bottega" tenuto in mano, per mostrare la dimensione reale (4 saponi da 100 g) | opera-cofanetto-bottega.html |
 | `bottega-apertura.webp` | 16:9 | 2048×1152 | L'interno della bottega: banco di marmo, scaffali di castagno con i saponi in stagionatura, finestra sulle colline | bottega.html |
 | `bottega-territorio.webp` | 16:9 | 2048×1152 | Colline toscane con ulivi in primo piano e le cave di marmo delle Apuane bianche sullo sfondo, luce del tardo pomeriggio | bottega.html |
 | `lotto-passo-1.webp` | 4:5 | 1600×2000 | Cesto di vimini con fiori di calendula e rametti di lavanda appena raccolti | bottega.html |

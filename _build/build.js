@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '6'; // cache-busting css/js
+const V = '7'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -271,7 +271,7 @@ function lineaDesc(id) {
     'mani-labbra': 'Mani che aprono una scatolina di latta di balsamo, maniche di lino',
     'capelli': 'Panetto di shampoo solido su un telo di lino, rametti di rosmarino fresco',
     'saponi': 'Saponi in stagionatura su griglie di castagno, vista dall\'alto',
-    'cofanetti': 'Cofanetto di cartone aperto con quattro prodotti, carta velina e nastro di cotone'
+    'cofanetti': 'Il cofanetto dei quattro saponi chiuso con nastro di cotone (oggi in uso una foto provvisoria con vasetti: da rifare)'
   }[id];
 }
 
@@ -309,7 +309,7 @@ curPage = 'opere.html';
 for (const p of D.P) {
   curPage = slug(p);
   const l = LINE[p.line];
-  const inciBlocks = p.contents ? p.contents.map(id => ({ title: BY[id].name + ' ' + BY[id].size, inci: BY[id].inci })) : [{ title: '', inci: p.inci }];
+  const inciBlocks = p.contents ? p.contents.map(c => (typeof c === 'string' ? { title: BY[c].name + ' ' + BY[c].size, inci: BY[c].inci } : { title: c.name + ' ' + c.size, inci: c.inci })) : [{ title: '', inci: p.inci }];
   const inciHtml = inciBlocks.map(b => `${b.title ? `<p class="inci__title">${esc(b.title)}</p>` : ''}<ul class="inci__list">${b.inci.split(', ').map(n => `<li><button type="button" class="inci__chip" data-inci-name="${esc(n)}" aria-expanded="false">${esc(n)}</button></li>`).join('')}</ul>`).join('');
   const nat = p.nat ? `${p.nat}% di ingredienti di origine naturale` : 'Dal 98% al 100% di ingredienti di origine naturale';
   const paoText = D.PAO_TEXT[p.pao] || 'ogni opera riporta il suo PAO sulla confezione.';
@@ -326,7 +326,7 @@ for (const p of D.P) {
   <div class="product__gallery">
     ${packshot(p, { eager: true, sizes: '(max-width: 900px) 100vw, 50vw' })}
     ${photo(p.id + '-in-mano', '4:5', p.name + ' tenuto in mano, per mostrare la dimensione reale (' + p.size + ')', { alt: p.name + ', dimensione reale ' + p.size })}
-    ${photo(p.id + '-dettaglio', '4:5', dettaglio(p), { alt: p.name + ', dettaglio' })}
+    ${!p.gallery || p.gallery.includes('dettaglio') ? photo(p.id + '-dettaglio', '4:5', dettaglio(p), { alt: p.name + ', dettaglio' }) : ''}
   </div>
   <div class="product__info">
     <div class="buy">
@@ -613,7 +613,7 @@ fs.writeFileSync(path.join(out, 'js/catalogo.js'), '// generato da _build/build.
 // ---------- Controlli ----------
 const dup = Object.entries(photoUses).filter(([, pages]) => pages.length > 1);
 if (dup.length) { console.error('FOTO DUPLICATE:', dup); process.exit(1); }
-const missingGloss = [...new Set(D.P.filter(p => p.inci).flatMap(p => p.inci.split(', ')))].filter(n => !D.GLOSS[n]);
+const missingGloss = [...new Set(D.P.flatMap(p => [p.inci || ''].concat((p.contents || []).filter(c => typeof c !== 'string').map(c => c.inci))).join(', ').split(', ').filter(Boolean))].filter(n => !D.GLOSS[n]);
 if (missingGloss.length) { console.error('INCI senza spiegazione:', missingGloss); process.exit(1); }
 
 // ---------- Elenco foto e disegni da generare ----------

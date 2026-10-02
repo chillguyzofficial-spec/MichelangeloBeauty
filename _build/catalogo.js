@@ -116,16 +116,20 @@ const P = [
     keep: 'Conserva asciutto, su un portasapone forato o in una scatolina di latta con fori.',
     faq: [{ q: 'Fa schiuma?', a: 'Sì, una schiuma fitta, soprattutto al secondo passaggio.' }, { q: 'Va bene per i capelli colorati?', a: 'Sì, è delicato. Se hai dubbi fai una prova su una ciocca.' }] },
 
-  { id: 'cofanetto-bottega', opera: 'X', name: 'Cofanetto regalo "La bottega"', line: 'cofanetti', skin: ['Secca', 'Sensibile', 'Mista o grassa'], format: 'Cofanetto', size: '4 opere', price: 45, pao: '6M e 12M', lot: null,
-    contents: ['sapone-calendula', 'crema-mani', 'balsamo-labbra', 'olio-lavanda'],
-    pairs: ['crema-iris', 'scrub-marmo', 'shampoo-rosmarino'],
-    tecnica: 'Scatola di cartone pressato, chiusa con nastro di cotone',
-    materiali: 'Quattro opere della bottega, carta velina, biglietto scritto a mano',
-    lead: 'Quattro opere per un rituale semplice, in una scatola chiusa con nastro di cotone. Comprate una per una costerebbero 47,50 €.',
-    desc: 'Dentro trovi: sapone all\'olio d\'oliva e calendula 100 g, crema mani all\'olio d\'oliva 75 ml, balsamo labbra alla cera d\'api 10 ml, olio corpo alla lavanda 100 ml. Se è un regalo, aggiungi la confezione con biglietto scritto a mano nel carrello: non mettiamo lo scontrino nel pacco.',
-    use: 'Sapone e olio per la doccia della sera, crema mani e balsamo da tenere in borsa. Ogni opera ha le sue istruzioni sulla confezione.',
-    keep: 'Ogni opera ha il suo PAO: 6M per la crema mani, 12M per le altre. Conserva tutto al riparo da luce e calore.',
-    faq: [{ q: 'Posso cambiare le opere nel cofanetto?', a: 'Non ancora. Scrivici: per ordini di più cofanetti possiamo parlarne.' }, { q: 'Arriva già incartato?', a: 'Sì, la scatola è chiusa con nastro di cotone.' }] }
+  { id: 'cofanetto-bottega', opera: 'X', name: 'Cofanetto regalo "La bottega"', line: 'cofanetti', skin: ['Secca', 'Sensibile', 'Mista o grassa'], format: 'Cofanetto', size: '4 saponi da 100 g', price: 32, pao: '12M', lot: null,
+    // nel cofanetto: due saponi del catalogo + due che si trovano solo qui (con il loro INCI)
+    contents: ['sapone-calendula', 'sapone-argilla',
+      { name: 'Sapone alla lavanda', size: '100 g', inci: 'Sodium Olivate, Sodium Cocoate, Aqua, Sodium Castorate, Glycerin, Olea Europaea Fruit Oil, Lavandula Angustifolia Oil, Lavandula Angustifolia Flower, Tocopherol, Linalool, Limonene, Geraniol, Coumarin' },
+      { name: 'Sapone all\x27olio d\x27oliva puro', size: '100 g', inci: 'Sodium Olivate, Aqua, Glycerin, Olea Europaea Fruit Oil, Tocopherol' }],
+    gallery: ['in-mano'], // le foto del cofanetto: foto prodotto (scatola aperta) + in mano
+    pairs: ['olio-lavanda', 'crema-mani', 'balsamo-labbra'],
+    tecnica: 'Saponificazione a freddo, scatola di cartone con carta velina',
+    materiali: 'Quattro saponi della bottega, carta velina, biglietto scritto a mano',
+    lead: 'Quattro saponi a freddo in una scatola di cartone, con un biglietto scritto a mano: calendula, argilla e rosmarino, e due che trovi solo qui, lavanda e olio d\x27oliva puro.',
+    desc: 'Dentro trovi quattro panetti da 100 g, avvolti nella carta velina: sapone all\x27olio d\x27oliva e calendula, sapone all\x27argilla e rosmarino, sapone alla lavanda con i fiori interi e sapone all\x27olio d\x27oliva puro, il più delicato, senza profumo. Gli ultimi due li facciamo solo per il cofanetto. Il biglietto lo scriviamo a mano: dicci nel carrello cosa vuoi che ci sia scritto, altrimenti mettiamo i nostri auguri. Non mettiamo lo scontrino nel pacco.',
+    use: 'Inumidisci sapone e pelle, crea la schiuma tra le mani, massaggia e risciacqua. Tra un uso e l\x27altro lascia asciugare i saponi su un portasapone che fa scolare l\x27acqua: durano di più.',
+    keep: 'Conserva i saponi ancora incartati in un luogo asciutto. PAO 12M per tutti e quattro.',
+    faq: [{ q: 'Il biglietto è davvero scritto a mano?', a: 'Sì, da Livia o da Tommaso. Puoi scrivere il messaggio nel carrello, attivando la confezione regalo.' }, { q: 'Arriva già incartato?', a: 'Sì: carta velina dentro, scatola chiusa con nastro di cotone.' }] }
 ];
 
 const ALLERG = 'Componente naturale degli oli essenziali. È un allergene che la legge chiede di indicare: utile se sai di esserne sensibile.';
@@ -161,6 +165,7 @@ const GLOSS = {
   'Cera Alba': ['Cera d\'api', 'Da un apicoltore della Garfagnana. Protegge e rende solido il balsamo.'],
   'Calendula Officinalis Flower Extract': ['Estratto di calendula', 'Fiori macerati in olio. Ammorbidisce.'],
   'Calendula Officinalis Flower': ['Petali di calendula', 'Interi, per decorare il sapone.'],
+  'Lavandula Angustifolia Flower': ['Fiori di lavanda', 'Interi, per decorare il sapone.'],
   'Sodium Olivate': ['Olio d\'oliva saponificato', 'La base del sapone: olio d\'oliva trasformato in sapone a freddo.'],
   'Sodium Cocoate': ['Olio di cocco saponificato', 'Dà una schiuma abbondante.'],
   'Sodium Shea Butterate': ['Burro di karité saponificato', 'Rende il sapone più cremoso.'],
