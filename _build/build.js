@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '13'; // cache-busting css/js
+const V = '15'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -86,10 +86,11 @@ function header(active) {
     <nav class="nav" aria-label="Principale">${links}</nav>
     <div class="header-actions">
       <a class="saved-btn" href="salvati.html" aria-label="Opere salvate">${ICON.heart}<span class="cart-btn__n" data-saved-count data-zero>0</span></a>
-      <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello">${ICON.bag}<span class="cart-btn__n" data-cart-count>0</span></button>
+      <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello">${ICON.bag}<span class="cart-btn__n" data-cart-count data-zero>0</span></button>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu>Menu</button>
     </div>
   </div>
+  <script>try{var c=JSON.parse(localStorage.getItem('mb-cart')||'[]').reduce(function(a,l){return a+(l.qty||0)},0),s=JSON.parse(localStorage.getItem('mb-saved')||'[]').length;[['[data-cart-count]',c],['[data-saved-count]',s]].forEach(function(x){var e=document.querySelector(x[0]);if(e&&x[1]){e.textContent=x[1];e.removeAttribute('data-zero')}})}catch(e){}</script>
   <div class="menu" id="menu" hidden>
     <nav aria-label="Menu">${links}<a href="salvati.html">Opere salvate</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
   </div>
@@ -200,17 +201,14 @@ curPage = 'index.html';
     description: 'Cosmetici fatti a mano in piccoli lotti numerati tra Firenze e le Apuane: olio d\'oliva, iris fiorentino, polvere di marmo di Carrara. Progetto dimostrativo.',
     ld: [{ '@context': 'https://schema.org', '@type': 'Store', name: 'Michelangelo Beauty (progetto dimostrativo)', description: 'Bottega di cosmetica artigianale, marchio di fantasia.', email: D.EMAIL, priceRange: '€€' }],
     body: `
-<section class="hero">
-  <div class="hero__media">${photo('home-apertura', '16:9', 'Il banco di marmo della bottega con vasetti in vetro ambrato, saponi e un mazzo di iris; mani che lavorano; luce calda da una finestra laterale', { eager: true, sizes: '100vw' })}</div>
-  <div class="hero__text wrap">
-    <div>
-      <p class="eyebrow">Bottega di cosmetica · Toscana</p>
-      <h1>Cosmetici fatti a mano, <em>come opere di bottega.</em></h1>
-      <p class="lead">Olio extravergine d'oliva, iris fiorentino, polvere di marmo di Carrara. Piccoli lotti numerati, lavorati a mano tra Firenze e le Alpi Apuane.</p>
-      <a class="btn btn--primary" href="opere.html">Scopri le opere</a>
-    </div>
-    ${drawing('dw-mani-banco', 'Due mani che lavorano un panetto di sapone sul banco, tratto a sanguigna', 'hero__dw')}
+<section class="hero hero--home wrap">
+  <div class="hero__text">
+    <p class="eyebrow">Bottega di cosmetica · Toscana</p>
+    <h1>Cosmetici fatti a mano, <em>come opere di bottega.</em></h1>
+    <p class="lead">Olio extravergine d'oliva, iris fiorentino, polvere di marmo di Carrara. Piccoli lotti numerati, lavorati a mano tra Firenze e le Alpi Apuane.</p>
+    <div class="hero__cta"><a class="btn btn--primary" href="opere.html">Scopri le opere</a>${drawing('dw-mani-banco', 'Due mani che lavorano un panetto di sapone sul banco, tratto a sanguigna', 'hero__dw')}</div>
   </div>
+  <div class="hero__media">${photo('home-apertura', '16:9', 'Il banco di marmo della bottega con vasetti in vetro ambrato, saponi e un mazzo di iris; mani che lavorano; luce calda da una finestra laterale', { eager: true, sizes: '(max-width: 959px) 100vw, 58vw' })}</div>
 </section>
 
 <section class="trust wrap" aria-label="Perché comprare da noi">

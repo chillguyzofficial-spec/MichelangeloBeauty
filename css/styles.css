@@ -467,3 +467,16 @@ p,dd,td,li,a,label{overflow-wrap:break-word}
   .promo__box{width:100%;max-height:88svh;padding:28px var(--gutter) calc(20px + env(safe-area-inset-bottom));transform:translateY(24px);transition:transform .25s}
   .promo.is-open .promo__box{transform:none}
 }
+
+/* Apertura home: titolo e pulsante subito visibili (prima su PC si vedeva solo la foto).
+   Stesso ordine su ogni schermo: testo, poi foto. Su PC affiancati, foto intera e mai tagliata. */
+.hero--home{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,4vw,56px);align-items:center;padding-top:clamp(24px,3.5vw,48px)}
+.hero--home .hero__text{display:block;padding:0}
+.hero--home h1{font-size:clamp(40px,4.4vw,66px);margin-bottom:18px}
+.hero--home .lead{margin-bottom:26px;font-size:clamp(18px,1.4vw,21px)}
+.hero--home .hero__media{width:100%;margin:0}
+.hero__cta{display:flex;align-items:center;gap:20px}
+.hero--home .hero__dw{width:clamp(96px,10vw,150px);flex:none;margin:0}
+@media (max-width:959px){.hero--home{grid-template-columns:1fr;gap:24px}.hero--home .hero__media{margin:0 calc(var(--gutter) * -1)}}
+/* il blocco dello scroll (popup, carrello) non deve far saltare la pagina quando sparisce la barra di scorrimento */
+html{scrollbar-gutter:stable}

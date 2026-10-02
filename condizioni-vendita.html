@@ -8,9 +8,9 @@
 <meta name="description" content="Condizioni di vendita del sito dimostrativo Michelangelo Beauty.">
 <meta name="theme-color" content="#F3EFE7">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/fonts.css?v=13" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="css/fonts.css?v=13"></noscript>
-<link rel="stylesheet" href="css/styles.css?v=13">
+<link rel="stylesheet" href="css/fonts.css?v=15" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="css/fonts.css?v=15"></noscript>
+<link rel="stylesheet" href="css/styles.css?v=15">
 
 </head>
 <body class="">
@@ -22,10 +22,11 @@
     <nav class="nav" aria-label="Principale"><a href="opere.html">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html">Traccia il lotto</a><a href="bottega.html">La bottega</a></nav>
     <div class="header-actions">
       <a class="saved-btn" href="salvati.html" aria-label="Opere salvate"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.2-9.3C1.6 7.3 3.9 4 7.2 4c2 0 3.6 1.1 4.8 2.8C13.2 5.1 14.8 4 16.8 4c3.3 0 5.6 3.3 4.4 6.7C19.5 15.4 12 20 12 20Z" fill="var(--heart-fill,none)" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-saved-count data-zero>0</span></a>
-      <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-cart-count>0</span></button>
+      <button class="cart-btn" type="button" data-cart-open aria-label="Apri il carrello"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="cart-btn__n" data-cart-count data-zero>0</span></button>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu>Menu</button>
     </div>
   </div>
+  <script>try{var c=JSON.parse(localStorage.getItem('mb-cart')||'[]').reduce(function(a,l){return a+(l.qty||0)},0),s=JSON.parse(localStorage.getItem('mb-saved')||'[]').length;[['[data-cart-count]',c],['[data-saved-count]',s]].forEach(function(x){var e=document.querySelector(x[0]);if(e&&x[1]){e.textContent=x[1];e.removeAttribute('data-zero')}})}catch(e){}</script>
   <div class="menu" id="menu" hidden>
     <nav aria-label="Menu"><a href="opere.html">Le opere</a><a href="rituale.html">Il tuo rituale</a><a href="lotto.html">Traccia il lotto</a><a href="bottega.html">La bottega</a><a href="salvati.html">Opere salvate</a><a href="spedizioni-resi.html">Spedizioni e resi</a><a href="domande-contatti.html">Domande e contatti</a></nav>
   </div>
@@ -77,7 +78,7 @@
     <p class="small muted">Sito dimostrativo: nessuna email viene inviata. Lo sconto vale una volta, sui prodotti del primo ordine.</p>
   </div>
 </div>
-<script src="js/catalogo.js?v=13"></script>
-<script src="js/main.js?v=13"></script>
+<script src="js/catalogo.js?v=15"></script>
+<script src="js/main.js?v=15"></script>
 </body>
 </html>

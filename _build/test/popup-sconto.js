@@ -10,7 +10,7 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     await pg.goto(base + 'index.html');
     ok(!(await pg.isVisible('[data-promo]')), 'popup non subito all\'ingresso');
     await pg.waitForTimeout(6500);
-    ok(await pg.isVisible('[data-promo]'), 'popup dopo 6 secondi');
+    ok(await pg.isVisible('[data-promo]'), 'popup dopo 1,5 secondi');
     ok(await pg.evaluate(() => document.activeElement.id === 'promo-email'), 'focus sul campo email');
     await pg.fill('#promo-email', 'anna@esempio.it'); await pg.click('[data-promo] button[type=submit]');
     ok(await pg.isVisible('[data-promo] .form-err'), 'senza consenso: errore');
@@ -36,7 +36,7 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     // visitatore che dice "No grazie"
     const c2 = await b.newContext({ viewport: vp }); const p2 = await c2.newPage();
     await p2.goto(base + 'opere.html'); await p2.mouse.wheel(0, 3000); await p2.waitForTimeout(800);
-    ok(await p2.isVisible('[data-promo]'), 'popup dopo lo scorrimento (prima dei 6 s)');
+    ok(await p2.isVisible('[data-promo]'), 'popup allo scorrimento');
     await p2.click('.promo__no'); await p2.goto(base + 'index.html'); await p2.waitForTimeout(6500);
     ok(!(await p2.isVisible('[data-promo]')), '"No grazie": non ricompare');
     await c2.close();

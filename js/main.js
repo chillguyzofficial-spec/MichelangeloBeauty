@@ -331,7 +331,7 @@
     say(promoOn() ? 'Sconto del 10% attivo nel carrello' : 'Iscrizione registrata');
   }
 
-  // ---------- popup di benvenuto: dopo 6 secondi o a un terzo di pagina, mai in pagamento ----------
+  // ---------- popup di benvenuto: dopo 1,5 secondi (pagina già disegnata) o a un terzo di pagina, mai in pagamento ----------
   const pop = q('[data-promo]');
   if (pop) {
     const WEEK = 7 * 24 * 3600 * 1000;
@@ -352,7 +352,7 @@
       if (popLast && popLast.focus) popLast.focus();
     }
     function onScroll() { const h = document.documentElement; if (h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) > 0.33) openPop(); }
-    if (can()) { timer = setTimeout(openPop, 6000); window.addEventListener('scroll', onScroll, { passive: true }); }
+    if (can()) { timer = setTimeout(openPop, 1500); window.addEventListener('scroll', onScroll, { passive: true }); }
     pop.addEventListener('click', e => { if (e.target === pop || e.target.closest('[data-promo-close]')) closePop(); });
     document.addEventListener('keydown', e => {
       if (pop.hidden) return;
