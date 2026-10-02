@@ -450,3 +450,20 @@ p,dd,td,li,a,label{overflow-wrap:break-word}
 .sample legend{font-family:var(--serif);font-size:24px;margin-bottom:4px;padding:0}
 .sample .small{margin-bottom:10px}
 .radio--compact{padding:12px 16px}
+
+/* Popup di benvenuto (sconto 10% con la newsletter) */
+.promo{position:fixed;inset:0;z-index:80;background:rgba(20,18,15,.5);display:grid;place-items:center;padding:16px;opacity:0;transition:opacity .25s}
+.promo.is-open{opacity:1}
+.promo__box{position:relative;width:min(480px,100%);max-height:calc(100svh - 32px);overflow-y:auto;background:var(--marble);background-image:url("../assets/marmo-1800.webp?v=3");background-size:1800px 1800px;border-top:6px solid var(--sanguigna);padding:32px 28px 24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.promo__box h2{font-size:clamp(30px,4vw,40px)}
+.promo__box .roman{margin:0}
+.promo__lead{color:var(--ink-2)}
+.promo__x{position:absolute;top:8px;right:8px}
+.promo__no{align-self:center;font-size:15px;color:var(--ink-2)}
+.promo .small{text-align:center}
+.totals__disc{color:var(--verde);font-weight:600}
+@media (max-width:560px){
+  .promo{place-items:end stretch;padding:0}
+  .promo__box{width:100%;max-height:88svh;padding:28px var(--gutter) calc(20px + env(safe-area-inset-bottom));transform:translateY(24px);transition:transform .25s}
+  .promo.is-open .promo__box{transform:none}
+}

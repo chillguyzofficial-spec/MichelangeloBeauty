@@ -8,9 +8,9 @@
 <meta name="description" content="Pagamento simulato: sito dimostrativo, nessun ordine viene inviato.">
 <meta name="theme-color" content="#F3EFE7">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/fonts.css?v=12" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="css/fonts.css?v=12"></noscript>
-<link rel="stylesheet" href="css/styles.css?v=12">
+<link rel="stylesheet" href="css/fonts.css?v=13" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="css/fonts.css?v=13"></noscript>
+<link rel="stylesheet" href="css/styles.css?v=13">
 
 </head>
 <body class="is-checkout">
@@ -97,7 +97,24 @@
   <div class="drawer__foot" data-cart-foot></div>
 </aside>
 <div class="toast" data-toast role="status" aria-live="polite"></div>
-<script src="js/catalogo.js?v=12"></script>
-<script src="js/main.js?v=12"></script>
+<div class="promo" data-promo role="dialog" aria-modal="true" aria-labelledby="promo-t" hidden>
+  <div class="promo__box">
+    <button type="button" class="icon-btn promo__x" data-promo-close aria-label="Chiudi"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8"/></svg></button>
+    <p class="roman">Benvenuto in bottega</p>
+    <h2 id="promo-t">10% sul tuo primo ordine</h2>
+    <p class="promo__lead">Iscriviti alla lettera della bottega, una al mese, senza pubblicità. Lo sconto si applica da solo nel carrello.</p>
+    <form class="nl-form" data-demo-form data-newsletter novalidate>
+      <label for="promo-email">La tua email</label>
+      <input id="promo-email" type="email" autocomplete="email" required>
+      <label class="check"><input type="checkbox" required> <span>Acconsento a ricevere la newsletter (<a href="privacy.html">privacy</a>)</span></label>
+      <button class="btn btn--primary" type="submit">Iscriviti e attiva lo sconto</button>
+      <p class="form-msg" data-form-msg hidden>Fatto! Lo sconto del 10% è attivo: lo vedi nel carrello e al pagamento. <button type="button" class="link" data-promo-close>Continua</button></p>
+    </form>
+    <button type="button" class="link promo__no" data-promo-close>No grazie</button>
+    <p class="small muted">Sito dimostrativo: nessuna email viene inviata. Lo sconto vale una volta, sui prodotti del primo ordine.</p>
+  </div>
+</div>
+<script src="js/catalogo.js?v=13"></script>
+<script src="js/main.js?v=13"></script>
 </body>
 </html>

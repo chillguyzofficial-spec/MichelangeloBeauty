@@ -19,6 +19,11 @@
   const subtotal = () => cart.reduce((a, l) => a + MB.P[l.id].price * l.qty, 0);
   const count = () => cart.reduce((a, l) => a + l.qty, 0);
   const giftCost = () => (gift.on && cart.length ? MB.GIFT : 0);
+  // sconto di benvenuto: 10% sui prodotti del primo ordine, attivo da solo dopo l'iscrizione alla newsletter
+  let promo = store.get('mb-promo', null); // { email, used }
+  const promoOn = () => !!(promo && !promo.used);
+  const discount = () => (promoOn() && cart.length ? Math.round(subtotal() * 10) / 100 : 0);
+  const itemsTotal = () => subtotal() - discount(); // vale anche per la soglia della spedizione gratuita
 
   // ---------- date di consegna ----------
   const DAYS = ['dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab'];
@@ -67,10 +72,10 @@
     } else {
       body.innerHTML = cart.map(l => { const p = MB.P[l.id], ln = MB.LINES[p.line]; return `<div class="line" style="--line:${ln.bg};--line-fg:${ln.fg}">${thumb(p)}<div><a class="line__name" href="${p.url}">${esc(p.name)}</a><p class="line__meta">Opera n. ${p.opera} · ${p.size} · ${eur(p.price)}</p><div class="line__row"><div class="qty"><button type="button" data-line-dec="${l.id}" aria-label="Diminuisci ${esc(p.name)}">−</button><span aria-live="polite">${l.qty}</span><button type="button" data-line-inc="${l.id}" aria-label="Aumenta ${esc(p.name)}">+</button></div><strong>${eur(p.price * l.qty)}</strong></div><button type="button" class="link line__rm" data-line-rm="${l.id}">Rimuovi</button></div></div>`; }).join('') +
         `<div class="gift"><label><input type="checkbox" data-gift ${gift.on ? 'checked' : ''}> <span><strong>Confezione regalo</strong> con biglietto scritto a mano (+${eur(MB.GIFT)})</span></label>${gift.on ? `<label for="gift-msg" class="sr">Messaggio del biglietto</label><textarea id="gift-msg" data-gift-msg maxlength="200" placeholder="Il tuo messaggio (lo scriviamo a mano)">${esc(gift.msg)}</textarea>` : ''}</div>`;
-      const sub = subtotal(), ship = sub >= MB.FREE ? 0 : MB.STD;
-      const freeMsg = sub >= MB.FREE ? 'Spedizione gratuita raggiunta.' : 'Ti mancano <strong>' + eur(MB.FREE - sub) + '</strong> alla spedizione gratuita.';
-      foot.innerHTML = `<div class="free">${freeMsg}<div class="free__bar"><span style="width:${Math.min(100, sub / MB.FREE * 100)}%"></span></div></div>
-        <div class="totals"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${gift.on ? `<div><span>Confezione regalo</span><span>${eur(MB.GIFT)}</span></div>` : ''}<div><span>Spedizione standard</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(sub + ship + giftCost())}</span></div></div>
+      const sub = subtotal(), disc = discount(), net = sub - disc, ship = net >= MB.FREE ? 0 : MB.STD;
+      const freeMsg = net >= MB.FREE ? 'Spedizione gratuita raggiunta.' : 'Ti mancano <strong>' + eur(MB.FREE - net) + '</strong> alla spedizione gratuita.';
+      foot.innerHTML = `<div class="free">${freeMsg}<div class="free__bar"><span style="width:${Math.min(100, net / MB.FREE * 100)}%"></span></div></div>
+        <div class="totals"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${disc ? `<div class="totals__disc"><span>Sconto di benvenuto (10%)</span><span>−${eur(disc)}</span></div>` : ''}${gift.on ? `<div><span>Confezione regalo</span><span>${eur(MB.GIFT)}</span></div>` : ''}<div><span>Spedizione standard</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(net + ship + giftCost())}</span></div></div>
         <p class="small muted">Arriva ${between(2, 4)} · reso entro 14 giorni · campione omaggio in ogni pacco</p>
         <a class="btn btn--primary" href="pagamento.html">Vai al pagamento</a>`;
     }
@@ -160,7 +165,7 @@
   qa('[data-qty-dec]').forEach(b => b.addEventListener('click', () => { pqty = Math.max(pqty - 1, 1); showQty(); }));
   function updateShipLine() {
     const el = q('[data-ship-line]'); if (!el) return;
-    const sub = subtotal(), after = sub + parseFloat(el.dataset.price) * pqty;
+    const sub = itemsTotal(), after = sub + parseFloat(el.dataset.price) * pqty * (promoOn() ? 0.9 : 1);
     el.textContent = sub >= MB.FREE ? 'Spedizione gratuita: il carrello supera già i 49 €'
       : after >= MB.FREE ? 'Spedizione gratuita con questo acquisto (soglia 49 €)'
         : 'Spedizione 4,90 € · gratuita da 49 € (ti mancano ' + eur(MB.FREE - after) + ')';
@@ -314,9 +319,47 @@
     let err = q('.form-err', form);
     if (bad) { if (!err) { err = document.createElement('p'); err.className = 'form-err'; err.setAttribute('role', 'alert'); form.appendChild(err); } err.textContent = bad.type === 'checkbox' ? 'Per iscriverti serve il consenso.' : bad.type === 'email' ? 'Inserisci un indirizzo email valido.' : 'Compila tutti i campi obbligatori.'; bad.focus(); return; }
     if (err) err.remove();
+    if (form.hasAttribute('data-newsletter')) activatePromo(q('input[type=email]', form).value.trim());
     q('[data-form-msg]', form).hidden = false;
-    qa('input,textarea,button', form).forEach(el => { el.disabled = true; });
+    qa('input,textarea,button:not([data-promo-close])', form).forEach(el => { el.disabled = true; });
   }));
+
+  // ---------- iscrizione: attiva lo sconto (una sola volta, sul primo ordine) ----------
+  function activatePromo(email) {
+    if (!promo) { promo = { email, used: false }; store.set('mb-promo', promo); }
+    renderCart(); renderSummary();
+    say(promoOn() ? 'Sconto del 10% attivo nel carrello' : 'Iscrizione registrata');
+  }
+
+  // ---------- popup di benvenuto: dopo 6 secondi o a un terzo di pagina, mai in pagamento ----------
+  const pop = q('[data-promo]');
+  if (pop) {
+    const WEEK = 7 * 24 * 3600 * 1000;
+    const dismissed = store.get('mb-promo-dismiss', 0);
+    const can = () => !promo && Date.now() - dismissed > WEEK && !document.body.classList.contains('is-checkout') && !(drawer && drawer.classList.contains('is-open'));
+    let shown = false, popLast = null, timer;
+    function openPop() {
+      if (shown || !can()) return; shown = true;
+      popLast = document.activeElement; pop.hidden = false; lock(true);
+      requestAnimationFrame(() => pop.classList.add('is-open'));
+      setTimeout(() => q('input[type=email]', pop).focus(), 60);
+      window.removeEventListener('scroll', onScroll); clearTimeout(timer);
+    }
+    function closePop() {
+      if (pop.hidden) return;
+      pop.classList.remove('is-open'); pop.hidden = true; lock(false);
+      if (!promo) store.set('mb-promo-dismiss', Date.now());
+      if (popLast && popLast.focus) popLast.focus();
+    }
+    function onScroll() { const h = document.documentElement; if (h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) > 0.33) openPop(); }
+    if (can()) { timer = setTimeout(openPop, 6000); window.addEventListener('scroll', onScroll, { passive: true }); }
+    pop.addEventListener('click', e => { if (e.target === pop || e.target.closest('[data-promo-close]')) closePop(); });
+    document.addEventListener('keydown', e => {
+      if (pop.hidden) return;
+      if (e.key === 'Escape') closePop();
+      if (e.key === 'Tab') { const f = qa('a[href],button:not([disabled]),input:not([disabled])', pop); if (!f.length) return; if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); } }
+    });
+  }
 
   // ---------- pagamento simulato ----------
   const co = q('[data-checkout]');
@@ -326,13 +369,13 @@
     const sumBox = q('[data-co-summary]', co);
     let step = 1, order = null;
     const shipSel = () => (q('input[name=ship]:checked', co) || {}).value || 'standard';
-    const shipCost = () => (shipSel() === 'express' ? MB.EXP : subtotal() >= MB.FREE ? 0 : MB.STD);
+    const shipCost = () => (shipSel() === 'express' ? MB.EXP : itemsTotal() >= MB.FREE ? 0 : MB.STD);
     const sampleSel = () => { const r = q('input[name=sample]:checked', co); return r && r.value !== 'nessuno' ? r.closest('label').querySelector('strong').textContent : ''; };
     renderSummary = function () {
-      const lines = order ? order.lines : cart, sub = order ? order.sub : subtotal(), ship = order ? order.ship : shipCost(), g = order ? order.gift : giftCost();
+      const lines = order ? order.lines : cart, sub = order ? order.sub : subtotal(), ship = order ? order.ship : shipCost(), g = order ? order.gift : giftCost(), d = order ? order.disc : discount();
       sumBox.innerHTML = lines.map(l => { const p = MB.P[l.id]; return `<div class="line" style="--line:${MB.LINES[p.line].bg};--line-fg:${MB.LINES[p.line].fg}">${thumb(p)}<div><p class="line__name">${esc(p.name)}</p><p class="line__meta">${l.qty} × ${eur(p.price)}</p></div></div>`; }).join('') +
-        `<div class="totals" style="margin-top:12px"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${g ? `<div><span>Confezione regalo</span><span>${eur(g)}</span></div>` : ''}<div><span>Spedizione</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(sub + ship + g)}</span></div></div>${(order ? order.sample : sampleSel()) ? `<p class="small muted" style="margin-top:10px">Campione omaggio: ${esc(order ? order.sample : sampleSel())}</p>` : ''}`;
-      const std = q('[data-ship-std]', co); if (std) std.textContent = subtotal() >= MB.FREE ? 'Gratuita' : eur(MB.STD);
+        `<div class="totals" style="margin-top:12px"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${d ? `<div class="totals__disc"><span>Sconto di benvenuto (10%)</span><span>−${eur(d)}</span></div>` : ''}${g ? `<div><span>Confezione regalo</span><span>${eur(g)}</span></div>` : ''}<div><span>Spedizione</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(sub - d + ship + g)}</span></div></div>${(order ? order.sample : sampleSel()) ? `<p class="small muted" style="margin-top:10px">Campione omaggio: ${esc(order ? order.sample : sampleSel())}</p>` : ''}`;
+      const std = q('[data-ship-std]', co); if (std) std.textContent = itemsTotal() >= MB.FREE ? 'Gratuita' : eur(MB.STD);
     };
     function show(n) {
       step = n;
@@ -371,9 +414,10 @@
     q('[data-co-cart]', co).addEventListener('click', e => { e.preventDefault(); openCart(); });
     q('[data-co-place]', co).addEventListener('click', () => {
       const num = 'MB-DEMO-' + String(Math.floor(1000 + Math.random() * 9000));
-      order = { lines: cart.slice(), sub: subtotal(), ship: shipCost(), gift: giftCost(), sample: sampleSel() };
+      order = { lines: cart.slice(), sub: subtotal(), ship: shipCost(), gift: giftCost(), sample: sampleSel(), disc: discount() };
+      if (order.disc) { promo.used = true; store.set('mb-promo', promo); } // lo sconto vale solo sul primo ordine
       const when = shipSel() === 'express' ? between(1, 2) : between(2, 4);
-      q('[data-co-done-text]', co).innerHTML = `Ordine <strong>${num}</strong>. In un negozio vero ti arriverebbe una conferma a <strong>${esc(data.email)}</strong> e il pacco ${when}.${gift.on ? ' Con confezione regalo e biglietto scritto a mano.' : ''}${order.sample ? ' Nel pacco anche il campione: ' + esc(order.sample) + '.' : ''}`;
+      q('[data-co-done-text]', co).innerHTML = `Ordine <strong>${num}</strong>. In un negozio vero ti arriverebbe una conferma a <strong>${esc(data.email)}</strong> e il pacco ${when}.${gift.on ? ' Con confezione regalo e biglietto scritto a mano.' : ''}${order.sample ? ' Nel pacco anche il campione: ' + esc(order.sample) + '.' : ''}${order.disc ? ' Hai risparmiato ' + eur(order.disc) + ' con lo sconto di benvenuto.' : ''}`;
       cart = []; gift = { on: false, msg: '' }; save(); renderCart();
       show(4); q('[data-co-panel="4"]', co).focus();
     });

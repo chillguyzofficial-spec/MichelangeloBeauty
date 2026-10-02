@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '12'; // cache-busting css/js
+const V = '13'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -116,7 +116,24 @@ const shell = () => `<div class="overlay" data-overlay hidden></div>
   <div class="drawer__body" data-cart-body></div>
   <div class="drawer__foot" data-cart-foot></div>
 </aside>
-<div class="toast" data-toast role="status" aria-live="polite"></div>`;
+<div class="toast" data-toast role="status" aria-live="polite"></div>
+<div class="promo" data-promo role="dialog" aria-modal="true" aria-labelledby="promo-t" hidden>
+  <div class="promo__box">
+    <button type="button" class="icon-btn promo__x" data-promo-close aria-label="Chiudi">${ICON.close}</button>
+    <p class="roman">Benvenuto in bottega</p>
+    <h2 id="promo-t">10% sul tuo primo ordine</h2>
+    <p class="promo__lead">Iscriviti alla lettera della bottega, una al mese, senza pubblicità. Lo sconto si applica da solo nel carrello.</p>
+    <form class="nl-form" data-demo-form data-newsletter novalidate>
+      <label for="promo-email">La tua email</label>
+      <input id="promo-email" type="email" autocomplete="email" required>
+      <label class="check"><input type="checkbox" required> <span>Acconsento a ricevere la newsletter (<a href="privacy.html">privacy</a>)</span></label>
+      <button class="btn btn--primary" type="submit">Iscriviti e attiva lo sconto</button>
+      <p class="form-msg" data-form-msg hidden>Fatto! Lo sconto del 10% è attivo: lo vedi nel carrello e al pagamento. <button type="button" class="link" data-promo-close>Continua</button></p>
+    </form>
+    <button type="button" class="link promo__no" data-promo-close>No grazie</button>
+    <p class="small muted">Sito dimostrativo: nessuna email viene inviata. Lo sconto vale una volta, sui prodotti del primo ordine.</p>
+  </div>
+</div>`;
 
 function page({ file, active = '', title, description, body, ld = [], cls = '' }) {
   const html = `<!DOCTYPE html>
@@ -261,14 +278,14 @@ curPage = 'index.html';
 <section class="sec wrap newsletter">
   <div>
     <h2>Una lettera al mese dalla bottega</h2>
-    <p>Cosa stiamo raccogliendo, quale lotto è appena uscito, niente pubblicità. Ti puoi cancellare quando vuoi.</p>
+    <p>Cosa stiamo raccogliendo, quale lotto è appena uscito, niente pubblicità. Iscrivendoti hai il <strong>10% sul primo ordine</strong>, applicato da solo nel carrello. Ti puoi cancellare quando vuoi.</p>
   </div>
-  <form class="nl-form" data-demo-form novalidate>
+  <form class="nl-form" data-demo-form data-newsletter novalidate>
     <label for="nl-email">La tua email</label>
     <input id="nl-email" type="email" autocomplete="email" required>
-    <label class="check"><input type="checkbox" required> Acconsento a ricevere la newsletter (<a href="privacy.html">privacy</a>)</label>
+    <label class="check"><input type="checkbox" required> <span>Acconsento a ricevere la newsletter (<a href="privacy.html">privacy</a>)</span></label>
     <button class="btn btn--primary" type="submit">Iscriviti</button>
-    <p class="form-msg" data-form-msg hidden>Fatto: sei iscritto (sito dimostrativo, nessuna email verrà inviata).</p>
+    <p class="form-msg" data-form-msg hidden>Fatto: sei iscritto e lo sconto del 10% sul primo ordine è attivo nel carrello (sito dimostrativo, nessuna email verrà inviata).</p>
   </form>
 </section>`
   });
