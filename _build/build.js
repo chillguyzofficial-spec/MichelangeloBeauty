@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '4'; // cache-busting css/js
+const V = '5'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -298,7 +298,7 @@ curPage = 'opere.html';
     <label class="sort">Ordina <select data-sort><option value="evidenza">In evidenza</option><option value="prezzo-asc">Prezzo crescente</option><option value="prezzo-desc">Prezzo decrescente</option><option value="nome">Nome A-Z</option></select></label></div>
   <div class="grid" data-shop-grid>${D.P.map(p => card(p, { heading: 'h2' })).join('\n')}</div>
   <div class="shop__empty" data-shop-empty hidden>
-    ${drawing('dw-lavanda', 'Un rametto di lavanda appoggiato di traverso, tratto leggero a sanguigna', 'empty__dw')}
+    ${drawing('dw-ulivo-carta', 'Ramo d\x27ulivo su carta, tratto leggero a sanguigna', 'empty__dw')}
     <p>Nessuna opera con questi filtri.</p><button class="btn btn--ghost" type="button" data-filter-reset>Togli i filtri</button>
   </div>
 </section>`

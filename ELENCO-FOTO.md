@@ -1,7 +1,7 @@
 # Michelangelo Beauty — foto e disegni da generare
 <!-- generato da _build/build.js: si aggiorna da solo a ogni build -->
 
-Foto: **18/48** presenti · Disegni: **3/7** presenti
+Foto: **18/48** presenti · Disegni: **4/7** presenti
 
 ## Regole per tutte le foto
 - Luce naturale calda da finestra laterale, materiali veri: marmo bianco di Carrara, legno di castagno, vetro ambrato, lino, terracotta.
@@ -69,7 +69,7 @@ Stile: studio di bottega rinascimentale a gesso rosso (sanguigna), tratto vivo e
 |---|---|---|
 | `dw-mani-banco.webp` | Due mani che lavorano un panetto di sapone sul banco, tratto a sanguigna | index.html |
 | `dw-mortaio.webp` | Mortaio di marmo con pestello e qualche foglia di rosmarino, tratto a sanguigna | index.html |
-| `dw-lavanda.webp` | Un rametto di lavanda appoggiato di traverso, tratto leggero a sanguigna | opere.html |
+| `dw-ulivo-carta.webp` | Ramo d'ulivo su carta, tratto leggero a sanguigna | opere.html |
 | `dw-iris.webp` | Un fiore di iris con le foglie, studio botanico a sanguigna | rituale.html |
 | `dw-ramo-ulivo.webp` | Un ramo d'ulivo con le olive, studio a sanguigna | lotto.html |
 | `dw-mani-pacco.webp` | Due mani che chiudono un pacco con un nastro, tratto a sanguigna | pagamento.html |
