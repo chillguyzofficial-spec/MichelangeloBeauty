@@ -70,6 +70,15 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     ok((await pg.textContent('[data-cart-count]')).trim() === '0' && (await pg.textContent('[data-cart-body]')).includes('vuoto'), 'svuota il carrello: carrello vuoto');
     await pg.click('.toast__act'); await pg.waitForTimeout(200);
     ok((await pg.textContent('[data-cart-count]')).trim() === '5', 'annulla: carrello ripristinato');
+    // spedizione scelta nel carrello, ritrovata al pagamento
+    await pg.click('[data-cart-ship][value=express]');
+    ok((await pg.textContent('[data-cart-foot]')).includes('Spedizione espressa8,90'), 'carrello: espressa scelta, 8,90 € nel totale');
+    await pg.goto(base + 'pagamento.html'); await pg.waitForTimeout(200);
+    ok(await pg.isChecked('input[name=ship][value=express]'), 'pagamento: espressa già selezionata');
+    await pg.goto(base + 'opere.html'); await pg.click('[data-cart-open]'); await pg.waitForTimeout(300);
+    await pg.click('[data-cart-ship][value=standard]');
+    ok((await pg.textContent('[data-cart-foot]')).includes('Spedizione standard'), 'carrello: si torna alla standard');
+    await pg.keyboard.press('Escape');
     await pg.keyboard.press('Escape');
     // salva per dopo
     await pg.goto(base + 'opera-scrub-marmo.html');

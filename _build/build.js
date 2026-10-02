@@ -7,7 +7,8 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '21'; // cache-busting css/js
+const SITE = 'https://chillguyzofficial-spec.github.io/MichelangeloBeauty/'; // indirizzo pubblico (anteprime di condivisione)
+const V = '23'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -174,6 +175,14 @@ function page({ file, active = '', title, description, body, ld = [], cls = '' }
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <meta name="theme-color" content="#F3EFE7">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Michelangelo Beauty">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:url" content="${SITE}${file === 'index.html' ? '' : file}">
+<meta property="og:image" content="${SITE}assets/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/fonts.css?v=${V}" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="css/fonts.css?v=${V}"></noscript>

@@ -19,6 +19,7 @@
   const subtotal = () => cart.reduce((a, l) => a + MB.P[l.id].price * l.qty, 0);
   const count = () => cart.reduce((a, l) => a + l.qty, 0);
   const giftCost = () => (gift.on && cart.length ? MB.GIFT : 0);
+  let shipPref = store.get('mb-ship', 'standard'); // standard | express, scelta nel carrello e al pagamento
   // sconto di benvenuto: 10% sui prodotti del primo ordine, attivo da solo dopo l'iscrizione alla newsletter
   let promo = store.get('mb-promo', null); // { email, used }
   const promoOn = () => !!(promo && !promo.used);
@@ -97,12 +98,13 @@
     } else {
       // in cima, così si vede subito anche con tanti prodotti (solo da 2 prodotti in su)
       body.innerHTML = (cart.length >= 2 ? `<div class="cart-clear"><span>${count()} ${count() === 1 ? 'pezzo' : 'pezzi'} nel carrello</span><button type="button" class="link" data-cart-clear>Svuota il carrello</button></div>` : '') + cart.map(l => { const p = MB.P[l.id], ln = MB.LINES[p.line]; return `<div class="line" style="--line:${ln.bg};--line-fg:${ln.fg}">${thumb(p)}<div><a class="line__name" href="${p.url}">${esc(p.name)}</a><p class="line__meta">Opera n. ${p.opera} · ${p.size} · ${eur(p.price)}</p><div class="line__row"><div class="qty"><button type="button" data-line-dec="${l.id}" aria-label="Diminuisci ${esc(p.name)}">−</button><span aria-live="polite">${l.qty}</span><button type="button" data-line-inc="${l.id}" aria-label="Aumenta ${esc(p.name)}">+</button></div><strong>${eur(p.price * l.qty)}</strong></div><button type="button" class="link line__rm" data-line-rm="${l.id}">Rimuovi</button></div></div>`; }).join('') +
-        `<div class="gift"><label><input type="checkbox" data-gift ${gift.on ? 'checked' : ''}> <span><strong>Confezione regalo</strong> con biglietto scritto a mano (+${eur(MB.GIFT)})</span></label>${gift.on ? `<label for="gift-msg" class="sr">Messaggio del biglietto</label><textarea id="gift-msg" data-gift-msg maxlength="200" placeholder="Il tuo messaggio (lo scriviamo a mano)">${esc(gift.msg)}</textarea>` : ''}</div>`;
-      const sub = subtotal(), disc = discount(), net = sub - disc, ship = net >= MB.FREE ? 0 : MB.STD;
+        `<div class="gift"><label><input type="checkbox" data-gift ${gift.on ? 'checked' : ''}> <span><strong>Confezione regalo</strong> con biglietto scritto a mano (+${eur(MB.GIFT)})</span></label>${gift.on ? `<label for="gift-msg" class="sr">Messaggio del biglietto</label><textarea id="gift-msg" data-gift-msg maxlength="200" placeholder="Il tuo messaggio (lo scriviamo a mano)">${esc(gift.msg)}</textarea>` : ''}</div>` +
+        `<fieldset class="cart-ship"><legend>Spedizione</legend>${[['standard', 'Standard', itemsTotal() >= MB.FREE ? 'Gratuita' : eur(MB.STD), between(2, 4)], ['express', 'Espressa', eur(MB.EXP), between(1, 2)]].map(([v, n, c, w]) => `<label class="radio radio--compact"><input type="radio" name="cart-ship" value="${v}"${shipPref === v ? ' checked' : ''} data-cart-ship><span><strong>${n}</strong> · ${c}<br><span class="muted">arriva ${w}</span></span></label>`).join('')}</fieldset>`;
+      const sub = subtotal(), disc = discount(), net = sub - disc, ship = shipPref === 'express' ? MB.EXP : net >= MB.FREE ? 0 : MB.STD;
       const freeMsg = net >= MB.FREE ? 'Spedizione gratuita raggiunta.' : 'Ti mancano <strong>' + eur(MB.FREE - net) + '</strong> alla spedizione gratuita.';
       foot.innerHTML = `<div class="free">${freeMsg}<div class="free__bar"><span style="width:${Math.min(100, net / MB.FREE * 100)}%"></span></div></div>
-        <div class="totals"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${disc ? `<div class="totals__disc"><span>Sconto di benvenuto (10%)</span><span>−${eur(disc)}</span></div>` : ''}${gift.on ? `<div><span>Confezione regalo</span><span>${eur(MB.GIFT)}</span></div>` : ''}<div><span>Spedizione standard</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(net + ship + giftCost())}</span></div></div>
-        <p class="small muted">Arriva ${between(2, 4)} · reso entro 14 giorni · campione omaggio in ogni pacco</p>
+        <div class="totals"><div><span>Subtotale</span><span>${eur(sub)}</span></div>${disc ? `<div class="totals__disc"><span>Sconto di benvenuto (10%)</span><span>−${eur(disc)}</span></div>` : ''}${gift.on ? `<div><span>Confezione regalo</span><span>${eur(MB.GIFT)}</span></div>` : ''}<div><span>Spedizione ${shipPref === 'express' ? 'espressa' : 'standard'}</span><span>${ship ? eur(ship) : 'Gratuita'}</span></div><div class="totals__sum"><span>Totale</span><span>${eur(net + ship + giftCost())}</span></div></div>
+        <p class="small muted">Arriva ${shipPref === 'express' ? between(1, 2) : between(2, 4)} · reso entro 14 giorni · campione omaggio in ogni pacco</p>
         <a class="btn btn--primary" href="pagamento.html">Vai al pagamento</a>`;
     }
     updateShipLine();
@@ -146,6 +148,7 @@
     }
   });
   document.addEventListener('change', e => {
+    if (e.target.matches('[data-cart-ship]')) { shipPref = e.target.value; store.set('mb-ship', shipPref); renderCart(); const r = q('[data-cart-ship]:checked'); if (r) r.focus(); return; }
     if (e.target.matches('[data-gift]')) { gift.on = e.target.checked; save(); renderCart(); renderSummary(); const ta = q('[data-gift-msg]'); if (ta) ta.focus(); }
   });
   document.addEventListener('input', e => { if (e.target.matches('[data-gift-msg]')) { gift.msg = e.target.value; save(); } });
@@ -493,6 +496,8 @@
       q('[data-co-address]', co).textContent = 'Spediamo a: ' + data.nome + ' ' + data.cognome + ', ' + data.indirizzo + ', ' + data.cap + ' ' + data.citta + ' (' + data.provincia.toUpperCase() + ')';
       show(2);
     });
+    const pre = q('input[name=ship][value="' + shipPref + '"]', co); if (pre) pre.checked = true;
+    qa('input[name=ship]', co).forEach(r => r.addEventListener('change', () => { shipPref = r.value; store.set('mb-ship', shipPref); renderCart(); }));
     qa('input[name=ship], input[name=sample]', co).forEach(r => r.addEventListener('change', renderSummary));
     qa('[data-co-back]', co).forEach(b => b.addEventListener('click', () => show(step - 1)));
     q('[data-co-next]', co).addEventListener('click', () => show(3));

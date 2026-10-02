@@ -590,3 +590,8 @@ html{scrollbar-gutter:stable}
 .cart-clear .link{font-size:15px;color:var(--ink-2)}
 .toast.has-act{pointer-events:auto}
 .toast__act{background:none;border:0;padding:4px 2px;color:#fff;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:16px}
+
+/* Spedizione scelta già nel carrello */
+.cart-ship{border:0;padding:0;margin:14px 0 6px;display:flex;flex-direction:column;gap:8px}
+.cart-ship legend{font-weight:600;font-size:16px;margin-bottom:6px;padding:0}
+.cart-ship .radio{font-size:15px}
