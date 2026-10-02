@@ -374,11 +374,11 @@ for (const p of D.P) {
 }
 function dettaglio(p) {
   return {
-    'crema-iris': 'La crema aperta nel vasetto di vetro ambrato, superficie liscia, un petalo di iris accanto',
+    'crema-iris': 'La crema aperta nel vasetto di vetro satinato con tappo dorato, superficie liscia, un petalo di iris accanto',
     'siero-vinacce': 'Una goccia di siero dal contagocce, colore chiaro e limpido, grappolo d\'uva sfocato sullo sfondo',
     'scrub-marmo': 'La texture dello scrub: polvere di marmo bianca negli oli, su un cucchiaio di legno',
     'olio-lavanda': 'Una goccia d\'olio sul polso, spighe di lavanda',
-    'balsamo-labbra': 'La scatolina di latta aperta, superficie liscia del balsamo',
+    'balsamo-labbra': 'Il vasetto di vetro satinato aperto, superficie liscia del balsamo',
     'crema-mani': 'Un po\' di crema sul dorso della mano',
     'sapone-calendula': 'Il taglio del sapone, con i petali di calendula',
     'sapone-argilla': 'Il colore verde del sapone, in controluce, con un rametto di rosmarino',

@@ -32,7 +32,7 @@ Foto: **17/48** presenti · Disegni: **3/7** presenti
 | `prodotto-shampoo-rosmarino.webp` | 4:5 | 1600×2000 | Shampoo solido al rosmarino 70 g sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-cofanetto-bottega.webp` | 4:5 | 1600×2000 | Cofanetto regalo "La bottega" 4 opere sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `crema-iris-in-mano.webp` | 4:5 | 1600×2000 | Crema viso all'iris fiorentino tenuto in mano, per mostrare la dimensione reale (50 ml) | opera-crema-iris.html |
-| `crema-iris-dettaglio.webp` | 4:5 | 1600×2000 | La crema aperta nel vasetto di vetro ambrato, superficie liscia, un petalo di iris accanto | opera-crema-iris.html |
+| `crema-iris-dettaglio.webp` | 4:5 | 1600×2000 | La crema aperta nel vasetto di vetro satinato con tappo dorato, superficie liscia, un petalo di iris accanto | opera-crema-iris.html |
 | `siero-vinacce-in-mano.webp` | 4:5 | 1600×2000 | Siero viso alle vinacce tenuto in mano, per mostrare la dimensione reale (30 ml) | opera-siero-vinacce.html |
 | `siero-vinacce-dettaglio.webp` | 4:5 | 1600×2000 | Una goccia di siero dal contagocce, colore chiaro e limpido, grappolo d'uva sfocato sullo sfondo | opera-siero-vinacce.html |
 | `scrub-marmo-in-mano.webp` | 4:5 | 1600×2000 | Scrub corpo al marmo di Carrara tenuto in mano, per mostrare la dimensione reale (200 ml) | opera-scrub-marmo.html |
@@ -40,7 +40,7 @@ Foto: **17/48** presenti · Disegni: **3/7** presenti
 | `olio-lavanda-in-mano.webp` | 4:5 | 1600×2000 | Olio corpo alla lavanda tenuto in mano, per mostrare la dimensione reale (100 ml) | opera-olio-lavanda.html |
 | `olio-lavanda-dettaglio.webp` | 4:5 | 1600×2000 | Una goccia d'olio sul polso, spighe di lavanda | opera-olio-lavanda.html |
 | `balsamo-labbra-in-mano.webp` | 4:5 | 1600×2000 | Balsamo labbra alla cera d'api tenuto in mano, per mostrare la dimensione reale (10 ml) | opera-balsamo-labbra.html |
-| `balsamo-labbra-dettaglio.webp` | 4:5 | 1600×2000 | La scatolina di latta aperta, superficie liscia del balsamo | opera-balsamo-labbra.html |
+| `balsamo-labbra-dettaglio.webp` | 4:5 | 1600×2000 | Il vasetto di vetro satinato aperto, superficie liscia del balsamo | opera-balsamo-labbra.html |
 | `crema-mani-in-mano.webp` | 4:5 | 1600×2000 | Crema mani all'olio d'oliva tenuto in mano, per mostrare la dimensione reale (75 ml) | opera-crema-mani.html |
 | `crema-mani-dettaglio.webp` | 4:5 | 1600×2000 | Un po' di crema sul dorso della mano | opera-crema-mani.html |
 | `sapone-calendula-in-mano.webp` | 4:5 | 1600×2000 | Sapone all'olio d'oliva e calendula tenuto in mano, per mostrare la dimensione reale (100 g) | opera-sapone-calendula.html |

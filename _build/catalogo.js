@@ -23,7 +23,7 @@ const P = [
     desc: 'La radice di iris riposa tre anni prima di essere lavorata: per questo in Toscana la chiamano "l\'oro viola". La uniamo a olio extravergine d\'oliva, burro di karité e squalano vegetale in una crema che si assorbe in fretta e non lascia la pelle lucida. Pensata per pelli secche o sensibili. Non è profumata: il leggero sentore è quello dell\'iris.',
     use: 'Mattina e sera, su viso e collo detersi. Ne basta quanto un pisello: stendila dal centro del viso verso l\'esterno. Al mattino aspetta un minuto prima del trucco.',
     inci: 'Aqua, Olea Europaea Fruit Oil, Glycerin, Butyrospermum Parkii Butter, Iris Florentina Root Extract, Cetearyl Alcohol, Glyceryl Stearate Citrate, Squalane, Sodium Hyaluronate, Xanthan Gum, Tocopherol, Benzyl Alcohol, Dehydroacetic Acid, Helianthus Annuus Seed Oil, Citric Acid',
-    keep: 'Vasetto in vetro ambrato. Conserva sotto i 25 °C, al riparo da luce e calore, e preleva con mani pulite o con la spatolina.',
+    keep: 'Vasetto in vetro satinato. Conserva sotto i 25 °C, al riparo da luce e calore, e preleva con mani pulite o con la spatolina.',
     faq: [{ q: 'Va bene per la pelle grassa?', a: 'È leggera, ma la formula è pensata per pelli secche e sensibili. Per una pelle mista o grassa di solito basta il siero alle vinacce, la sera.' }, { q: 'Posso usarla sul contorno occhi?', a: 'Sì, picchiettandone pochissima con l\'anulare, senza arrivare alla rima degli occhi.' }] },
 
   { id: 'siero-vinacce', opera: 'II', name: 'Siero viso alle vinacce', line: 'viso', skin: ['Secca', 'Sensibile', 'Mista o grassa'], format: 'Olio', size: '30 ml', price: 32, nat: 100, pao: '6M', lot: 'MB-26-121',
