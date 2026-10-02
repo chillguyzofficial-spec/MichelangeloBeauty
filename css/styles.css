@@ -15,7 +15,7 @@
 html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-padding-top:90px}
 body{margin:0;background:var(--marble);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.6;
   /* venature del marmo: immagine che si ripete senza cuciture (il filtro SVG veniva disegnato a riquadri) */
-  background-image:url("../assets/marmo.webp?v=2");background-size:900px 900px}
+  background-image:url("../assets/marmo-1800.webp?v=3");background-size:1800px 1800px}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-underline-offset:3px}
 button,input,select,textarea{font:inherit;color:inherit}
