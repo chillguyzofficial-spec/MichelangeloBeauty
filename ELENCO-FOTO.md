@@ -1,7 +1,7 @@
 # Michelangelo Beauty — foto e disegni da generare
 <!-- generato da _build/build.js: si aggiorna da solo a ogni build -->
 
-Foto: **18/48** presenti · Disegni: **4/7** presenti
+Foto: **44/48** presenti · Disegni: **4/7** presenti
 
 ## Regole per tutte le foto
 - Luce naturale calda da finestra laterale, materiali veri: marmo bianco di Carrara, legno di castagno, vetro ambrato, lino, terracotta.
@@ -24,7 +24,7 @@ Foto: **18/48** presenti · Disegni: **4/7** presenti
 | `prodotto-sapone-calendula.webp` | 4:5 | 1600×2000 | Sapone all'olio d'oliva e calendula 100 g sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-siero-vinacce.webp` | 4:5 | 1600×2000 | Siero viso alle vinacce 30 ml sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `home-apertura.webp` | 16:9 | 2048×1152 | Il banco di marmo della bottega con vasetti in vetro ambrato, saponi e un mazzo di iris; mani che lavorano; luce calda da una finestra laterale | index.html |
-| `home-bottega.webp` | 4:5 | 1600×2000 | Tommaso che taglia a filo un blocco di sapone appena sformato, sul banco di castagno | index.html |
+| `home-bottega.webp` | 4:5 | 1600×2000 | Un artigiano della bottega taglia a filo un blocco di sapone appena sformato, sul banco di castagno | index.html |
 | `prodotto-olio-lavanda.webp` | 4:5 | 1600×2000 | Olio corpo alla lavanda 100 ml sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-balsamo-labbra.webp` | 4:5 | 1600×2000 | Balsamo labbra alla cera d'api 10 ml sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |
 | `prodotto-crema-mani.webp` | 4:5 | 1600×2000 | Crema mani all'olio d'oliva 75 ml sul piano di marmo, stessa luce per tutto il catalogo | foto prodotto: card (negozio, home, abbinamenti, carrello) e prima foto della sua scheda |

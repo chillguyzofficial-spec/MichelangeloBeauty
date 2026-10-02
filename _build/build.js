@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '5'; // cache-busting css/js
+const V = '6'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -217,7 +217,7 @@ curPage = 'index.html';
 </section>
 
 <section class="sec wrap split">
-  <div class="split__media">${photo('home-bottega', '4:5', 'Tommaso che taglia a filo un blocco di sapone appena sformato, sul banco di castagno', { sizes: '(max-width: 900px) 100vw, 50vw' })}</div>
+  <div class="split__media">${photo('home-bottega', '4:5', 'Un artigiano della bottega taglia a filo un blocco di sapone appena sformato, sul banco di castagno', { sizes: '(max-width: 900px) 100vw, 50vw' })}</div>
   <div class="split__text">
     <p class="roman">IV</p>
     <h2>Due persone, un banco di marmo, il tempo che serve.</h2>
