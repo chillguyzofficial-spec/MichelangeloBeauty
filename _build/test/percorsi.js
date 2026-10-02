@@ -58,13 +58,18 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     await pg.click('[data-quiz-q="pelle"] [data-quiz-value="Secca"]');
     await pg.click('[data-quiz-q="momento"] [data-quiz-value="sera"]');
     await pg.click('[data-quiz-q="zona"] [data-quiz-value="viso"]');
-    await pg.click('[data-quiz-q="zona"] [data-quiz-next]');
     await pg.click('[data-quiz-q="profumo"] [data-quiz-value="si"]');
     await pg.click('[data-quiz-q="per"] [data-quiz-value="me"]');
     const rit = await pg.textContent('[data-quiz-result]');
     ok(rit.includes('Siero viso alle vinacce') && rit.includes('Crema viso all') && rit.includes('Sapone all'), 'rituale pelle secca/sera/viso: sapone, siero, crema');
     await pg.click('[data-ritual-add]'); await pg.waitForTimeout(350);
     ok((await pg.textContent('[data-cart-count]')).trim() === '5', 'rituale aggiunto (2 creme + 3 opere = 5 pezzi): ' + await pg.textContent('[data-cart-count]'));
+    // svuota il carrello (con Annulla)
+    ok(await pg.isVisible('[data-cart-clear]'), 'svuota il carrello: visibile con più prodotti');
+    await pg.click('[data-cart-clear]'); await pg.waitForTimeout(200);
+    ok((await pg.textContent('[data-cart-count]')).trim() === '0' && (await pg.textContent('[data-cart-body]')).includes('vuoto'), 'svuota il carrello: carrello vuoto');
+    await pg.click('.toast__act'); await pg.waitForTimeout(200);
+    ok((await pg.textContent('[data-cart-count]')).trim() === '5', 'annulla: carrello ripristinato');
     await pg.keyboard.press('Escape');
     // salva per dopo
     await pg.goto(base + 'opera-scrub-marmo.html');
@@ -88,20 +93,18 @@ const ok = (c, m) => { console.log((c ? 'OK  ' : 'ERR ') + m); if (!c) process.e
     await pg.goto(base + 'rituale.html');
     await pg.click('[data-quiz-q="pelle"] [data-quiz-value="Mista o grassa"]');
     await pg.click('[data-quiz-q="momento"] [data-quiz-value="entrambi"]');
-    await pg.click('[data-quiz-q="zona"] [data-quiz-value="corpo"]');
-    await pg.click('[data-quiz-q="zona"] [data-quiz-value="mani-labbra"]');
-    await pg.click('[data-quiz-q="zona"] [data-quiz-next]');
+    await pg.click('[data-quiz-q="zona"] [data-quiz-value="tutto"]');
     await pg.click('[data-quiz-q="profumo"] [data-quiz-value="no"]');
     await pg.click('[data-quiz-q="per"] [data-quiz-value="regalo"]');
     let txt = await pg.textContent('[data-quiz-result]');
-    ok(txt.includes('Crema mani') && txt.includes('Balsamo') && !/<li[^>]*>[sS]*Olio corpo/.test(await pg.innerHTML('.ritual')) && txt.includes('senza profumo'), 'più zone + senza profumo: niente olio alla lavanda, nota mostrata');
+    ok(txt.includes('Crema mani') && txt.includes('Balsamo') && !/<li[^>]*>[sS]*Olio corpo/.test(await pg.innerHTML('.ritual')) && txt.includes('senza profumo'), 'un po’ di tutto + senza profumo: niente olio alla lavanda, nota mostrata');
     ok(await pg.isChecked('[data-rit-gift]'), 'regalo: confezione già spuntata');
     ok((await pg.textContent('.extras')).includes('Idea regalo'), 'regalo: cofanetto proposto come idea regalo');
     await pg.click('[data-rit-rm="balsamo-labbra"]');
     ok(!(await pg.textContent('.ritual')).includes('Balsamo') && (await pg.textContent('.extras')).includes('Balsamo'), 'togli: il balsamo passa tra gli extra');
     await pg.click('[data-rit-add="cofanetto-bottega"]'); await pg.click('[data-rit-add="olio-lavanda"]');
     const nRit = (await pg.$$('.ritual li')).length;
-    ok((await pg.textContent('.ritual')).includes('Cofanetto') && nRit === 4, 'aggiungi: cofanetto e olio nel rituale (' + nRit + ' opere, senza limiti)');
+    ok((await pg.textContent('.ritual')).includes('Cofanetto') && nRit === 5, 'aggiungi: cofanetto e olio nel rituale (' + nRit + ' opere, senza limiti)');
     const before = +(await pg.textContent('[data-cart-count]'));
     await pg.click('[data-ritual-add]'); await pg.waitForTimeout(400);
     ok(+(await pg.textContent('[data-cart-count]')) === before + nRit && (await pg.textContent('[data-cart-foot]')).includes('Confezione regalo'), 'nel carrello: ' + nRit + ' opere in più e confezione regalo');

@@ -7,7 +7,7 @@ const path = require('path');
 const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
-const V = '19'; // cache-busting css/js
+const V = '21'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -467,7 +467,7 @@ curPage = 'rituale.html';
   <ol class="quiz__steps quiz__steps--5" aria-label="Avanzamento"><li data-quiz-step="1" aria-current="step">Pelle</li><li data-quiz-step="2">Quando</li><li data-quiz-step="3">Cosa</li><li data-quiz-step="4">Profumo</li><li data-quiz-step="5">Per chi</li></ol>
   ${q(1, 'pelle', 'Che pelle hai?', [['Secca', 'Secca', 'tira, a volte si squama'], ['Sensibile', 'Sensibile', 'si arrossa facilmente'], ['Mista o grassa', 'Mista o grassa', 'lucida in zona T']])}
   ${q(2, 'momento', 'Quando ti prendi cura di te?', [['mattina', 'La mattina', 'pochi minuti, prima di uscire'], ['sera', 'La sera', 'con calma, prima di dormire'], ['entrambi', 'Mattina e sera', 'due momenti brevi']])}
-  ${q(3, 'zona', 'Cosa ti interessa?', [['viso', 'Il viso'], ['corpo', 'Il corpo'], ['mani-labbra', 'Mani e labbra'], ['capelli', 'I capelli']], true)}
+  ${q(3, 'zona', 'Cosa ti interessa di più?', [['viso', 'Il viso'], ['corpo', 'Il corpo'], ['mani-labbra', 'Mani e labbra'], ['capelli', 'I capelli'], ['tutto', 'Un po\' di tutto', 'viso, corpo, mani e labbra']])}
   ${q(4, 'profumo', 'Ti piacciono i profumi?', [['si', 'Sì, delicati', 'oli essenziali di lavanda, limone, rosmarino'], ['no', 'Preferisco senza', 'solo opere non profumate']])}
   ${q(5, 'per', 'È per te o da regalare?', [['me', 'Per me'], ['regalo', 'È un regalo', 'con confezione e biglietto scritto a mano']])}
   <button type="button" class="link quiz__back" data-quiz-back hidden>← Torna alla domanda precedente</button>

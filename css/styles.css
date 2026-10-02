@@ -584,3 +584,9 @@ html{scrollbar-gutter:stable}
 .extra__plus{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:20px;line-height:1}
 .extra:hover .extra__plus{background:var(--ink);color:var(--marble)}
 @media (max-width:560px){.ritual__end{grid-column:2;flex-direction:row;justify-content:space-between;width:100%}}
+
+/* Svuota il carrello + avviso con "Annulla" */
+.cart-clear{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 0 10px;border-bottom:1px solid var(--marble-2);font-size:15px;color:var(--ink-2)}
+.cart-clear .link{font-size:15px;color:var(--ink-2)}
+.toast.has-act{pointer-events:auto}
+.toast__act{background:none;border:0;padding:4px 2px;color:#fff;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:16px}

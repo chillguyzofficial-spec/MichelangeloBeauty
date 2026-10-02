@@ -42,7 +42,13 @@
   // ---------- avviso breve ----------
   const toast = q('[data-toast]');
   let toastT;
-  function say(msg) { if (!toast) return; toast.textContent = msg; toast.classList.add('is-on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('is-on'), 2200); }
+  function say(msg, action, onAction) {
+    if (!toast) return;
+    toast.textContent = msg;
+    if (action) { const bt = document.createElement('button'); bt.type = 'button'; bt.className = 'toast__act'; bt.textContent = action; bt.addEventListener('click', () => { toast.classList.remove('is-on', 'has-act'); onAction(); }); toast.append(' · ', bt); }
+    toast.classList.toggle('has-act', !!action); toast.classList.add('is-on');
+    clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('is-on', 'has-act'), action ? 6000 : 2200);
+  }
 
   // ---------- blocco dello scroll (overflow su html + body, mai position:fixed) ----------
   let locks = 0;
@@ -89,7 +95,8 @@
       body.innerHTML = `<div class="cart-empty"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M30 46h60l-6 56H36z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M44 46c0-12 7-20 16-20s16 8 16 20" fill="none" stroke="currentColor" stroke-width="2"/></svg><p>Il carrello è vuoto.</p><a class="btn btn--ghost" href="opere.html">Guarda le opere</a></div>`;
       foot.innerHTML = '';
     } else {
-      body.innerHTML = cart.map(l => { const p = MB.P[l.id], ln = MB.LINES[p.line]; return `<div class="line" style="--line:${ln.bg};--line-fg:${ln.fg}">${thumb(p)}<div><a class="line__name" href="${p.url}">${esc(p.name)}</a><p class="line__meta">Opera n. ${p.opera} · ${p.size} · ${eur(p.price)}</p><div class="line__row"><div class="qty"><button type="button" data-line-dec="${l.id}" aria-label="Diminuisci ${esc(p.name)}">−</button><span aria-live="polite">${l.qty}</span><button type="button" data-line-inc="${l.id}" aria-label="Aumenta ${esc(p.name)}">+</button></div><strong>${eur(p.price * l.qty)}</strong></div><button type="button" class="link line__rm" data-line-rm="${l.id}">Rimuovi</button></div></div>`; }).join('') +
+      // in cima, così si vede subito anche con tanti prodotti (solo da 2 prodotti in su)
+      body.innerHTML = (cart.length >= 2 ? `<div class="cart-clear"><span>${count()} ${count() === 1 ? 'pezzo' : 'pezzi'} nel carrello</span><button type="button" class="link" data-cart-clear>Svuota il carrello</button></div>` : '') + cart.map(l => { const p = MB.P[l.id], ln = MB.LINES[p.line]; return `<div class="line" style="--line:${ln.bg};--line-fg:${ln.fg}">${thumb(p)}<div><a class="line__name" href="${p.url}">${esc(p.name)}</a><p class="line__meta">Opera n. ${p.opera} · ${p.size} · ${eur(p.price)}</p><div class="line__row"><div class="qty"><button type="button" data-line-dec="${l.id}" aria-label="Diminuisci ${esc(p.name)}">−</button><span aria-live="polite">${l.qty}</span><button type="button" data-line-inc="${l.id}" aria-label="Aumenta ${esc(p.name)}">+</button></div><strong>${eur(p.price * l.qty)}</strong></div><button type="button" class="link line__rm" data-line-rm="${l.id}">Rimuovi</button></div></div>`; }).join('') +
         `<div class="gift"><label><input type="checkbox" data-gift ${gift.on ? 'checked' : ''}> <span><strong>Confezione regalo</strong> con biglietto scritto a mano (+${eur(MB.GIFT)})</span></label>${gift.on ? `<label for="gift-msg" class="sr">Messaggio del biglietto</label><textarea id="gift-msg" data-gift-msg maxlength="200" placeholder="Il tuo messaggio (lo scriviamo a mano)">${esc(gift.msg)}</textarea>` : ''}</div>`;
       const sub = subtotal(), disc = discount(), net = sub - disc, ship = net >= MB.FREE ? 0 : MB.STD;
       const freeMsg = net >= MB.FREE ? 'Spedizione gratuita raggiunta.' : 'Ti mancano <strong>' + eur(MB.FREE - net) + '</strong> alla spedizione gratuita.';
@@ -119,7 +126,7 @@
     if (lastFocus) lastFocus.focus();
   }
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-cart-open],[data-cart-close],[data-overlay],[data-add],[data-line-inc],[data-line-dec],[data-line-rm]');
+    const t = e.target.closest('[data-cart-open],[data-cart-close],[data-overlay],[data-add],[data-line-inc],[data-line-dec],[data-line-rm],[data-cart-clear]');
     if (!t) return;
     if (t.matches('[data-cart-open]')) openCart();
     else if (t.matches('[data-cart-close],[data-overlay]')) { closeCart(); closeSheet(); }
@@ -131,6 +138,12 @@
     else if (t.matches('[data-line-inc]')) { const l = cart.find(x => x.id === t.dataset.lineInc); setQty(l.id, l.qty + 1); }
     else if (t.matches('[data-line-dec]')) { const l = cart.find(x => x.id === t.dataset.lineDec); setQty(l.id, l.qty - 1); }
     else if (t.matches('[data-line-rm]')) { setQty(t.dataset.lineRm, 0); say('Rimosso dal carrello'); }
+    else if (t.matches('[data-cart-clear]')) {
+      const prevCart = cart.slice(), prevGift = Object.assign({}, gift);
+      cart = []; gift = { on: false, msg: '' }; save(); renderCart(); renderSummary();
+      const cl = q('[data-cart-close]'); if (cl) cl.focus();
+      say('Carrello svuotato', 'Annulla', () => { cart = prevCart; gift = prevGift; save(); renderCart(); renderSummary(); say('Carrello ripristinato'); });
+    }
   });
   document.addEventListener('change', e => {
     if (e.target.matches('[data-gift]')) { gift.on = e.target.checked; save(); renderCart(); renderSummary(); const ta = q('[data-gift-msg]'); if (ta) ta.focus(); }
@@ -337,9 +350,9 @@
       const others = Object.keys(MB.P).filter(id => !chosen.includes(id)).sort((x, y) => (ans.per === 'regalo' && x === 'cofanetto-bottega' ? -1 : 0) - (ans.per === 'regalo' && y === 'cofanetto-bottega' ? -1 : 0));
       const tot = ord.reduce((t, id) => t + MB.P[id].price, 0) + (giftOn && ord.length ? MB.GIFT : 0);
       const when = { mattina: 'la mattina', sera: 'la sera', entrambi: 'mattina e sera' }[ans.momento];
-      const zones = ans.zona.map(z => MB.LINES[z] ? MB.LINES[z].name.toLowerCase() : z).join(', ');
+      const zones = ans.zona.length > 2 ? 'un po\' di tutto' : ans.zona.map(z => MB.LINES[z] ? MB.LINES[z].name.toLowerCase() : z).join(', ');
       res.innerHTML = `<p class="roman">Il tuo rituale</p><h2>Pelle ${ans.pelle.toLowerCase()}, ${when}: ${zones}.</h2>
-        <p>${ord.length ? 'Ecco cosa ti proponiamo, nell\'ordine in cui usarlo. Togli quello che non ti serve, aggiungi quello che ti piace.' : 'Il rituale è vuoto: aggiungi le opere che ti interessano qui sotto.'}</p>
+        <p>${ord.length ? 'Ecco cosa ti proponiamo, nell\'ordine in cui usarlo. Togli quello che non ti serve, aggiungi quello che ti piace: anche per altre zone, qui sotto.' : 'Il rituale è vuoto: aggiungi le opere che ti interessano qui sotto.'}</p>
         ${notes.map(n => `<p class="quiz__note">${n}</p>`).join('')}
         <ol class="ritual">${ord.map((id, i) => { const p = MB.P[id]; return `<li style="--line:${MB.LINES[p.line].bg}"><span class="ritual__n">${['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][i]}</span><div><p class="ritual__name"><a href="${p.url}">${esc(p.name)}</a></p><p class="ritual__why">${esc((WHY[id] || (() => ''))(ans))}</p></div><div class="ritual__end"><span class="ritual__price">${eur(p.price)}</span><button type="button" class="link ritual__rm" data-rit-rm="${id}" aria-label="Togli ${esc(p.name)}">Togli</button></div></li>`; }).join('')}</ol>
         <label class="ritual__gift"><input type="checkbox" data-rit-gift${giftOn ? ' checked' : ''}> <span><strong>Confezione regalo</strong> con biglietto scritto a mano (+${eur(MB.GIFT)})</span></label>
@@ -365,7 +378,7 @@
           ans.zona = ans.zona.includes(v) ? ans.zona.filter(x => x !== v) : ans.zona.concat(v);
           bt.setAttribute('aria-pressed', String(ans.zona.includes(v))); nextBtn.disabled = !ans.zona.length; return;
         }
-        ans[order[i]] = v;
+        if (order[i] === 'zona') ans.zona = v === 'tutto' ? ['viso', 'corpo', 'mani-labbra'] : [v]; else ans[order[i]] = v;
         if (i < qs.length - 1) go(i + 1); else result();
       }));
       if (nextBtn) nextBtn.addEventListener('click', () => go(i + 1));
