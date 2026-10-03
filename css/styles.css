@@ -354,6 +354,14 @@ textarea{min-height:120px;resize:vertical}
 .totals{display:flex;flex-direction:column;gap:4px;font-size:16px}
 .totals div{display:flex;justify-content:space-between}
 .totals .totals__sum{font-family:var(--serif);font-size:24px;border-top:1px solid var(--marble-3);padding-top:8px;margin-top:4px}
+/* telefono: il fondo fisso del carrello si mangiava metà schermo (316px, su iPhone SE restavano 150px per i prodotti).
+   Restano barra spedizione gratuita, sconto, totale e pulsante; spedizione e confezione regalo hanno già prezzo e date sopra */
+@media (max-width:959px){
+  .drawer__foot.drawer__foot{padding-top:12px;gap:8px}
+  .drawer__foot .totals div:not(.totals__sum):not(.totals__disc),.drawer__foot > p.small{display:none}
+  .drawer__foot .totals .totals__sum{border-top:0;padding-top:0;margin-top:0}
+  .drawer__foot .free{font-size:14px}
+}
 .cart-empty{text-align:center;padding:24px 0;display:flex;flex-direction:column;align-items:center;gap:14px}
 .cart-empty svg{width:120px;height:auto;color:var(--sanguigna-2)}
 
@@ -524,7 +532,9 @@ html{scrollbar-gutter:stable}
 /* Striscia di foto a scorrimento (foto intere: riquadro con le proporzioni della foto) */
 .strip{--strip-h:clamp(300px,34vw,460px)}
 .strip__track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:thin;padding-bottom:6px;overscroll-behavior-x:contain}
-.strip__item{flex:none;height:var(--strip-h);aspect-ratio:var(--ar);margin:0;scroll-snap-align:start}
+/* larghezza mai oltre il riquadro: una foto 16:9 alta come le altre sarebbe più larga dello schermo e verrebbe tagliata */
+.strip__track{align-items:center}
+.strip__item{flex:none;width:min(100%,calc(var(--strip-h) * (var(--ar))));aspect-ratio:var(--ar);margin:0;scroll-snap-align:start}
 .strip__item .ph-img,.strip__item .ph{width:100%;height:100%;object-fit:cover}
 .strip__nav{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:10px}
 .strip__btn{width:44px;height:44px;border:1.5px solid var(--ink);background:none;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;color:var(--ink)}

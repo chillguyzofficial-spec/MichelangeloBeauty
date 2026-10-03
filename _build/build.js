@@ -8,7 +8,7 @@ const D = require('./catalogo');
 
 const out = path.join(__dirname, '..');
 const SITE = 'https://chillguyzofficial-spec.github.io/MichelangeloBeauty/'; // indirizzo pubblico (anteprime di condivisione)
-const V = '24'; // cache-busting css/js
+const V = '25'; // cache-busting css/js
 const FREE = 49, STD = 4.9, EXP = 8.9, GIFT = 3;
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

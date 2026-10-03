@@ -51,9 +51,11 @@
     clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('is-on', 'has-act'), action ? 6000 : 2200);
   }
 
-  // ---------- blocco dello scroll (overflow su html + body, mai position:fixed) ----------
+  // ---------- blocco dello scroll (overflow solo su html, mai position:fixed) ----------
+  // NON mettere overflow:hidden anche sul body: diventerebbe un contenitore di scorrimento a sé,
+  // l'header sticky si aggancerebbe al body e tornerebbe in cima alla pagina (menu sparito a metà pagina)
   let locks = 0;
-  function lock(on) { locks = Math.max(0, locks + (on ? 1 : -1)); const v = locks ? 'hidden' : ''; document.documentElement.style.overflow = v; document.body.style.overflow = v; }
+  function lock(on) { locks = Math.max(0, locks + (on ? 1 : -1)); document.documentElement.style.overflow = locks ? 'hidden' : ''; }
 
   // ---------- menu telefono ----------
   const menuBtn = q('[data-menu]'), menu = q('#menu');
@@ -97,7 +99,7 @@
       foot.innerHTML = '';
     } else {
       // in cima, così si vede subito anche con tanti prodotti (solo da 2 prodotti in su)
-      body.innerHTML = (cart.length >= 2 ? `<div class="cart-clear"><span>${count()} ${count() === 1 ? 'pezzo' : 'pezzi'} nel carrello</span><button type="button" class="link" data-cart-clear>Svuota il carrello</button></div>` : '') + cart.map(l => { const p = MB.P[l.id], ln = MB.LINES[p.line]; return `<div class="line" style="--line:${ln.bg};--line-fg:${ln.fg}">${thumb(p)}<div><a class="line__name" href="${p.url}">${esc(p.name)}</a><p class="line__meta">Opera n. ${p.opera} · ${p.size} · ${eur(p.price)}</p><div class="line__row"><div class="qty"><button type="button" data-line-dec="${l.id}" aria-label="Diminuisci ${esc(p.name)}">−</button><span aria-live="polite">${l.qty}</span><button type="button" data-line-inc="${l.id}" aria-label="Aumenta ${esc(p.name)}">+</button></div><strong>${eur(p.price * l.qty)}</strong></div><button type="button" class="link line__rm" data-line-rm="${l.id}">Rimuovi</button></div></div>`; }).join('') +
+      body.innerHTML = (cart.length >= 2 ? `<div class="cart-clear"><span>${count()} ${count() === 1 ? 'pezzo' : 'pezzi'} nel carrello</span><button type="button" class="link" data-cart-clear>Svuota il carrello</button></div>` : '') + cart.map(l => { const p = MB.P[l.id], ln = MB.LINES[p.line]; return `<div class="line" data-line="${l.id}" style="--line:${ln.bg};--line-fg:${ln.fg}">${thumb(p)}<div><a class="line__name" href="${p.url}">${esc(p.name)}</a><p class="line__meta">Opera n. ${p.opera} · ${p.size} · ${eur(p.price)}</p><div class="line__row"><div class="qty"><button type="button" data-line-dec="${l.id}" aria-label="Diminuisci ${esc(p.name)}">−</button><span aria-live="polite">${l.qty}</span><button type="button" data-line-inc="${l.id}" aria-label="Aumenta ${esc(p.name)}">+</button></div><strong>${eur(p.price * l.qty)}</strong></div><button type="button" class="link line__rm" data-line-rm="${l.id}">Rimuovi</button></div></div>`; }).join('') +
         `<div class="gift"><label><input type="checkbox" data-gift ${gift.on ? 'checked' : ''}> <span><strong>Confezione regalo</strong> con biglietto scritto a mano (+${eur(MB.GIFT)})</span></label>${gift.on ? `<label for="gift-msg" class="sr">Messaggio del biglietto</label><textarea id="gift-msg" data-gift-msg maxlength="200" placeholder="Il tuo messaggio (lo scriviamo a mano)">${esc(gift.msg)}</textarea>` : ''}</div>` +
         `<fieldset class="cart-ship"><legend>Spedizione</legend>${[['standard', 'Standard', itemsTotal() >= MB.FREE ? 'Gratuita' : eur(MB.STD), between(2, 4)], ['express', 'Espressa', eur(MB.EXP), between(1, 2)]].map(([v, n, c, w]) => `<label class="radio radio--compact"><input type="radio" name="cart-ship" value="${v}"${shipPref === v ? ' checked' : ''} data-cart-ship><span><strong>${n}</strong> · ${c}<br><span class="muted">arriva ${w}</span></span></label>`).join('')}</fieldset>`;
       const sub = subtotal(), disc = discount(), net = sub - disc, ship = shipPref === 'express' ? MB.EXP : net >= MB.FREE ? 0 : MB.STD;
@@ -114,7 +116,12 @@
     const i = cart.findIndex(l => l.id === id);
     if (i >= 0) cart[i] = { id, qty: Math.min(cart[i].qty + n, 20) }; else cart.push({ id, qty: n });
     save(); renderCart();
-    if (!silent) openCart();
+    if (!silent) {
+      openCart();
+      // il prodotto appena aggiunto deve vedersi anche se è in fondo alla lista
+      const ln = body && q('[data-line="' + id + '"]', body);
+      if (ln) body.scrollTop += ln.getBoundingClientRect().top - body.getBoundingClientRect().top - 8;
+    }
   }
   function openCart() {
     if (!drawer) return;

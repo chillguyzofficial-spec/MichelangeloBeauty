@@ -46,6 +46,20 @@ const ok = (c, m) => { if (!c) { console.log('ERR ' + m); process.exitCode = 1; 
       ok(await q.isVisible('[data-promo]'), devName + ': il popup compare dopo che il menu è stato chiuso');
       await q.tap('.promo__no'); await q.waitForTimeout(300);
       ok(await q.evaluate(() => getComputedStyle(document.documentElement).overflow !== 'hidden'), devName + ': scroll sbloccato dopo il popup');
+      // menu aperto a metà pagina e in fondo: l'header (sticky) deve restare in cima allo schermo e il menu visibile.
+      // Tocco a coordinate (q.tap ricentra il pulsante e sposta la pagina). Bug reale 2026-10-03: overflow:hidden sul body
+      // agganciava l'header al body → tornava in cima al documento e il menu "spariva"
+      for (const pos of [0.5, 1]) {
+        await q.evaluate(x => window.scrollTo(0, (document.documentElement.scrollHeight - innerHeight) * x), pos); await q.waitForTimeout(150);
+        const tapMenu = async () => { const bb = await (await q.$('[data-menu]')).boundingBox(); await q.touchscreen.tap(bb.x + bb.width / 2, bb.y + bb.height / 2); await q.waitForTimeout(250); };
+        const y0 = await q.evaluate(() => scrollY);
+        await tapMenu();
+        const r = await q.evaluate(() => ({ h: document.querySelector('.site-header').getBoundingClientRect().top, m: document.querySelector('#menu').getBoundingClientRect().top }));
+        ok(Math.abs(r.h) <= 1 && r.m > 0, devName + ': menu aperto al ' + pos * 100 + '% della pagina resta sullo schermo (header ' + Math.round(r.h) + ')');
+        await tapMenu();
+        ok(Math.abs(await q.evaluate(() => scrollY) - y0) <= 2, devName + ': chiudendo il menu la pagina resta dov\'era');
+      }
+      await q.evaluate(() => window.scrollTo(0, 0)); await q.waitForTimeout(150);
       // un link del menu porta davvero alla pagina
       await q.tap('[data-menu]'); await q.waitForTimeout(250); await Promise.all([q.waitForURL(/bottega.html/, { timeout: 8000 }).catch(() => {}), q.tap('#menu .menu__main a[href="bottega.html"]')]);
       ok(q.url().endsWith('bottega.html'), devName + ': link del menu funziona');
